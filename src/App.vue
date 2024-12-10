@@ -1,11 +1,26 @@
 <script setup lang="ts">
-const rols = {}
+const rols = [
+  ['军', '马', '相', '仕', '帅', '仕', '相', '马', '军'],
+  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
+  ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
+  ['兵', '空', '兵', '空', '兵', '空', '兵', '空', '兵'],
+  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
+  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
+  ['兵', '空', '兵', '空', '兵', '空', '兵', '空', '兵'],
+  ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
+  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
+  ['军', '马', '相', '仕', '帅', '仕', '相', '马', '军'],
+]
+
+function getRole(i: number, j: number) {
+  return rols[i][j] === '空' ? '' : rols[i][j]
+}
 </script>
 
 <template>
   <div class="app">
     <div class="line" v-for="i in 10">
-      <div v-for="i in 9"></div>
+      <div v-for="j in 9" :k="`${i - 1}-${j - 1}`">{{ getRole(i - 1, j - 1) }}</div>
     </div>
   </div>
 </template>
@@ -41,6 +56,10 @@ body {
   height: 50px;
   position: relative;
   flex-shrink: 0;
+  color: red;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .line div::before {
   content: '';

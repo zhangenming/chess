@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const rols = [
+const roles = [
   ['军', '马', '相', '仕', '帅', '仕', '相', '马', '军'],
   ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
   ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
@@ -11,16 +11,14 @@ const rols = [
   ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
   ['军', '马', '相', '仕', '帅', '仕', '相', '马', '军'],
 ]
-
-function getRole(i: number, j: number) {
-  return rols[i][j] === '空' ? '' : rols[i][j]
-}
 </script>
 
 <template>
   <div class="app">
-    <div class="line" v-for="i in 10">
-      <div v-for="j in 9" :k="`${i - 1}-${j - 1}`">{{ getRole(i - 1, j - 1) }}</div>
+    <div class="line" v-for="(line, i) of roles">
+      <div v-for="(role, j) of line" class="item" :i="i" :j="j">
+        <div v-if="role !== '空'" class="role">{{ role }}</div>
+      </div>
     </div>
   </div>
 </template>
@@ -40,7 +38,7 @@ body {
   opacity: 0.1;
   width: 401px;
   height: 451px;
-  overflow: hidden;
+  /* overflow: hidden; */
   position: relative;
 }
 .app {
@@ -51,7 +49,7 @@ body {
 .line {
   display: flex;
 }
-.line div {
+.item {
   width: 50px;
   height: 50px;
   position: relative;
@@ -61,7 +59,7 @@ body {
   align-items: center;
   justify-content: center;
 }
-.line div::before {
+.item::before {
   content: '';
   position: absolute;
   top: 25px;
@@ -69,12 +67,41 @@ body {
   height: 1px;
   background: black;
 }
-.line div::after {
+.item::after {
   content: '';
   position: absolute;
   left: 25px;
   width: 1px;
   height: 50px;
   background: black;
+}
+.item[i='0']::after {
+  height: 25px;
+  top: 25px;
+}
+.item[i='9']::after {
+  height: 25px;
+  top: 0;
+}
+.item[j='0']::before {
+  width: 25px;
+  left: 25px;
+}
+
+.item[j='8']::before {
+  width: 25px;
+  left: 0;
+}
+
+.item:has(.role) {
+  cursor: pointer;
+}
+.role {
+  font-family: cursive;
+  font-size: 35px;
+  padding: 5px;
+  line-height: 1em;
+  border: 3px solid red;
+  border-radius: 50%;
 }
 </style>

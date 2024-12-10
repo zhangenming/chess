@@ -1,23 +1,39 @@
 <script setup lang="ts">
-const roles = [
-  ['军', '马', '相', '仕', '帅', '仕', '相', '马', '军'],
-  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
-  ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
-  ['兵', '空', '兵', '空', '兵', '空', '兵', '空', '兵'],
-  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
-  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
-  ['兵', '空', '兵', '空', '兵', '空', '兵', '空', '兵'],
-  ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
-  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
-  ['军', '马', '相', '仕', '帅', '仕', '相', '马', '军'],
-]
+import { roles, select, role } from './data'
+import { moves } from './move'
 </script>
 
 <template>
-  <div class="app">
+  <div>
     <div class="line" v-for="(line, i) of roles">
       <div v-for="(role, j) of line" class="item" :i="i" :j="j">
-        <div v-if="role !== '空'" class="role">{{ role }}</div>
+        <div
+          v-if="role !== '空'"
+          class="role"
+          :class="{
+            selected: select && i === select[0] && j === select[1],
+          }"
+          @click="
+            () => {
+              select = [i, j]
+            }
+          "
+        >
+          {{ role }}
+        </div>
+        <div
+          v-else
+          class="empty"
+          :class="{
+            canMove: moves.some((item) => item.i === i && item.j === j),
+          }"
+          @click="
+            () => {
+              if (!select) return
+              ;[roles[i][j], roles[select[0]][select[1]]] = [roles[select[0]][select[1]], roles[i][j]]
+            }
+          "
+        ></div>
       </div>
     </div>
   </div>
@@ -33,9 +49,6 @@ body {
   margin-top: 50px;
 }
 #app {
-  display: flex;
-  justify-content: center;
-  opacity: 0.1;
   width: 401px;
   height: 451px;
   /* overflow: hidden; */
@@ -103,5 +116,21 @@ body {
   line-height: 1em;
   border: 3px solid red;
   border-radius: 50%;
+  background: white;
+  z-index: 1;
+}
+.selected {
+  background: red;
+  color: white;
+}
+.empty {
+  width: 50px;
+  height: 50px;
+  z-index: 1;
+}
+.canMove {
+  background: #aea;
+  width: 30px;
+  height: 30px;
 }
 </style>

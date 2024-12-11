@@ -15,6 +15,6 @@ export const roles = reactive(
   ].map((line, i) => line.map((role, j) => ({ role, i, j })))
 )
 
-export const select = ref<number[]>()
+export const select = ref<{ i: number; j: number }>()
 
 export const role = computed(() => select.value && roles[select.value[0]][select.value[1]])

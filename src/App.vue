@@ -15,7 +15,7 @@ import { moves } from './move'
           }"
           @click="
             () => {
-              select = [i, j]
+              select = { i, j }
             }
           "
         >
@@ -30,9 +30,7 @@ import { moves } from './move'
           @click="
             () => {
               if (!select) return
-              ;[roles[i][j].role, roles[select[0]][select[1]].role] =
-                //
-                [roles[select[0]][select[1]].role, roles[i][j].role]
+              ;[roles[i][j].role, roles[select.i][select.j].role] = [roles[select.i][select.j].role, roles[i][j].role]
               select = undefined
             }
           "

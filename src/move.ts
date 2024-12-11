@@ -2,9 +2,8 @@ import { computed, watch } from 'vue'
 import { roles, select } from './data'
 
 export const moves = computed(() => {
-  if (!select.value) return []
-
-  const x = { i: select.value[0], j: select.value[1] }
+  const x = select.value
+  if (!x) return []
 
   const role = roles[x.i][x.j]
 

@@ -1,6 +1,7 @@
 import { positions } from './data'
 
 export type coord = { i: number; j: number }
+
 export function 距离(a: coord, b: coord) {
   return Math.abs(a.i - b.i) + Math.abs(a.j - b.j)
 }

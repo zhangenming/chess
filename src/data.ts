@@ -36,7 +36,3 @@ export const positionsFlat = positions.flat()
 export const select = ref<{ i: number; j: number }>()
 
 export const role = computed(() => select.value && positions[select.value[0]][select.value[1]])
-
-watch(select, (v) => {
-  console.log('select change', v)
-})

@@ -1,6 +1,7 @@
 import { computed } from 'vue'
 import { positions, positionsFlat, select } from './data'
-import { get下侧全部棋子, get上侧全部棋子, get右侧全部棋子, get左侧全部棋子, 距离i, 距离j, coord, 距离 } from './utils'
+import { get下侧全部棋子, get上侧全部棋子, get右侧全部棋子, get左侧全部棋子, 距离i, 距离j, 距离 } from './utils'
+import type { coord } from './utils'
 
 const _moves = computed(() => {
   const x = select.value

@@ -1,4 +1,5 @@
 import { computed, reactive, ref, watch } from 'vue'
+import { getArrItemRandom } from './utils'
 
 const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
@@ -13,18 +14,24 @@ const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
 ]
 
+const rolesA = raw
+  .slice(0, 4)
+  .flat()
+  .filter((e) => e != '空' && e != '帅')
+
+const rolesB = [...rolesA]
+
 export const positions = reactive(
   raw.map((line, i) =>
-    line.map((role, j) => ({
+    line.map((r, j) => ({
       i,
       j,
-      ...(role != '空' && {
+      ...(r != '空' && {
         qz: {
-          role,
-          color: i < 5 ? 'red' : 'black',
-        } as {
-          role: string
-          color: 'red' | 'black'
+          role: r,
+          roleB: r === '帅' ? '帅' : getArrItemRandom(i < 5 ? rolesA : rolesB),
+          showB: false,
+          color: i < 5 ? ('red' as const) : ('black' as const),
         },
       }),
     }))
@@ -36,3 +43,6 @@ export const positionsFlat = positions.flat()
 export const select = ref<{ i: number; j: number }>()
 
 export const role = computed(() => select.value && positions[select.value[0]][select.value[1]])
+
+// pro plus max utral
+// 帅也随机 暗器

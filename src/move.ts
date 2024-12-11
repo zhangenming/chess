@@ -7,7 +7,8 @@ const _moves = computed(() => {
   const x = select.value
   if (!x) return []
 
-  const role = positions[x.i][x.j].qz.role
+  const { role: _r, showB, roleB } = positions[x.i][x.j].qz
+  const role = showB ? roleB : _r
 
   if (role === '车') {
     return [

@@ -37,3 +37,11 @@ export function getRoleType(i: number, j: number) {
 
   return qz.color
 }
+
+// 删除选中的元素 防止下次继续选中
+export function getArrItemRandom<T>(arr: T[]) {
+  const index = Math.floor(Math.random() * arr.length)
+  const item = arr[index]
+  arr.splice(index, 1)
+  return item
+}

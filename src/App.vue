@@ -35,6 +35,10 @@ function action({ target }) {
         ;[clicked.qz, old.qz] = [old.qz, undefined]
       }
       select.value = undefined
+
+      if (clicked.qz?.showB === false) {
+        clicked.qz.showB = true
+      }
     }
   }
 }
@@ -53,7 +57,7 @@ function action({ target }) {
           :i
           :j
         >
-          {{ role.qz?.role }}
+          {{ role.qz && (role.qz.showB ? role.qz.roleB : role.qz.role) }}
         </div>
       </div>
     </div>

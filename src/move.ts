@@ -1,5 +1,6 @@
 import { computed } from 'vue'
 import { positions, positionsFlat, select } from './data'
+import { get下侧全部棋子, get上侧全部棋子, get右侧全部棋子, get左侧全部棋子, 距离i, 距离j, coord, 距离 } from './utils'
 
 const _moves = computed(() => {
   const x = select.value
@@ -86,37 +87,7 @@ export const moves = computed(() => {
   return _moves.value.filter((p) => p && p.qz?.color !== 'black')
 })
 
-type 位置 = { i: number; j: number }
-function 距离(a: 位置, b: 位置) {
-  return Math.abs(a.i - b.i) + Math.abs(a.j - b.j)
-}
-function 距离i(a: 位置, b: 位置) {
-  return Math.abs(a.i - b.i)
-}
-function 距离j(a: 位置, b: 位置) {
-  return Math.abs(a.j - b.j)
-}
-
-function get左侧全部棋子({ i, j }: 位置) {
-  return positions[i].slice(0, j).reverse()
-}
-
-function get右侧全部棋子({ i, j }: 位置) {
-  return positions[i].slice(j + 1)
-}
-
-function get上侧全部棋子({ i, j }: 位置) {
-  return positions
-    .slice(0, i)
-    .map((line) => line[j])
-    .reverse()
-}
-
-function get下侧全部棋子({ i, j }: 位置) {
-  return positions.slice(i + 1).map((line) => line[j])
-}
-
-function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; color: string } }[], x: 位置) {
+function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; color: string } }[], x: coord) {
   let meetRed = false
   return datas
     .filter((item) => {

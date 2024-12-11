@@ -12,6 +12,7 @@ import { moves } from './move'
           class="role"
           :class="{
             selected: i === select?.i && j === select?.j,
+            canEat: moves.some((item) => item.i === i && item.j === j),
           }"
           @click="
             () => {
@@ -136,5 +137,8 @@ body {
   background: black;
   width: 30px;
   height: 30px;
+}
+.canEat {
+  background: black;
 }
 </style>

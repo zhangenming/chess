@@ -65,11 +65,7 @@ const _moves = computed(() => {
   return []
 })
 export const moves = computed(() => {
-  return _moves.value.filter((p) => p && p.qz === undefined)
-})
-
-watch(moves, (moves) => {
-  console.log(moves)
+  return _moves.value.filter((p) => p && p.qz?.color !== 'black')
 })
 
 type 位置 = { i: number; j: number }
@@ -103,5 +99,15 @@ function get下侧全部棋子({ i, j }: 位置) {
 }
 
 function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; color: string } }[], x: 位置) {
-  return datas.filter((item) => item.qz === undefined).filter((item, i) => 距离(x, item) === i + 1)
+  let meetRed = false
+  return datas
+    .filter((item) => {
+      if (meetRed) return false
+      if (!item.qz) return true
+      if (!meetRed && item.qz.color === 'red') {
+        meetRed = true
+        return true
+      }
+    })
+    .filter((item, i) => 距离(x, item) === i + 1)
 }

@@ -25,7 +25,6 @@ export const positions = reactive(
     }))
   )
 )
-console.log(positions)
 
 export const positionsFlat = positions.flat()
 

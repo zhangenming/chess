@@ -21,7 +21,7 @@ function action({ target }) {
       // 拿(换)
       select.value = { i, j }
     }
-  } else {
+  } else if (select.value) {
     const clicked = positions[i][j]
     const old = positions[select.value.i][select.value.j]
 
@@ -45,20 +45,18 @@ function action({ target }) {
 </script>
 
 <template>
-  <div @click="action">
-    <div class="line" v-for="(line, i) of positions">
-      <div v-for="(role, j) of line" class="item">
-        <div
-          :class="{
-            selected: i === select?.i && j === select?.j,
-            canMove: moves.find((item) => item.i === i && item.j === j),
-            [role.qz?.color]: role.qz,
-          }"
-          :i
-          :j
-        >
-          {{ role.qz && (role.qz.showB ? role.qz.roleB : role.qz.role) }}
-        </div>
+  <div @click="action" class="flex" v-for="(line, i) of positions">
+    <div v-for="(role, j) of line" class="item">
+      <div
+        :class="{
+          selected: i === select?.i && j === select?.j,
+          canMove: moves.find((item) => item.i === i && item.j === j),
+          [role.qz?.color]: role.qz,
+        }"
+        :i
+        :j
+      >
+        {{ role.qz && (role.qz.showB ? role.qz.roleB : role.qz.role) }}
       </div>
     </div>
   </div>
@@ -72,6 +70,10 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 50px;
+  opacity: 0.02;
+}
+body:hover {
+  opacity: 0.07;
 }
 #app {
   width: 401px;
@@ -83,9 +85,6 @@ body {
   position: absolute;
   left: -25px;
   top: -25px;
-}
-.line {
-  display: flex;
 }
 .item {
   width: 50px;

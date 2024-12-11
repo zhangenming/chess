@@ -22,17 +22,17 @@ const _moves = computed(() => {
   if (role === '马') {
     return positionsFlat
       .filter((p) => (距离i(x, p) === 1 && 距离j(x, p) === 2) || (距离i(x, p) === 2 && 距离j(x, p) === 1))
-      .filter((p) => {
-        if (p.i - x.i === 2) {
+      .filter(({ i, j }) => {
+        if (i - x.i === 2) {
           return get下侧全部棋子(x)[0].qz === undefined
         }
-        if (p.i - x.i === -2) {
+        if (i - x.i === -2) {
           return get上侧全部棋子(x)[0].qz === undefined
         }
-        if (p.j - x.j === 2) {
+        if (j - x.j === 2) {
           return get右侧全部棋子(x)[0].qz === undefined
         }
-        if (p.j - x.j === -2) {
+        if (j - x.j === -2) {
           return get左侧全部棋子(x)[0].qz === undefined
         }
         console.error('马')
@@ -51,17 +51,17 @@ const _moves = computed(() => {
   if (role === '象') {
     return positionsFlat
       .filter((p) => 距离i(x, p) === 2 && 距离j(x, p) === 2)
-      .filter((p) => {
-        if (p.i - x.i === 2 && p.j - x.j === 2) {
+      .filter(({ i, j }) => {
+        if (i - x.i === 2 && j - x.j === 2) {
           return positions[x.i + 1][x.j + 1].qz === undefined
         }
-        if (p.i - x.i === -2 && p.j - x.j === -2) {
+        if (i - x.i === -2 && j - x.j === -2) {
           return positions[x.i - 1][x.j - 1].qz === undefined
         }
-        if (p.i - x.i === 2 && p.j - x.j === -2) {
+        if (i - x.i === 2 && j - x.j === -2) {
           return positions[x.i + 1][x.j - 1].qz === undefined
         }
-        if (p.i - x.i === -2 && p.j - x.j === 2) {
+        if (i - x.i === -2 && j - x.j === 2) {
           return positions[x.i - 1][x.j + 1].qz === undefined
         }
         console.error('象')
@@ -69,7 +69,12 @@ const _moves = computed(() => {
   }
 
   if (role === '士') {
-    return positionsFlat.filter((p) => 距离i(x, p) === 1 && 距离j(x, p) === 1)
+    return positionsFlat
+      .filter((p) => 距离i(x, p) === 1 && 距离j(x, p) === 1)
+      .filter(({ j }) => {
+        if (showB) return true
+        return j === 3 || j === 4 || j === 5
+      })
   }
 
   if (role === '卒') {
@@ -79,7 +84,7 @@ const _moves = computed(() => {
   if (role === '帅') {
     return positionsFlat
       .filter((p) => (距离i(x, p) === 1 && 距离j(x, p) === 0) || (距离i(x, p) === 0 && 距离j(x, p) === 1))
-      .filter((e) => (e.j === 3 || e.j === 4 || e.j === 5) && (e.i === 7 || e.i === 8 || e.i === 9))
+      .filter(({ i, j }) => (j === 3 || j === 4 || j === 5) && (i === 7 || i === 8 || i === 9))
   }
 
   console.error('move')

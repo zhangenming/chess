@@ -64,14 +64,24 @@ const _moves = computed(() => {
         console.error('象')
       })
   }
-  if (role === '兵') {
+
+  if (role === '士') {
+    return positionsFlat.filter((p) => 距离i(x, p) === 1 && 距离j(x, p) === 1)
+  }
+
+  // 不局限左右后退
+  if (role === '卒') {
     return [get下侧全部棋子(x)[0], get上侧全部棋子(x)[0], get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]]
   }
 
+  // 不局限九宫格
   if (role === '帅') {
+    return positionsFlat.filter(
+      (p) => (距离i(x, p) === 1 && 距离j(x, p) === 0) || (距离i(x, p) === 0 && 距离j(x, p) === 1)
+    )
   }
 
-  return []
+  console.error('move')
 })
 export const moves = computed(() => {
   return _moves.value.filter((p) => p && p.qz?.color !== 'black')

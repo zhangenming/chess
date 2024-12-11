@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { positions, select } from './data'
 import { moves } from './move'
-import { getRoleType, judgeRed } from './utils'
+import { getRoleType } from './utils'
 
 function action({ target }) {
   if (!(target instanceof HTMLElement)) {
@@ -13,35 +13,28 @@ function action({ target }) {
 
   const clickType = getRoleType(i, j)
 
-  if (!select.value) {
-    // 拿
-    if (clickType === 'black') {
+  if (clickType === 'black') {
+    if (select.value?.i === i && select.value?.j === j) {
+      // 拿-关
+      select.value = undefined
+    } else {
+      // 拿(换)
       select.value = { i, j }
     }
   } else {
     const clicked = positions[i][j]
     const old = positions[select.value.i][select.value.j]
 
-    // 走
-    if (clickType === '空') {
-      ;[clicked.qz, old.qz] = [old.qz, clicked.qz]
-      select.value = undefined
-    }
-    // 走-吃
-    if (clickType === 'red') {
-      clicked.qz = old.qz
-      old.qz = undefined
-      select.value = undefined
-    }
-
-    if (clickType === 'black') {
-      if (select.value.i === i && select.value.j === j) {
-        // 拿-关
-        select.value = undefined
-      } else {
-        // 拿-换
-        select.value = { i, j }
+    if (moves.value.find((item) => item.i === i && item.j === j)) {
+      // 走
+      if (clickType === 'empty') {
+        ;[clicked.qz, old.qz] = [old.qz, clicked.qz]
       }
+      // 走-吃
+      if (clickType === 'red') {
+        ;[clicked.qz, old.qz] = [old.qz, undefined]
+      }
+      select.value = undefined
     }
   }
 }
@@ -52,14 +45,11 @@ function action({ target }) {
     <div class="line" v-for="(line, i) of positions">
       <div v-for="(role, j) of line" class="item">
         <div
-          :class="[
-            {
-              selected: i === select?.i && j === select?.j,
-              canEat: role.qz && moves.some((item) => item.i === i && item.j === j),
-              canMove: !role.qz && moves.some((item) => item.i === i && item.j === j),
-            },
-            role.qz ? ['role', role.qz.color] : 'empty',
-          ]"
+          :class="{
+            selected: i === select?.i && j === select?.j,
+            canMove: moves.find((item) => item.i === i && item.j === j),
+            [role.qz?.color]: role.qz,
+          }"
           :i
           :j
         >
@@ -137,10 +127,15 @@ body {
   left: 0;
 }
 
-.item:has(.role) {
+.item:has(.red),
+.item:has(.black) {
   cursor: pointer;
 }
-.role {
+.item > div {
+  z-index: 1;
+}
+.red,
+.black {
   font-family: cursive;
   font-size: 35px;
   font-weight: 900;
@@ -149,26 +144,22 @@ body {
   border: 3px solid red;
   border-radius: 50%;
   background: white;
-  z-index: 1;
 }
-.role.red {
+.red {
   border: 1px solid red;
 }
 .selected {
   background: red;
   color: white;
 }
-.empty {
-  width: 50px;
-  height: 50px;
-  z-index: 1;
-}
 .canMove {
   background: black;
   width: 30px;
   height: 30px;
 }
-.canEat {
+
+/* 吃 */
+.canMove.red {
   background: black;
 }
 </style>

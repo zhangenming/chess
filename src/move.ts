@@ -36,6 +36,15 @@ const _moves = computed(() => {
       })
   }
 
+  if (role === '炮') {
+    return [
+      ...炮可移动位置(get下侧全部棋子(x)),
+      ...炮可移动位置(get上侧全部棋子(x)),
+      ...炮可移动位置(get右侧全部棋子(x)),
+      ...炮可移动位置(get左侧全部棋子(x)),
+    ]
+  }
+
   if (role === '象') {
     return positionsFlat
       .filter((p) => 距离i(x, p) === 2 && 距离j(x, p) === 2)
@@ -110,4 +119,19 @@ function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; 
       }
     })
     .filter((item, i) => 距离(x, item) === i + 1)
+}
+
+function 炮可移动位置(datas: { i: number; j: number; qz?: { role: string; color: string } }[]) {
+  let 炮架 = false
+  let 找到目标 = false
+  return datas.filter((item) => {
+    if (!炮架 && !item.qz) return true
+    if (炮架 && item.qz && !找到目标) {
+      找到目标 = true
+      return true
+    }
+    if (item.qz) {
+      炮架 = true
+    }
+  })
 }

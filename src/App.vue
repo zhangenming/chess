@@ -7,11 +7,13 @@ import { computed } from 'vue'
 import { SEND } from './online'
 
 function action({ target }: { target: HTMLElement }) {
-  if (!该你走了.value) return
+  // if (!该你走了.value) return
 
   if (!(target instanceof HTMLElement)) {
     return
   }
+
+  console.log(target)
 
   const i = Number(target.getAttribute('i'))
   const j = Number(target.getAttribute('j'))
@@ -26,25 +28,30 @@ function action({ target }: { target: HTMLElement }) {
       // 拿(换)
       select.value = { i, j }
     }
-  } else if (select.value) {
+  } else if (select.value && target.classList.contains('canMove')) {
     const clicked = positions[i][j]
     const old = positions[select.value.i][select.value.j]
 
     if (moves.value.find((item) => item.i === i && item.j === j)) {
       // 走
       if (clickType === 'empty') {
-        SEND({
-          走: {
-            l: { i: old.i, j: old.j },
-            r: { i: clicked.i, j: clicked.j },
-          },
-        })
+        ;[clicked.qz, old.qz] = [old.qz, clicked.qz]
+        // SEND({
+        //   走: {
+        //     l: { i: old.i, j: old.j },
+        //     r: { i: clicked.i, j: clicked.j },
+        //   },
+        // })
       }
       // 走-吃
       if (clickType === 'red') {
         ;[clicked.qz, old.qz] = [old.qz, undefined]
       }
       select.value = undefined
+
+      if (clicked.qz.showB === false) {
+        clicked.qz.showB = true
+      }
     }
   }
 }
@@ -58,13 +65,15 @@ const 该你走了 = computed(() => {
   <div class="opacity-100">回合{{ 回合 }}</div>
   <div class="opacity-100">{{ 该你走了 ? '你的回合' : '对手的回合' }}</div>
 
-  <div @click="action" class="flex opacity-0" v-for="(line, i) of positions">
-    <div v-for="(role, j) of line" class="item">
+  <div @click="action" class="flex" v-for="(line, i) of positions">
+    <div v-for="(role, j) of line" class="item" :i :j>
       <div
         :class="{
           selected: i === select?.i && j === select?.j,
           canMove: moves.find((item) => item.i === i && item.j === j),
           [role.qz?.color]: role.qz,
+          kong: !role.qz,
+          jie: !role.qz?.showB,
         }"
         :i
         :j
@@ -79,30 +88,18 @@ const 该你走了 = computed(() => {
 * {
   box-sizing: border-box;
 }
+div {
+  user-select: none;
+}
 body {
   display: flex;
   justify-content: center;
   margin-top: 50px;
 }
-#app:hover > div {
-  opacity: 0.07;
-}
-#app {
-  width: 401px;
-  height: 451px;
-  /* overflow: hidden; */
-  position: relative;
-}
-.app {
-  position: absolute;
-  left: -25px;
-  top: -25px;
-}
 .item {
   width: 50px;
   height: 50px;
   position: relative;
-  flex-shrink: 0;
   color: red;
   display: flex;
   align-items: center;
@@ -128,6 +125,26 @@ body {
   height: 25px;
   top: 25px;
 }
+.item[i='4']::before {
+  height: 2px;
+}
+.item[i='4'] {
+  /* background: linear-gradient(180deg, #eee 0%, #ffffff 60%); */
+}
+.item[i='5'] {
+  /* background: linear-gradient(180deg, #999 0%, #ffffff 50%); */
+}
+.item[i='4']:not([j='0'], [j='8'])::after {
+  height: 25px;
+  top: 0px;
+}
+.item[i='5']::before {
+  height: 2px;
+}
+.item[i='5']:not([j='0'], [j='8'])::after {
+  height: 25px;
+  top: 25px;
+}
 .item[i='9']::after {
   height: 25px;
   top: 0;
@@ -142,8 +159,16 @@ body {
   left: 0;
 }
 
-.item:has(.red),
-.item:has(.black) {
+/* 炮位 */
+.item[i='7'][j='7'],
+.item[i='7'][j='1'],
+.item[i='2'][j='1'],
+.item[i='2'][j='7'] {
+  /* background-color: #eee; */
+}
+
+.item:has(.black),
+.canMove {
   cursor: pointer;
 }
 .item > div {
@@ -153,28 +178,46 @@ body {
 .black {
   font-family: cursive;
   font-size: 35px;
-  font-weight: 900;
   line-height: 1em;
   padding: 5px;
-  border: 3px solid red;
   border-radius: 50%;
   background: white;
+  transition: border-width 0.3s;
+}
+.black {
+  border: 1px solid black;
+  color: black;
+  font-weight: 900;
 }
 .red {
   border: 1px solid red;
+  color: red;
 }
-.selected {
+.jie {
+  color: #999;
+}
+.item .selected {
+  border-width: 8px;
+  z-index: 9;
+}
+.canMove.kong {
+  background: black;
+  width: 10px;
+  height: 10px;
+  padding: 5px;
+  border: 10px solid white;
+  border-radius: 50%;
+}
+.canMove.red::before {
+  content: '';
   background: red;
-  color: white;
-}
-.canMove {
-  background: black;
-  width: 30px;
-  height: 30px;
-}
-
-/* 吃 */
-.canMove.red {
-  background: black;
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px solid black;
 }
 </style>

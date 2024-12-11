@@ -4,16 +4,23 @@ if (location.search.includes('l')) {
   localStorage.setItem('my_channel', Math.random().toString())
 }
 
+const 身份 = Math.random()
+
 const goEasy = GoEasy.getInstance({
-  host: 'hangzhou.goeasy.io', //应用所在的区域地址: 【hangzhou.goeasy.io |singapore.goeasy.io】
-  appkey: 'BC-c12db807824d4c98923bc16c498935bf', // common key,
+  host: 'hangzhou.goeasy.io',
+  appkey: 'BC-c12db807824d4c98923bc16c498935bf',
   modules: ['pubsub'],
 })
 
-goEasy.connect({})
+goEasy.connect({
+  id: 身份,
+})
 
 goEasy.pubsub.subscribe({
   channel: localStorage.getItem('my_channel'),
+  presence: {
+    enable: true,
+  },
   onMessage: function ({ content }) {
     const msg = JSON.parse(content)
     console.log('收到', msg)
@@ -52,7 +59,6 @@ goEasy.pubsub.subscribe({
   },
 })
 
-const 身份 = Math.random()
 let 玩家1数据
 let 玩家2数据
 

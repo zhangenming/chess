@@ -27,7 +27,7 @@ export const positions = reactive(
         qz: {
           role: r,
           roleB: r === '帅' ? '帅' : getArrItemRandom(i < 5 ? rolesA : rolesB),
-          showB: false,
+          showB: r === '帅',
           color: i < 5 ? ('red' as const) : ('black' as const),
         },
       }),

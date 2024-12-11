@@ -11,7 +11,7 @@ import { moves } from './move'
           v-if="role.role !== '空'"
           class="role"
           :class="{
-            selected: select && i === select[0] && j === select[1],
+            selected: i === select?.i && j === select?.j,
           }"
           @click="
             () => {

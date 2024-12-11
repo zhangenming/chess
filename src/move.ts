@@ -7,7 +7,7 @@ const _moves = computed(() => {
 
   const role = positions[x.i][x.j]
 
-  if (role.role === '军') {
+  if (role.role === '车') {
     return [
       ...军可移动位置(get下侧全部棋子(x), x),
       ...军可移动位置(get上侧全部棋子(x), x),
@@ -32,9 +32,29 @@ const _moves = computed(() => {
         if (p.j - x.j === -2) {
           return get左侧全部棋子(x)[0].role === '空'
         }
+        console.error('马')
       })
   }
 
+  if (role.role === '象') {
+    return positionsFlat
+      .filter((p) => 距离i(x, p) === 2 && 距离j(x, p) === 2)
+      .filter((p) => {
+        if (p.i - x.i === 2 && p.j - x.j === 2) {
+          return positions[x.i + 1][x.j + 1].role === '空'
+        }
+        if (p.i - x.i === -2 && p.j - x.j === -2) {
+          return positions[x.i - 1][x.j - 1].role === '空'
+        }
+        if (p.i - x.i === 2 && p.j - x.j === -2) {
+          return positions[x.i + 1][x.j - 1].role === '空'
+        }
+        if (p.i - x.i === -2 && p.j - x.j === 2) {
+          return positions[x.i - 1][x.j + 1].role === '空'
+        }
+        console.error('象')
+      })
+  }
   if (role.role === '兵') {
     return [get下侧全部棋子(x)[0], get上侧全部棋子(x)[0], get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]]
   }

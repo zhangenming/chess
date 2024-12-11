@@ -1,5 +1,8 @@
 import GoEasy from 'goeasy'
 import { positions, 先手, 回合 } from './data'
+if (location.search.includes('l')) {
+  localStorage.setItem('my_channel', Math.random().toString())
+}
 
 const goEasy = GoEasy.getInstance({
   host: 'hangzhou.goeasy.io', //应用所在的区域地址: 【hangzhou.goeasy.io |singapore.goeasy.io】
@@ -10,7 +13,7 @@ const goEasy = GoEasy.getInstance({
 goEasy.connect({})
 
 goEasy.pubsub.subscribe({
-  channel: 'my_channel',
+  channel: localStorage.getItem('my_channel'),
   onMessage: function ({ content }) {
     const msg = JSON.parse(content)
     console.log('收到', msg)
@@ -22,20 +25,17 @@ goEasy.pubsub.subscribe({
         玩家2数据 = msg.身份
       }
       if (玩家1数据 && 玩家2数据) {
-        console.log('游戏开始')
-        SEND({ 游戏开始: '游戏开始', 玩家1数据, 玩家2数据 })
+        SEND({ 游戏开始: 身份 })
       }
     }
 
     if (msg.游戏开始) {
-      console.log('游戏开始', msg.玩家1数据, msg.玩家2数据)
-      if (msg.玩家1数据 > msg.玩家2数据) {
-        if (msg.玩家1数据 === 身份) {
-          console.log('我赢了 我先手')
-        } else {
-          console.log('对手赢了 对手先手')
-        }
-        先手.value = msg.玩家1数据 === 身份 ? 0 : 1
+      if (msg.游戏开始 === 身份) {
+        console.log('我是房主 我先手')
+        先手.value = 0
+      } else {
+        console.log('对手是房主 对手先手')
+        先手.value = 1
       }
     }
 
@@ -58,11 +58,13 @@ setTimeout(() => {
   })
 }, 111)
 
-export function SEND(data: any) {
+export async function SEND(data: any) {
   console.log('SEND', data)
 
+  await new Promise((resolve) => setTimeout(resolve, 311))
+
   goEasy.pubsub.publish({
-    channel: 'my_channel',
+    channel: localStorage.getItem('my_channel'),
     message: JSON.stringify(data),
   })
 }

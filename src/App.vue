@@ -62,8 +62,7 @@ const 该你走了 = computed(() => {
 
 <template>
   <div class="opacity-100">回合{{ 回合 }}</div>
-  <div class="opacity-100">先手{{ 先手 }}</div>
-  <div class="opacity-100">该你走了{{ !!该你走了 }}</div>
+  <div class="opacity-100">{{ 该你走了 ? '你的回合' : '对手的回合' }}</div>
 
   <div @click="action" class="flex opacity-0" v-for="(line, i) of positions">
     <div v-for="(role, j) of line" class="item">
@@ -76,7 +75,7 @@ const 该你走了 = computed(() => {
         :i
         :j
       >
-        {{ role.qz && (role.qz.showB ? role.qz.roleB : role.qz.role) }}
+        {{ role.qz && (role.qz.showB ? role.qz.roleB : '〇') }}
       </div>
     </div>
   </div>

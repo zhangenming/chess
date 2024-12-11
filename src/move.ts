@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { positions, positionsFlat, select } from './data'
+import { positions, positionsFlat, select, 先手 } from './data'
 import { get下侧全部棋子, get上侧全部棋子, get右侧全部棋子, get左侧全部棋子, 距离i, 距离j, 距离 } from './utils'
 import type { coord } from './utils'
 
@@ -91,7 +91,7 @@ const _moves = computed(() => {
 })
 
 export const moves = computed(() => {
-  return _moves.value.filter((p) => p && p.qz?.color !== 'black')
+  return _moves.value.filter((p) => p && p.qz?.color !== (!先手.value ? 'black' : 'red'))
 })
 
 function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; color: string } }[], x: coord) {

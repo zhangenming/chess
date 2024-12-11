@@ -43,3 +43,6 @@ export const role = computed(() => select.value && positions[select.value[0]][se
 
 // pro plus max utral
 // 帅也随机 暗器
+
+export const 回合 = ref(0)
+export const 先手 = ref()

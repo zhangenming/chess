@@ -1,10 +1,14 @@
 <script setup lang="ts">
-import { positions, select } from './data'
+import { positions, select, 回合, 先手 } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
 import './online'
+import { computed } from 'vue'
+import { SEND } from './online'
 
 function action({ target }: { target: HTMLElement }) {
+  if (!该你走了.value) return
+
   if (!(target instanceof HTMLElement)) {
     return
   }
@@ -14,7 +18,7 @@ function action({ target }: { target: HTMLElement }) {
 
   const clickType = getRoleType(i, j)
 
-  if (clickType === 'black') {
+  if (clickType === (!先手.value ? 'black' : 'red')) {
     if (select.value?.i === i && select.value?.j === j) {
       // 拿-关
       select.value = undefined
@@ -29,11 +33,18 @@ function action({ target }: { target: HTMLElement }) {
     if (moves.value.find((item) => item.i === i && item.j === j)) {
       // 走
       if (clickType === 'empty') {
-        ;[clicked.qz, old.qz] = [old.qz, clicked.qz]
+        SEND({
+          走: {
+            l: { i: old.i, j: old.j },
+            r: { i: clicked.i, j: clicked.j },
+          },
+        })
       }
       // 走-吃
-      if (clickType === 'red') {
+      else if (clickType === 'red') {
         ;[clicked.qz, old.qz] = [old.qz, undefined]
+      } else {
+        console.error('吃')
       }
       select.value = undefined
 
@@ -43,10 +54,18 @@ function action({ target }: { target: HTMLElement }) {
     }
   }
 }
+
+const 该你走了 = computed(() => {
+  return 回合.value % 2 === 先手.value
+})
 </script>
 
 <template>
-  <div @click="action" class="flex" v-for="(line, i) of positions">
+  <div class="opacity-100">回合{{ 回合 }}</div>
+  <div class="opacity-100">先手{{ 先手 }}</div>
+  <div class="opacity-100">该你走了{{ !!该你走了 }}</div>
+
+  <div @click="action" class="flex opacity-0" v-for="(line, i) of positions">
     <div v-for="(role, j) of line" class="item">
       <div
         :class="{
@@ -71,9 +90,8 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 50px;
-  opacity: 0.02;
 }
-body:hover {
+#app:hover > div {
   opacity: 0.07;
 }
 #app {

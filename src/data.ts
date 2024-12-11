@@ -12,8 +12,21 @@ export const positions = reactive(
     ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
     ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
     ['车', '马', '象', '仕', '帅', '仕', '象', '马', '车'],
-  ].map((line, i) => line.map((role, j) => ({ role, i, j })))
+  ].map((line, i) =>
+    line.map((role, j) => ({
+      i,
+      j,
+      ...(role != '空' && {
+        qz: {
+          role,
+          color: i < 5 ? 'red' : 'black',
+        },
+      }),
+    }))
+  )
 )
+console.log(positions)
+
 export const positionsFlat = positions.flat()
 
 export const select = ref<{ i: number; j: number }>()

@@ -8,7 +8,7 @@ import { moves } from './move'
     <div class="line" v-for="(line, i) of positions">
       <div v-for="(role, j) of line" class="item" :i="i" :j="j">
         <div
-          v-if="role.role !== '空'"
+          v-if="role.qz"
           class="role"
           :class="{
             selected: i === select?.i && j === select?.j,
@@ -19,7 +19,7 @@ import { moves } from './move'
             }
           "
         >
-          {{ role.role }}
+          {{ role.qz.role }}
         </div>
         <div
           v-else
@@ -30,9 +30,9 @@ import { moves } from './move'
           @click="
             () => {
               if (!select) return
-              ;[positions[i][j].role, positions[select.i][select.j].role] = [
-                positions[select.i][select.j].role,
-                positions[i][j].role,
+              ;[positions[i][j].qz, positions[select.i][select.j].qz] = [
+                positions[select.i][select.j].qz,
+                positions[i][j].qz,
               ]
               select = undefined
             }

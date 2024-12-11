@@ -5,9 +5,9 @@ const _moves = computed(() => {
   const x = select.value
   if (!x) return []
 
-  const role = positions[x.i][x.j]
+  const role = positions[x.i][x.j].qz.role
 
-  if (role.role === '车') {
+  if (role === '车') {
     return [
       ...军可移动位置(get下侧全部棋子(x), x),
       ...军可移动位置(get上侧全部棋子(x), x),
@@ -16,56 +16,56 @@ const _moves = computed(() => {
     ]
   }
 
-  if (role.role === '马') {
+  if (role === '马') {
     return positionsFlat
       .filter((p) => (距离i(x, p) === 1 && 距离j(x, p) === 2) || (距离i(x, p) === 2 && 距离j(x, p) === 1))
       .filter((p) => {
         if (p.i - x.i === 2) {
-          return get下侧全部棋子(x)[0].role === '空'
+          return get下侧全部棋子(x)[0].qz === undefined
         }
         if (p.i - x.i === -2) {
-          return get上侧全部棋子(x)[0].role === '空'
+          return get上侧全部棋子(x)[0].qz === undefined
         }
         if (p.j - x.j === 2) {
-          return get右侧全部棋子(x)[0].role === '空'
+          return get右侧全部棋子(x)[0].qz === undefined
         }
         if (p.j - x.j === -2) {
-          return get左侧全部棋子(x)[0].role === '空'
+          return get左侧全部棋子(x)[0].qz === undefined
         }
         console.error('马')
       })
   }
 
-  if (role.role === '象') {
+  if (role === '象') {
     return positionsFlat
       .filter((p) => 距离i(x, p) === 2 && 距离j(x, p) === 2)
       .filter((p) => {
         if (p.i - x.i === 2 && p.j - x.j === 2) {
-          return positions[x.i + 1][x.j + 1].role === '空'
+          return positions[x.i + 1][x.j + 1].qz === undefined
         }
         if (p.i - x.i === -2 && p.j - x.j === -2) {
-          return positions[x.i - 1][x.j - 1].role === '空'
+          return positions[x.i - 1][x.j - 1].qz === undefined
         }
         if (p.i - x.i === 2 && p.j - x.j === -2) {
-          return positions[x.i + 1][x.j - 1].role === '空'
+          return positions[x.i + 1][x.j - 1].qz === undefined
         }
         if (p.i - x.i === -2 && p.j - x.j === 2) {
-          return positions[x.i - 1][x.j + 1].role === '空'
+          return positions[x.i - 1][x.j + 1].qz === undefined
         }
         console.error('象')
       })
   }
-  if (role.role === '兵') {
+  if (role === '兵') {
     return [get下侧全部棋子(x)[0], get上侧全部棋子(x)[0], get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]]
   }
 
-  if (role.role === '帅') {
+  if (role === '帅') {
   }
 
   return []
 })
 export const moves = computed(() => {
-  return _moves.value.filter((p) => p?.role === '空')
+  return _moves.value.filter((p) => p && p.qz === undefined)
 })
 
 watch(moves, (moves) => {
@@ -102,6 +102,6 @@ function get下侧全部棋子({ i, j }: 位置) {
   return positions.slice(i + 1).map((line) => line[j])
 }
 
-function 军可移动位置(datas: { i: number; j: number; role: string }[], x: 位置) {
-  return datas.filter((item) => item.role === '空').filter((item, i) => 距离(x, item) === i + 1)
+function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; color: string } }[], x: 位置) {
+  return datas.filter((item) => item.qz === undefined).filter((item, i) => 距离(x, item) === i + 1)
 }

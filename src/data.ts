@@ -1,6 +1,6 @@
 import { computed, reactive, ref } from 'vue'
 
-export const roles = reactive(
+export const positions = reactive(
   [
     ['军', '马', '相', '仕', '帅', '仕', '相', '马', '军'],
     ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
@@ -14,7 +14,8 @@ export const roles = reactive(
     ['军', '马', '相', '仕', '帅', '仕', '相', '马', '军'],
   ].map((line, i) => line.map((role, j) => ({ role, i, j })))
 )
+export const positionsFlat = positions.flat()
 
 export const select = ref<{ i: number; j: number }>()
 
-export const role = computed(() => select.value && roles[select.value[0]][select.value[1]])
+export const role = computed(() => select.value && positions[select.value[0]][select.value[1]])

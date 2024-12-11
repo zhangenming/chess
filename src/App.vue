@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { roles, select, role } from './data'
+import { positions, select, role } from './data'
 import { moves } from './move'
 </script>
 
 <template>
   <div>
-    <div class="line" v-for="(line, i) of roles">
+    <div class="line" v-for="(line, i) of positions">
       <div v-for="(role, j) of line" class="item" :i="i" :j="j">
         <div
           v-if="role.role !== '空'"
@@ -30,7 +30,10 @@ import { moves } from './move'
           @click="
             () => {
               if (!select) return
-              ;[roles[i][j].role, roles[select.i][select.j].role] = [roles[select.i][select.j].role, roles[i][j].role]
+              ;[positions[i][j].role, positions[select.i][select.j].role] = [
+                positions[select.i][select.j].role,
+                positions[i][j].role,
+              ]
               select = undefined
             }
           "

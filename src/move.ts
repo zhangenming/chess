@@ -1,11 +1,11 @@
 import { computed, watch } from 'vue'
-import { roles, select } from './data'
+import { positions, positionsFlat, select } from './data'
 
-export const moves = computed(() => {
+const _moves = computed(() => {
   const x = select.value
   if (!x) return []
 
-  const role = roles[x.i][x.j]
+  const role = positions[x.i][x.j]
 
   if (role.role === '军') {
     return [
@@ -15,15 +15,37 @@ export const moves = computed(() => {
       ...军可移动位置(get左侧全部棋子(x), x),
     ]
   }
-  if (role.role === '兵') {
-    return [get下侧全部棋子(x)[0], get上侧全部棋子(x)[0], get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]].filter(
-      (e) => e?.role === '空'
-    )
+
+  if (role.role === '马') {
+    return positionsFlat
+      .filter((p) => (距离i(x, p) === 1 && 距离j(x, p) === 2) || (距离i(x, p) === 2 && 距离j(x, p) === 1))
+      .filter((p) => {
+        if (p.i - x.i === 2) {
+          return get下侧全部棋子(x)[0].role === '空'
+        }
+        if (p.i - x.i === -2) {
+          return get上侧全部棋子(x)[0].role === '空'
+        }
+        if (p.j - x.j === 2) {
+          return get右侧全部棋子(x)[0].role === '空'
+        }
+        if (p.j - x.j === -2) {
+          return get左侧全部棋子(x)[0].role === '空'
+        }
+      })
   }
+
+  if (role.role === '兵') {
+    return [get下侧全部棋子(x)[0], get上侧全部棋子(x)[0], get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]]
+  }
+
   if (role.role === '帅') {
   }
 
   return []
+})
+export const moves = computed(() => {
+  return _moves.value.filter((p) => p?.role === '空')
 })
 
 watch(moves, (moves) => {
@@ -34,24 +56,30 @@ type 位置 = { i: number; j: number }
 function 距离(a: 位置, b: 位置) {
   return Math.abs(a.i - b.i) + Math.abs(a.j - b.j)
 }
+function 距离i(a: 位置, b: 位置) {
+  return Math.abs(a.i - b.i)
+}
+function 距离j(a: 位置, b: 位置) {
+  return Math.abs(a.j - b.j)
+}
 
 function get左侧全部棋子({ i, j }: 位置) {
-  return roles[i].slice(0, j).reverse()
+  return positions[i].slice(0, j).reverse()
 }
 
 function get右侧全部棋子({ i, j }: 位置) {
-  return roles[i].slice(j + 1)
+  return positions[i].slice(j + 1)
 }
 
 function get上侧全部棋子({ i, j }: 位置) {
-  return roles
+  return positions
     .slice(0, i)
     .map((line) => line[j])
     .reverse()
 }
 
 function get下侧全部棋子({ i, j }: 位置) {
-  return roles.slice(i + 1).map((line) => line[j])
+  return positions.slice(i + 1).map((line) => line[j])
 }
 
 function 军可移动位置(datas: { i: number; j: number; role: string }[], x: 位置) {

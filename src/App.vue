@@ -2,8 +2,9 @@
 import { positions, select } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
+import './online'
 
-function action({ target }) {
+function action({ target }: { target: HTMLElement }) {
   if (!(target instanceof HTMLElement)) {
     return
   }

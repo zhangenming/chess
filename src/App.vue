@@ -1,44 +1,70 @@
 <script setup lang="ts">
-import { positions, select, role } from './data'
+import { positions, select } from './data'
 import { moves } from './move'
+import { getRoleType, judgeRed } from './utils'
+
+function action({ target }) {
+  if (!(target instanceof HTMLElement)) {
+    return
+  }
+
+  const i = Number(target.getAttribute('i'))
+  const j = Number(target.getAttribute('j'))
+
+  const clickType = getRoleType(i, j)
+
+  if (!select.value) {
+    // 拿
+    if (clickType === 'black') {
+      select.value = { i, j }
+    }
+  } else {
+    const clicked = positions[i][j]
+    const old = positions[select.value.i][select.value.j]
+
+    // 走
+    if (clickType === '空') {
+      ;[clicked.qz, old.qz] = [old.qz, clicked.qz]
+      select.value = undefined
+    }
+    // 走-吃
+    if (clickType === 'red') {
+      clicked.qz = old.qz
+      old.qz = undefined
+      select.value = undefined
+    }
+
+    if (clickType === 'black') {
+      if (select.value.i === i && select.value.j === j) {
+        // 拿-关
+        select.value = undefined
+      } else {
+        // 拿-换
+        select.value = { i, j }
+      }
+    }
+  }
+}
 </script>
 
 <template>
-  <div>
+  <div @click="action">
     <div class="line" v-for="(line, i) of positions">
-      <div v-for="(role, j) of line" class="item" :i="i" :j="j">
+      <div v-for="(role, j) of line" class="item">
         <div
-          v-if="role.qz"
-          class="role"
-          :class="{
-            selected: i === select?.i && j === select?.j,
-            canEat: moves.some((item) => item.i === i && item.j === j),
-          }"
-          @click="
-            () => {
-              select = { i, j }
-            }
-          "
+          :class="[
+            {
+              selected: i === select?.i && j === select?.j,
+              canEat: role.qz && moves.some((item) => item.i === i && item.j === j),
+              canMove: !role.qz && moves.some((item) => item.i === i && item.j === j),
+            },
+            role.qz ? ['role', role.qz.color] : 'empty',
+          ]"
+          :i
+          :j
         >
-          {{ role.qz.role }}
+          {{ role.qz?.role }}
         </div>
-        <div
-          v-else
-          class="empty"
-          :class="{
-            canMove: moves.some((item) => item.i === i && item.j === j),
-          }"
-          @click="
-            () => {
-              if (!select) return
-              ;[positions[i][j].qz, positions[select.i][select.j].qz] = [
-                positions[select.i][select.j].qz,
-                positions[i][j].qz,
-              ]
-              select = undefined
-            }
-          "
-        ></div>
       </div>
     </div>
   </div>
@@ -117,12 +143,16 @@ body {
 .role {
   font-family: cursive;
   font-size: 35px;
-  padding: 5px;
+  font-weight: 900;
   line-height: 1em;
+  padding: 5px;
   border: 3px solid red;
   border-radius: 50%;
   background: white;
   z-index: 1;
+}
+.role.red {
+  border: 1px solid red;
 }
 .selected {
   background: red;

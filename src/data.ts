@@ -1,4 +1,4 @@
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 
 export const positions = reactive(
   [
@@ -20,6 +20,9 @@ export const positions = reactive(
         qz: {
           role,
           color: i < 5 ? 'red' : 'black',
+        } as {
+          role: string
+          color: 'red' | 'black'
         },
       }),
     }))
@@ -31,3 +34,7 @@ export const positionsFlat = positions.flat()
 export const select = ref<{ i: number; j: number }>()
 
 export const role = computed(() => select.value && positions[select.value[0]][select.value[1]])
+
+watch(select, (v) => {
+  console.log('select change', v)
+})

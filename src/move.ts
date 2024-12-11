@@ -1,4 +1,4 @@
-import { computed, watch } from 'vue'
+import { computed } from 'vue'
 import { positions, positionsFlat, select } from './data'
 
 const _moves = computed(() => {

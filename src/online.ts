@@ -44,6 +44,10 @@ goEasy.pubsub.subscribe({
       const old = positions[msg.走.l.i][msg.走.l.j]
       ;[clicked.qz, old.qz] = [old.qz, clicked.qz]
       回合.value++
+
+      if (clicked.qz.showB === false) {
+        clicked.qz.showB = true
+      }
     }
   },
 })
@@ -61,7 +65,7 @@ setTimeout(() => {
 export async function SEND(data: any) {
   console.log('SEND', data)
 
-  await new Promise((resolve) => setTimeout(resolve, 311))
+  await new Promise((resolve) => setTimeout(resolve, 回合.value * 10))
 
   goEasy.pubsub.publish({
     channel: localStorage.getItem('my_channel'),

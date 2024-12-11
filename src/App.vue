@@ -41,16 +41,10 @@ function action({ target }: { target: HTMLElement }) {
         })
       }
       // 走-吃
-      else if (clickType === 'red') {
+      if (clickType === 'red') {
         ;[clicked.qz, old.qz] = [old.qz, undefined]
-      } else {
-        console.error('吃')
       }
       select.value = undefined
-
-      if (clicked.qz?.showB === false) {
-        clicked.qz.showB = true
-      }
     }
   }
 }

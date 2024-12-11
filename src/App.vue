@@ -8,7 +8,7 @@ import { moves } from './move'
     <div class="line" v-for="(line, i) of roles">
       <div v-for="(role, j) of line" class="item" :i="i" :j="j">
         <div
-          v-if="role !== '空'"
+          v-if="role.role !== '空'"
           class="role"
           :class="{
             selected: select && i === select[0] && j === select[1],
@@ -19,7 +19,7 @@ import { moves } from './move'
             }
           "
         >
-          {{ role }}
+          {{ role.role }}
         </div>
         <div
           v-else
@@ -30,7 +30,10 @@ import { moves } from './move'
           @click="
             () => {
               if (!select) return
-              ;[roles[i][j], roles[select[0]][select[1]]] = [roles[select[0]][select[1]], roles[i][j]]
+              ;[roles[i][j].role, roles[select[0]][select[1]].role] =
+                //
+                [roles[select[0]][select[1]].role, roles[i][j].role]
+              select = undefined
             }
           "
         ></div>
@@ -129,7 +132,7 @@ body {
   z-index: 1;
 }
 .canMove {
-  background: #aea;
+  background: black;
   width: 30px;
   height: 30px;
 }

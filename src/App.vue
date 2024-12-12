@@ -2,9 +2,8 @@
 import { positions, select, 回合, 先手 } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
-import './online'
 import { computed } from 'vue'
-import { SEND } from './online'
+import './online'
 
 function action({ target }: { target: HTMLElement }) {
   // if (!该你走了.value) return
@@ -65,7 +64,7 @@ const 该你走了 = computed(() => {
   <div class="opacity-100">回合{{ 回合 }}</div>
   <div class="opacity-100">{{ 该你走了 ? '你的回合' : '对手的回合' }}</div>
 
-  <div @click="action" class="flex" v-for="(line, i) of positions">
+  <!-- <div @click="action" class="flex" v-for="(line, i) of positions">
     <div v-for="(role, j) of line" class="item" :i :j>
       <div
         :class="{
@@ -81,7 +80,7 @@ const 该你走了 = computed(() => {
         {{ role.qz && (role.qz.showB ? role.qz.roleB : '〇') }}
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <style>

@@ -35,25 +35,31 @@ export async function SEND(channel: string, type: string, data: any) {
   })
 }
 
-if (isMaster) {
-  // todo 监听成员上下线
-  setInterval(() => {
-    pubsub.hereNow({
-      channel: '大厅',
-      onSuccess({ content: { members } }) {
-        console.log(members)
+let memberA
 
-        while (members.length >= 2) {
-          const l = members.pop()
-          const r = members.pop()
+if (isMaster) {
+  pubsub.subscribePresence({
+    channel: '大厅',
+    onSuccess() {},
+    onPresence({ action, member, members }) {
+      if (action === 'join') {
+        console.log(action, member)
+
+        if (
+          memberA &&
+          members.find((e) => e.id === memberA.id) // 此时a可能已经离开
+        ) {
           SEND('大厅', '匹配成功', {
-            ol房间号: `-${l.id}-${r.id}-`,
-            ol先手: Math.max(l.id, r.id),
+            ol房间号: `-${memberA.id}-${member.id}-`,
+            ol先手: memberA.id,
           })
+          memberA = null
+        } else {
+          memberA = member
         }
-      },
-    })
-  }, 3000)
+      }
+    },
+  })
 } else {
   pubsub.subscribe({
     channel: '大厅',

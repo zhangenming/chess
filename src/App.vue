@@ -6,13 +6,7 @@ import { computed } from 'vue'
 import './online'
 
 function action({ target }) {
-  // if (!该你走了.value) return
-
-  if (!(target instanceof HTMLElement)) {
-    return
-  }
-
-  console.log(target)
+  if (!该你走了.value) return
 
   const i = Number(target.getAttribute('i'))
   const j = Number(target.getAttribute('j'))
@@ -56,28 +50,29 @@ function action({ target }) {
 }
 
 const 该你走了 = computed(() => {
-  return 回合.value % 2 === (先手.value ? 1 : 0)
+  return 回合.value % 2 === (先手.value ? 0 : 1)
 })
 </script>
 
 <template>
   <div>回合{{ 回合 }}</div>
-  <div>{{ 该你走了 ? '你的回合' : '对手的回合' }}</div>
 
-  <div @click="action" class="flex" v-for="(line, i) of positions">
-    <div v-for="(role, j) of line" class="item" :i :j>
-      <div
-        :class="{
-          selected: i === select?.i && j === select?.j,
-          canMove: moves.find((item) => item.i === i && item.j === j),
-          [role.qz?.color]: role.qz,
-          kong: !role.qz,
-          jie: !role.qz?.showB,
-        }"
-        :i
-        :j
-      >
-        {{ role.qz && (role.qz.showB ? role.qz.roleB : '〇') }}
+  <div @click="action" :style="{ border: `5px solid ${该你走了 ? 'green' : '#eee'}` }">
+    <div class="flex" v-for="(line, i) of positions">
+      <div v-for="(role, j) of line" class="item" :i :j>
+        <div
+          :class="{
+            selected: i === select?.i && j === select?.j,
+            canMove: moves.find((item) => item.i === i && item.j === j),
+            [role.qz?.color]: role.qz,
+            kong: !role.qz,
+            jie: !role.qz?.showB,
+          }"
+          :i
+          :j
+        >
+          {{ role.qz && (role.qz.showB ? role.qz.roleB : '〇') }}
+        </div>
       </div>
     </div>
   </div>

@@ -1,13 +1,11 @@
 import GoEasy from 'goeasy'
-import { positions, 先手, 回合 } from './data'
+import { isMaster, positions, 先手, 回合 } from './data'
 
 const { connect, pubsub } = GoEasy.getInstance({
   host: 'hangzhou.goeasy.io',
   appkey: 'BC-c12db807824d4c98923bc16c498935bf',
   modules: ['pubsub'],
 })
-
-const isMaster = location.search.includes('master')
 
 const 身份 = (() => {
   if (isMaster) {
@@ -38,6 +36,7 @@ export async function SEND(channel: string, type: string, data: any) {
 }
 
 if (isMaster) {
+  // todo 监听成员上下线
   setInterval(() => {
     pubsub.hereNow({
       channel: '大厅',
@@ -47,8 +46,10 @@ if (isMaster) {
         while (members.length >= 2) {
           const l = members.pop()
           const r = members.pop()
-          const 房间号 = `-${l.id}-${r.id}-`
-          SEND('大厅', '开始比赛', { 房间号 })
+          SEND('大厅', '匹配成功', {
+            ol房间号: `-${l.id}-${r.id}-`,
+            ol先手: Math.max(l.id, r.id),
+          })
         }
       },
     })
@@ -63,20 +64,20 @@ if (isMaster) {
       const { type, data } = JSON.parse(content)
       console.log('接收', type, data)
 
-      if (type === '开始比赛') {
-        if (data.房间号.includes(`-${身份}-`)) {
-          pubsub.unsubscribe({
-            channel: '大厅',
-            onSuccess() {},
-          })
-          pubsub.subscribe({
-            channel: data.房间号,
-            onMessage({ content }) {
-              const { type, data } = JSON.parse(content)
-              console.log('接收', type, data)
-            },
-          })
-        }
+      if (type === '匹配成功' && data.ol房间号.includes(`-${身份}-`)) {
+        pubsub.unsubscribe({
+          channel: '大厅',
+          onSuccess() {},
+        })
+        pubsub.subscribe({
+          channel: data.ol房间号,
+          onMessage({ content }) {
+            const { type, data } = JSON.parse(content)
+            console.log('接收', type, data)
+          },
+        })
+
+        先手.value = data.ol先手 === 身份
       }
     },
   })

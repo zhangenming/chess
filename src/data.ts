@@ -46,3 +46,5 @@ export const role = computed(() => select.value && positions[select.value[0]][se
 
 export const 回合 = ref(0)
 export const 先手 = ref()
+
+export const isMaster = location.search.includes('master')

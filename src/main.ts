@@ -2,9 +2,8 @@ import './assets/main.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
+import { isMaster } from './data'
 
-createApp(App).mount('#app')
-
-if (location.search.includes('home')) {
-  document.body.style.opacity = '1'
+if (!isMaster) {
+  createApp(App).mount('#app')
 }

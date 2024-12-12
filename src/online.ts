@@ -1,13 +1,5 @@
 import GoEasy from 'goeasy'
 import { positions, 先手, 回合 } from './data'
-if (location.search.includes('l')) {
-  localStorage.setItem('大厅', Math.random().toString())
-}
-
-const 身份 = Number(localStorage.getItem('身份')) || 0
-localStorage.setItem('身份', String(身份 + 1))
-
-console.log('身份', 身份)
 
 const { connect, pubsub } = GoEasy.getInstance({
   host: 'hangzhou.goeasy.io',
@@ -15,9 +7,21 @@ const { connect, pubsub } = GoEasy.getInstance({
   modules: ['pubsub'],
 })
 
+const isMaster = location.search.includes('master')
+
+const 身份 = (() => {
+  if (isMaster) {
+    return 'master'
+  } else {
+    const 身份 = Number(localStorage.getItem('身份')) || 0
+    localStorage.setItem('身份', String(身份 + 1))
+    return 身份
+  }
+})()
+
 connect({ id: 身份 })
 
-// 先判断大厅里有没有人
+console.log({ 身份 })
 
 export async function SEND(channel: string, type: string, data: any) {
   console.log('SEND', type, data)
@@ -26,66 +30,57 @@ export async function SEND(channel: string, type: string, data: any) {
 
   pubsub.publish({
     channel,
-    message: JSON.stringify({ type, data }),
+    message: JSON.stringify({
+      type,
+      data,
+    }),
   })
 }
 
-pubsub.hereNow({
-  channel: '大厅',
-  onSuccess({ content: { members } }) {
-    console.log('members', members)
-    if (members.length === 0) {
-      console.log('第1个人第1次') // 第1个人第1次
-      // 没人 我进入大厅 等待新玩家加入
-      pubsub.subscribe({
-        channel: '大厅',
-        presence: {
-          enable: true,
-        },
-        onMessage({ content }) {
-          console.log('第1个人第2次')
-          const { type, data } = JSON.parse(content)
-          console.log('收到', type, data)
+if (isMaster) {
+  setInterval(() => {
+    pubsub.hereNow({
+      channel: '大厅',
+      onSuccess({ content: { members } }) {
+        console.log(members)
 
-          if (type === '新玩家加入') {
-            // 新玩家加入 我退出大厅 进入房间
-            pubsub.unsubscribe({
-              channel: '大厅',
-              onSuccess() {},
-            })
-            pubsub.subscribe({
-              channel: data,
-              onMessage({ content }) {
-                // 第1个人游戏逻辑
-                const { type, data } = JSON.parse(content)
-                console.log('收到', type, data)
-              },
-            })
-          }
-        },
-      })
-    }
-    if (members.length === 1) {
-      // 第2个人第1次
-      // 已经有一个人 创建房间和他匹配开始游戏
-      // 房间号 第一个人id+第二个人id
-      const 房间号 = members[0].id + ':' + 身份
+        while (members.length >= 2) {
+          const l = members.pop()
+          const r = members.pop()
+          const 房间号 = `-${l.id}-${r.id}-`
+          SEND('大厅', '开始比赛', { 房间号 })
+        }
+      },
+    })
+  }, 3000)
+} else {
+  pubsub.subscribe({
+    channel: '大厅',
+    presence: {
+      enable: true,
+    },
+    onMessage({ content }) {
+      const { type, data } = JSON.parse(content)
+      console.log('接收', type, data)
 
-      // 第2个人进入房间
-      pubsub.subscribe({
-        channel: 房间号,
-        onMessage({ content }) {
-          // 第2个人游戏逻辑
-          const { type, data } = JSON.parse(content)
-          console.log('收到', type, data)
-        },
-      })
-
-      // 通知第1个人 我来了 可以开始游戏(新玩家加入)
-      SEND('大厅', '新玩家加入', 房间号)
-    }
-  },
-})
+      if (type === '开始比赛') {
+        if (data.房间号.includes(`-${身份}-`)) {
+          pubsub.unsubscribe({
+            channel: '大厅',
+            onSuccess() {},
+          })
+          pubsub.subscribe({
+            channel: data.房间号,
+            onMessage({ content }) {
+              const { type, data } = JSON.parse(content)
+              console.log('接收', type, data)
+            },
+          })
+        }
+      }
+    },
+  })
+}
 // setTimeout(() => {
 //   while (1) {
 //     while (Date.now() % 10000 > 9000) {

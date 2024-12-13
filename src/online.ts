@@ -32,7 +32,7 @@ const 身份 = (() => {
   }
 })()
 
-connect({ id: 身份 })
+connect({ id: Math.random() + '' })
 
 if (isMaster) {
   let memberA

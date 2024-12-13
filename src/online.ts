@@ -93,7 +93,7 @@ if (isMaster) {
               const old = positions[selectI][selectJ]
 
               clicked.qz = old.qz
-              clicked.qz.showB = true
+              clicked.qz.showJie = true
               delete old.qz
 
               回合.value++

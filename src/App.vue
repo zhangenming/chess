@@ -50,12 +50,12 @@ const 该你走了 = computed(() => {
             canMove: moves.find((item) => item.i === i && item.j === j),
             [role.qz?.color]: role.qz,
             kong: !role.qz,
-            jie: !role.qz?.showB,
+            jieCls: !role.qz?.showJie,
           }"
           :i
           :j
         >
-          {{ role.qz && (role.qz.showB ? role.qz.roleB : '〇') }}
+          {{ role.qz && (role.qz.showJie ? role.qz.jie : '〇') }}
         </div>
       </div>
     </div>
@@ -181,7 +181,7 @@ body {
   border: 1px solid red;
   color: red;
 }
-.jie {
+.jieCls {
   color: #999;
 }
 .item .selected {

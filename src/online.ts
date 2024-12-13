@@ -26,13 +26,11 @@ const 身份 = (() => {
   if (isMaster) {
     return 'master'
   } else {
-    const 身份 = Number(localStorage.getItem('身份')) || 0
-    localStorage.setItem('身份', String(身份 + 1))
-    return String(身份)
+    return Math.random() + ''
   }
 })()
 
-connect({ id: Math.random() + '' })
+connect({ id: 身份 })
 
 if (isMaster) {
   let memberA

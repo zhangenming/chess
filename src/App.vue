@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { positions, select, 回合, 先手 } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
-import { computed } from 'vue'
 import './online'
 
 function action({ target }) {
@@ -55,27 +55,32 @@ const 该你走了 = computed(() => {
 </script>
 
 <template>
-  <div>回合{{ 回合 }}</div>
+  <template v-if="回合 === undefined"> 等待对手加入 </template>
 
-  <div @click="action" :style="{ border: `5px solid ${该你走了 ? 'green' : '#eee'}` }">
-    <div class="flex" v-for="(line, i) of positions">
-      <div v-for="(role, j) of line" class="item" :i :j>
-        <div
-          :class="{
-            selected: i === select?.i && j === select?.j,
-            canMove: moves.find((item) => item.i === i && item.j === j),
-            [role.qz?.color]: role.qz,
-            kong: !role.qz,
-            jie: !role.qz?.showB,
-          }"
-          :i
-          :j
-        >
-          {{ role.qz && (role.qz.showB ? role.qz.roleB : '〇') }}
+  <template v-else>
+    <div>回合: {{ 回合 }}</div>
+    <div>该你走了: {{ 该你走了 }}</div>
+
+    <div class="app" :class="{ 该你走了 }" @click="action">
+      <div class="flex" v-for="(line, i) of positions">
+        <div v-for="(role, j) of line" class="item" :i :j>
+          <div
+            :class="{
+              selected: i === select?.i && j === select?.j,
+              canMove: moves.find((item) => item.i === i && item.j === j),
+              [role.qz?.color]: role.qz,
+              kong: !role.qz,
+              jie: !role.qz?.showB,
+            }"
+            :i
+            :j
+          >
+            {{ role.qz && (role.qz.showB ? role.qz.roleB : '〇') }}
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </template>
 </template>
 
 <style>
@@ -86,6 +91,12 @@ body {
   display: flex;
   justify-content: center;
   margin-top: 50px;
+}
+.app {
+  border: 5px solid #eee;
+}
+.app.该你走了 {
+  border: 5px solid green;
 }
 .item {
   width: 50px;
@@ -159,7 +170,7 @@ body {
   /* background-color: #eee; */
 }
 
-.item:has(.black),
+.该你走了 .item:has(.black),
 .canMove {
   cursor: pointer;
 }

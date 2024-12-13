@@ -1,26 +1,6 @@
 import GoEasy from 'goeasy'
 import { isMaster, positions, 先手, 回合 } from './data'
 
-const { connect, pubsub } = GoEasy.getInstance({
-  host: 'hangzhou.goeasy.io',
-  appkey: 'BC-c12db807824d4c98923bc16c498935bf',
-  modules: ['pubsub'],
-})
-
-const 身份 = (() => {
-  if (isMaster) {
-    return 'master'
-  } else {
-    const 身份 = Number(localStorage.getItem('身份')) || 0
-    localStorage.setItem('身份', String(身份 + 1))
-    return 身份
-  }
-})()
-
-connect({ id: 身份 })
-
-console.log({ 身份 })
-
 export async function SEND(channel: string, type: string, data: any) {
   console.log('SEND', type, data)
 
@@ -35,9 +15,26 @@ export async function SEND(channel: string, type: string, data: any) {
   })
 }
 
-let memberA
+const { connect, pubsub } = GoEasy.getInstance({
+  host: 'hangzhou.goeasy.io',
+  appkey: 'BC-c12db807824d4c98923bc16c498935bf',
+  modules: ['pubsub'],
+})
+
+const 身份 = (() => {
+  if (isMaster) {
+    return 'master'
+  } else {
+    const 身份 = Number(localStorage.getItem('身份')) || 0
+    localStorage.setItem('身份', String(身份 + 1))
+    return String(身份)
+  }
+})()
+
+connect({ id: 身份 })
 
 if (isMaster) {
+  let memberA
   pubsub.subscribePresence({
     channel: '大厅',
     onSuccess() {},
@@ -61,6 +58,7 @@ if (isMaster) {
     },
   })
 } else {
+  console.log({ 身份 })
   pubsub.subscribe({
     channel: '大厅',
     presence: {
@@ -84,6 +82,7 @@ if (isMaster) {
         })
 
         先手.value = data.ol先手 === 身份
+        回合.value = 0
       }
     },
   })

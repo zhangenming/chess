@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { positions, select, 回合, 先手 } from './data'
+import { positions, select, 回合, 先手, myColor } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
 import './online'
@@ -12,8 +12,6 @@ function action({ target }) {
   const i = Number(target.getAttribute('i'))
   const j = Number(target.getAttribute('j'))
 
-  const clickType = getRoleType(i, j)
-
   if (target.classList.contains('canMove')) {
     SEND('走', {
       old: [select.value.i, select.value.j],
@@ -23,7 +21,7 @@ function action({ target }) {
 
   select.value = undefined
 
-  if (clickType === 'black') {
+  if (getRoleType(i, j) === myColor.value) {
     select.value = { i, j }
   }
 }
@@ -36,12 +34,16 @@ const 该你走了 = computed(() => {
 <template>
   <template v-if="回合 === undefined"> 等待对手加入 </template>
 
-  <div>回合: {{ 回合 }}</div>
-  <div>该你走了: {{ 该你走了 }}</div>
+  <template v-else>
+    <div>回合: {{ 回合 }}</div>
+    <div>该你走了: {{ 该你走了 }}</div>
+    <div>先手: {{ 先手 }}</div>
+    <div>myColor: {{ myColor }}</div>
+  </template>
 
   <div class="app" :class="{ 该你走了 }" @click="action">
     <div class="flex" v-for="(line, i) of positions">
-      <div v-for="(role, j) of line" class="item" :i :j>
+      <div class="item" v-for="(role, j) of line" :i :j>
         <div
           :class="{
             selected: i === select?.i && j === select?.j,

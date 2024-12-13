@@ -16,7 +16,7 @@ const raw = [
 
 const rolesA = ['士', '卒', '马', '卒', '车', '象', '车', '炮', '炮', '卒', '马', '卒', '士', '象', '卒']
 
-const rolesB = [...rolesA]
+const rolesB = ['卒', '车', '炮', '卒', '马', '象', '车', '炮', '卒', '卒', '士', '卒', '马', '象', '士']
 
 export const positions = reactive(
   raw.map((line, i) =>
@@ -41,10 +41,10 @@ export const select = ref<{ i: number; j: number }>()
 
 export const role = computed(() => select.value && positions[select.value[0]][select.value[1]])
 
-// pro plus max utral
-// 帅也随机 暗器
-
 export const 回合 = ref<number | undefined>(undefined)
 export const 先手 = ref(false)
+
+export const myColor = computed(() => (先手.value ? 'red' : 'black'))
+export const drColor = computed(() => (先手.value ? 'black' : 'red'))
 
 export const isMaster = location.search.includes('master')

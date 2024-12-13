@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { positions, positionsFlat, select, 先手 } from './data'
+import { drColor, myColor, positions, positionsFlat, select, 先手 } from './data'
 import { get下侧全部棋子, get上侧全部棋子, get右侧全部棋子, get左侧全部棋子, 距离i, 距离j, 距离 } from './utils'
 import type { coord } from './utils'
 
@@ -78,9 +78,9 @@ const _moves = computed(() => {
   }
 
   if (role === '卒') {
-    return 先手.value === 0
-      ? [get上侧全部棋子(x)[0], ...(x.i < 5 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
-      : [get下侧全部棋子(x)[0], ...(x.i > 4 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
+    return 先手.value
+      ? [get下侧全部棋子(x)[0], ...(x.i > 4 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
+      : [get上侧全部棋子(x)[0], ...(x.i < 5 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
   }
 
   if (role === '帅') {
@@ -93,17 +93,17 @@ const _moves = computed(() => {
 })
 
 export const moves = computed(() => {
-  return _moves.value.filter((p) => p && p.qz?.color !== (!先手.value ? 'black' : 'red'))
+  return _moves.value.filter((p) => p && p.qz?.color !== myColor.value)
 })
 
 function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; color: string } }[], x: coord) {
-  let meetRed = false
+  let meetDr = false
   return datas
     .filter((item) => {
-      if (meetRed) return false
+      if (meetDr) return false
       if (!item.qz) return true
-      if (!meetRed && item.qz.color === 'red') {
-        meetRed = true
+      if (!meetDr && item.qz.color === drColor.value) {
+        meetDr = true
         return true
       }
     })

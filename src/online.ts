@@ -87,13 +87,16 @@ if (isMaster) {
               const {
                 old: [selectI, selectJ],
                 clicked: [i, j],
+                jie,
               } = data
 
               const clicked = positions[i][j]
               const old = positions[selectI][selectJ]
 
-              clicked.qz = old.qz
-              clicked.qz.showJie = true
+              clicked.qz = {
+                ...old.qz,
+                jie: jie || old.qz.jie,
+              }
               delete old.qz
 
               回合.value++

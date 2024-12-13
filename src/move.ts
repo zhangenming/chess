@@ -7,8 +7,8 @@ const _moves = computed(() => {
   const x = select.value
   if (!x) return []
 
-  const { role: _r, showJie, jie } = positions[x.i][x.j].qz
-  const role = showJie ? jie : _r
+  const { role: _r, jie } = positions[x.i][x.j].qz
+  const role = jie || _r
 
   if (role === '车') {
     return [
@@ -72,7 +72,7 @@ const _moves = computed(() => {
     return positionsFlat
       .filter((p) => 距离i(x, p) === 1 && 距离j(x, p) === 1)
       .filter(({ j }) => {
-        if (showJie) return true
+        if (jie) return true
         return j === 3 || j === 4 || j === 5
       })
   }

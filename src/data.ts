@@ -1,5 +1,5 @@
 import { computed, reactive, ref, watch } from 'vue'
-import { getArrItemRandom } from './utils'
+import { getArrItemRandom, shuffle } from './utils'
 
 const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
@@ -14,9 +14,40 @@ const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
 ]
 
-const rolesA = ['士', '卒', '马', '卒', '车', '象', '车', '炮', '炮', '卒', '马', '卒', '士', '象', '卒']
-
-const rolesB = ['卒', '车', '炮', '卒', '马', '象', '车', '炮', '卒', '卒', '士', '卒', '马', '象', '士']
+export const rolesA = shuffle([
+  '士',
+  '卒',
+  '马',
+  '卒',
+  '车',
+  '象',
+  '车',
+  '炮',
+  '炮',
+  '卒',
+  '马',
+  '卒',
+  '士',
+  '象',
+  '卒',
+])
+export const rolesB = shuffle([
+  '卒',
+  '车',
+  '炮',
+  '卒',
+  '马',
+  '象',
+  '车',
+  '炮',
+  '卒',
+  '卒',
+  '士',
+  '卒',
+  '马',
+  '象',
+  '士',
+])
 
 export const positions = reactive(
   raw.map((line, i) =>
@@ -26,8 +57,7 @@ export const positions = reactive(
       ...(r != '空' && {
         qz: {
           role: r,
-          jie: r === '帅' ? '帅' : getArrItemRandom(i < 5 ? rolesA : rolesB),
-          showJie: r === '帅',
+          jie: r === '帅' ? '帅' : '', //getArrItemRandom(i < 5 ? rolesA : rolesB),
           color: i < 5 ? ('red' as const) : ('black' as const),
         },
       }),

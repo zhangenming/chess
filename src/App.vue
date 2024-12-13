@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { positions, select, 回合, 先手, myColor } from './data'
+import { positions, select, 回合, 先手, myColor, rolesA, rolesB } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
 import './online'
@@ -13,9 +13,11 @@ function action({ target }) {
   const j = Number(target.getAttribute('j'))
 
   if (target.classList.contains('canMove')) {
+    const { i: oldI, j: oldJ } = select.value
     SEND('走', {
-      old: [select.value.i, select.value.j],
+      old: [oldI, oldJ],
       clicked: [i, j],
+      ...(!positions[oldI][oldJ].qz?.jie && { jie: 先手.value ? rolesA.pop() : rolesB.pop() }),
     })
   }
 
@@ -50,12 +52,12 @@ const 该你走了 = computed(() => {
             canMove: moves.find((item) => item.i === i && item.j === j),
             [role.qz?.color]: role.qz,
             kong: !role.qz,
-            jieCls: !role.qz?.showJie,
+            jieCls: !role.qz?.jie,
           }"
           :i
           :j
         >
-          {{ role.qz && (role.qz.showJie ? role.qz.jie : '〇') }}
+          {{ role.qz && (role.qz.jie || '〇') }}
         </div>
       </div>
     </div>

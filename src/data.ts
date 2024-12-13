@@ -78,3 +78,4 @@ export const myColor = computed(() => (先手.value ? 'red' : 'black'))
 export const drColor = computed(() => (先手.value ? 'black' : 'red'))
 
 export const isMaster = location.search.includes('master')
+export const isMe = location.search.includes('me')

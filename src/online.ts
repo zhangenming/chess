@@ -1,5 +1,5 @@
 import GoEasy from 'goeasy'
-import { isMaster, positions, 先手, 回合 } from './data'
+import { isMaster, isMe, positions, 先手, 回合 } from './data'
 
 let channel = '大厅'
 export async function SEND(type: string, data: any) {
@@ -26,7 +26,7 @@ const 身份 = (() => {
   if (isMaster) {
     return 'master'
   } else {
-    return Math.random() + ''
+    return (isMe ? 'ME' : '') + Math.random().toFixed(3).slice(2)
   }
 })()
 
@@ -38,9 +38,8 @@ if (isMaster) {
     channel,
     onSuccess() {},
     onPresence({ action, member, members }) {
+      console.log(action, member)
       if (action === 'join') {
-        console.log(action, member)
-
         if (
           memberA &&
           members.find((e) => e.id === memberA.id) // 此时a可能已经离开
@@ -77,6 +76,9 @@ if (isMaster) {
 
         pubsub.subscribe({
           channel,
+          presence: {
+            enable: true,
+          },
           onMessage({ content }) {
             const { type, data } = JSON.parse(content)
             console.log('接收', type, data)
@@ -98,6 +100,20 @@ if (isMaster) {
               delete old.qz
 
               回合.value++
+            }
+          },
+        })
+
+        pubsub.subscribePresence({
+          channel,
+          onSuccess() {},
+          onPresence({ action }) {
+            if (action === 'timeout') {
+              console.log('对方退出')
+              if (!isMe) {
+                alert('对方退出')
+                location.reload()
+              }
             }
           },
         })

@@ -86,7 +86,11 @@ const _moves = computed(() => {
   if (role === '帅') {
     return positionsFlat
       .filter((p) => (距离i(x, p) === 1 && 距离j(x, p) === 0) || (距离i(x, p) === 0 && 距离j(x, p) === 1))
-      .filter(({ i, j }) => (j === 3 || j === 4 || j === 5) && (i === 7 || i === 8 || i === 9))
+      .filter(
+        ({ i, j }) =>
+          (j === 3 || j === 4 || j === 5) &&
+          (先手.value ? i === 0 || i === 1 || i === 2 : i === 7 || i === 8 || i === 9)
+      )
   }
 
   console.error('move')

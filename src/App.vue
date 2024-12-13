@@ -4,6 +4,7 @@ import { positions, select, 回合, 先手 } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
 import './online'
+import { SEND } from './online'
 
 function action({ target }) {
   if (!该你走了.value) return
@@ -13,39 +14,17 @@ function action({ target }) {
 
   const clickType = getRoleType(i, j)
 
-  if (clickType === (!先手.value ? 'black' : 'red')) {
-    if (select.value?.i === i && select.value?.j === j) {
-      // 拿-关
-      select.value = undefined
-    } else {
-      // 拿(换)
-      select.value = { i, j }
-    }
-  } else if (select.value && target.classList.contains('canMove')) {
-    const clicked = positions[i][j]
-    const old = positions[select.value.i][select.value.j]
+  if (target.classList.contains('canMove')) {
+    SEND('走', {
+      old: [select.value.i, select.value.j],
+      clicked: [i, j],
+    })
+  }
 
-    if (moves.value.find((item) => item.i === i && item.j === j)) {
-      // 走
-      if (clickType === 'empty') {
-        ;[clicked.qz, old.qz] = [old.qz, clicked.qz]
-        // SEND({
-        //   走: {
-        //     l: { i: old.i, j: old.j },
-        //     r: { i: clicked.i, j: clicked.j },
-        //   },
-        // })
-      }
-      // 走-吃
-      if (clickType === 'red') {
-        ;[clicked.qz, old.qz] = [old.qz, undefined]
-      }
-      select.value = undefined
+  select.value = undefined
 
-      if (clicked.qz.showB === false) {
-        clicked.qz.showB = true
-      }
-    }
+  if (clickType === 'black') {
+    select.value = { i, j }
   }
 }
 
@@ -57,30 +36,28 @@ const 该你走了 = computed(() => {
 <template>
   <template v-if="回合 === undefined"> 等待对手加入 </template>
 
-  <template v-else>
-    <div>回合: {{ 回合 }}</div>
-    <div>该你走了: {{ 该你走了 }}</div>
+  <div>回合: {{ 回合 }}</div>
+  <div>该你走了: {{ 该你走了 }}</div>
 
-    <div class="app" :class="{ 该你走了 }" @click="action">
-      <div class="flex" v-for="(line, i) of positions">
-        <div v-for="(role, j) of line" class="item" :i :j>
-          <div
-            :class="{
-              selected: i === select?.i && j === select?.j,
-              canMove: moves.find((item) => item.i === i && item.j === j),
-              [role.qz?.color]: role.qz,
-              kong: !role.qz,
-              jie: !role.qz?.showB,
-            }"
-            :i
-            :j
-          >
-            {{ role.qz && (role.qz.showB ? role.qz.roleB : '〇') }}
-          </div>
+  <div class="app" :class="{ 该你走了 }" @click="action">
+    <div class="flex" v-for="(line, i) of positions">
+      <div v-for="(role, j) of line" class="item" :i :j>
+        <div
+          :class="{
+            selected: i === select?.i && j === select?.j,
+            canMove: moves.find((item) => item.i === i && item.j === j),
+            [role.qz?.color]: role.qz,
+            kong: !role.qz,
+            jie: !role.qz?.showB,
+          }"
+          :i
+          :j
+        >
+          {{ role.qz && (role.qz.showB ? role.qz.roleB : '〇') }}
         </div>
       </div>
     </div>
-  </template>
+  </div>
 </template>
 
 <style>

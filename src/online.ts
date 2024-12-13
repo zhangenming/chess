@@ -1,7 +1,8 @@
 import GoEasy from 'goeasy'
 import { isMaster, positions, 先手, 回合 } from './data'
 
-export async function SEND(channel: string, type: string, data: any) {
+let channel = '大厅'
+export async function SEND(type: string, data: any) {
   console.log('SEND', type, data)
 
   await new Promise((resolve) => setTimeout(resolve, 回合.value * 10))
@@ -36,7 +37,7 @@ connect({ id: 身份 })
 if (isMaster) {
   let memberA
   pubsub.subscribePresence({
-    channel: '大厅',
+    channel,
     onSuccess() {},
     onPresence({ action, member, members }) {
       if (action === 'join') {
@@ -46,9 +47,9 @@ if (isMaster) {
           memberA &&
           members.find((e) => e.id === memberA.id) // 此时a可能已经离开
         ) {
-          SEND('大厅', '匹配成功', {
+          SEND('匹配成功', {
             ol房间号: `-${memberA.id}-${member.id}-`,
-            ol先手: memberA.id,
+            ol先手: member.id,
           })
           memberA = null
         } else {
@@ -60,7 +61,7 @@ if (isMaster) {
 } else {
   console.log({ 身份 })
   pubsub.subscribe({
-    channel: '大厅',
+    channel,
     presence: {
       enable: true,
     },
@@ -70,14 +71,33 @@ if (isMaster) {
 
       if (type === '匹配成功' && data.ol房间号.includes(`-${身份}-`)) {
         pubsub.unsubscribe({
-          channel: '大厅',
+          channel,
           onSuccess() {},
         })
+
+        channel = data.ol房间号
+
         pubsub.subscribe({
-          channel: data.ol房间号,
+          channel,
           onMessage({ content }) {
             const { type, data } = JSON.parse(content)
             console.log('接收', type, data)
+
+            if (type === '走') {
+              const {
+                old: [selectI, selectJ],
+                clicked: [i, j],
+              } = data
+
+              const clicked = positions[i][j]
+              const old = positions[selectI][selectJ]
+
+              clicked.qz = old.qz
+              clicked.qz.showB = true
+              delete old.qz
+
+              回合.value++
+            }
           },
         })
 

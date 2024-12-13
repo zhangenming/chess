@@ -41,7 +41,7 @@ const 该你走了 = computed(() => {
     <div>myColor: {{ myColor }}</div>
   </template>
 
-  <div class="app" :class="{ 该你走了 }" @click="action">
+  <div class="app" :class="{ 该你走了, 先手 }" @click="action">
     <div class="flex" v-for="(line, i) of positions">
       <div class="item" v-for="(role, j) of line" :i :j>
         <div
@@ -77,6 +77,9 @@ body {
 .app.该你走了 {
   border: 5px solid green;
 }
+.app.先手 {
+  transform: rotate(180deg);
+}
 .item {
   width: 50px;
   height: 50px;
@@ -86,6 +89,9 @@ body {
   align-items: center;
   justify-content: center;
   user-select: none;
+}
+.先手 .item > div {
+  transform: rotate(180deg);
 }
 .item::before {
   content: '';

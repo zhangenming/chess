@@ -1,5 +1,5 @@
 import GoEasy from 'goeasy'
-import { isMaster, isMe, positions, 先手, 回合, username, 对手 } from './data'
+import { isMaster, isMe, positions, 先手, 回合, username, 对手, 走棋提示1, 走棋提示2 } from './data'
 
 let channel = '大厅'
 export async function SEND(type: string, data: any) {
@@ -92,6 +92,9 @@ if (isMaster) {
                 jie: jie || old.qz.jie,
               }
               delete old.qz
+
+              走棋提示1.value = { i, j }
+              走棋提示2.value = { i: selectI, j: selectJ }
 
               回合.value++
             }

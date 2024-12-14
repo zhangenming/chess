@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { moves } from '../move'
+import { 走棋提示2 } from '../data'
 </script>
 
 <template>
@@ -62,7 +63,14 @@ import { moves } from '../move'
       <div>
         <template v-for="i in 10">
           <div
-            :class="['clickable', '位置', moves.find((item) => item.i === i - 1 && item.j === j - 1) && 'canMove']"
+            :class="[
+              'clickable',
+              '位置',
+              {
+                canMove: moves.find((item) => item.i === i - 1 && item.j === j - 1),
+                走棋提示2: 走棋提示2.i === i - 1 && 走棋提示2.j === j - 1,
+              },
+            ]"
             v-for="j in 9"
             :style="{ top: `${(i - 1) * 50}px`, left: `${(j - 1) * 50}px` }"
             :i="i - 1"

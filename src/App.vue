@@ -1,6 +1,18 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { positions, select, 回合, 先手, myColor, rolesA, rolesB, username, 对手, positionsFlat } from './data'
+import {
+  positions,
+  select,
+  回合,
+  先手,
+  myColor,
+  rolesA,
+  rolesB,
+  username,
+  对手,
+  positionsFlat,
+  走棋提示1,
+} from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
 import './online'
@@ -67,6 +79,7 @@ const 该你走了 = computed(() => {
           canMove: moves.find((item) => item.i === i && item.j === j),
           jieCls: !qz.jie,
           selected: i === select?.i && j === select?.j,
+          走棋提示1: 走棋提示1.i === i && 走棋提示1.j === j,
         },
       ]"
       :i
@@ -140,5 +153,17 @@ body {
   translate: -50% -50%;
   border-radius: 50%;
   background: blue;
+}
+.走棋提示1::after,
+.走棋提示2::after {
+  content: '';
+  width: 35px;
+  aspect-ratio: 1;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  translate: -50% -50%;
+  border-radius: 50%;
+  border: 2px solid blue;
 }
 </style>

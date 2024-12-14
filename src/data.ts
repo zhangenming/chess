@@ -91,3 +91,6 @@ export const username =
   })()
 
 export const 对手 = ref('')
+
+export const 走棋提示1 = ref({ i: -1, j: -1 })
+export const 走棋提示2 = ref({ i: -1, j: -1 })

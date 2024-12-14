@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { positions, select, 回合, 先手, myColor, rolesA, rolesB, username, 对手 } from './data'
+import { positions, select, 回合, 先手, myColor, rolesA, rolesB, username, 对手, positionsFlat } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
 import './online'
 import { SEND } from './online'
 
+import 棋盘 from './components/棋盘.vue'
+
 function action({ target }) {
-  if (!该你走了.value) return
+  // if (!该你走了.value) return
+
+  if (!target.classList.contains('clickable')) return
 
   const i = Number(target.getAttribute('i'))
   const j = Number(target.getAttribute('j'))
+
+  console.log(target, i, j)
 
   if (target.classList.contains('canMove')) {
     const { i: oldI, j: oldJ } = select.value
@@ -23,7 +29,7 @@ function action({ target }) {
 
   select.value = undefined
 
-  if (getRoleType(i, j) === myColor.value) {
+  if (target.classList.contains(myColor.value)) {
     select.value = { i, j }
   }
 }
@@ -41,31 +47,29 @@ const 该你走了 = computed(() => {
     <div>回合: {{ 回合 }}</div>
   </template>
 
-  <div class="app" :class="{ 该你走了, 先手 }" @click="action">
-    <div class="flex" v-for="(line, i) of positions">
-      <div class="item" v-for="(role, j) of line" :i :j>
-        <div
-          :class="{
-            selected: i === select?.i && j === select?.j,
-            canMove: moves.find((item) => item.i === i && item.j === j),
-            [role.qz?.color]: role.qz,
-            kong: !role.qz,
-            jieCls: !role.qz?.jie,
-          }"
-          :i
-          :j
-        >
-          {{ role.qz && (role.qz.jie || '〇') }}
-        </div>
-      </div>
+  <component :is="棋盘" @click="action">
+    <div
+      v-for="{ i, j, qz, key } in positionsFlat.filter((e) => e.qz)"
+      :key="key"
+      :style="{ top: `${i * 50}px`, left: `${j * 50 + 2}px` }"
+      :class="{
+        clickable: true,
+        roles: true,
+        canMove: moves.find((item) => item.i === i && item.j === j),
+        [qz.color]: qz,
+        kong: !qz,
+        jieCls: !qz.jie,
+        selected: i === select?.i && j === select?.j,
+      }"
+      :i
+      :j
+    >
+      {{ qz.jie || '〇' }}
     </div>
-  </div>
+  </component>
 </template>
 
 <style>
-* {
-  box-sizing: border-box;
-}
 body {
   display: flex;
   justify-content: center;
@@ -80,97 +84,25 @@ body {
 .app.先手 {
   transform: rotate(180deg);
 }
-.item {
-  width: 50px;
-  height: 50px;
-  position: relative;
-  color: red;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  user-select: none;
-}
 .先手 .item > div {
   transform: rotate(180deg);
-}
-.item::before {
-  content: '';
-  position: absolute;
-  top: 25px;
-  width: 50px;
-  height: 1px;
-  background: black;
-}
-.item::after {
-  content: '';
-  position: absolute;
-  left: 25px;
-  width: 1px;
-  height: 50px;
-  background: black;
-}
-.item[i='0']::after {
-  height: 25px;
-  top: 25px;
-}
-.item[i='4']::before {
-  height: 2px;
-}
-.item[i='4'] {
-  /* background: linear-gradient(180deg, #eee 0%, #ffffff 60%); */
-}
-.item[i='5'] {
-  /* background: linear-gradient(180deg, #999 0%, #ffffff 50%); */
-}
-.item[i='4']:not([j='0'], [j='8'])::after {
-  height: 25px;
-  top: 0px;
-}
-.item[i='5']::before {
-  height: 2px;
-}
-.item[i='5']:not([j='0'], [j='8'])::after {
-  height: 25px;
-  top: 25px;
-}
-.item[i='9']::after {
-  height: 25px;
-  top: 0;
-}
-.item[j='0']::before {
-  width: 25px;
-  left: 25px;
-}
-
-.item[j='8']::before {
-  width: 25px;
-  left: 0;
-}
-
-/* 炮位 */
-.item[i='7'][j='7'],
-.item[i='7'][j='1'],
-.item[i='2'][j='1'],
-.item[i='2'][j='7'] {
-  /* background-color: #eee; */
 }
 
 .该你走了 .item:has(.black),
 .canMove {
   cursor: pointer;
 }
-.item > div {
-  z-index: 1;
-}
-.red,
-.black {
+.roles {
   font-family: cursive;
   font-size: 35px;
   line-height: 1em;
   padding: 5px;
   border-radius: 50%;
   background: white;
-  transition: border-width 0.3s;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  transition-property: top, left, border-width;
+  transition-duration: 0.3s;
 }
 .black {
   border: 1px solid black;
@@ -184,11 +116,10 @@ body {
 .jieCls {
   color: #999;
 }
-.item .selected {
+.selected {
   border-width: 8px;
-  z-index: 9;
 }
-.canMove.kong {
+.canMove.位置 {
   background: black;
   width: 10px;
   height: 10px;
@@ -196,9 +127,9 @@ body {
   border: 10px solid white;
   border-radius: 50%;
 }
-.canMove.red::before {
+.canMove.red::before,
+.canMove.black::before {
   content: '';
-  background: red;
   width: 10px;
   height: 10px;
   position: absolute;
@@ -206,6 +137,6 @@ body {
   top: 50%;
   transform: translate(-50%, -50%);
   border-radius: 50%;
-  border: 2px solid black;
+  background: blue;
 }
 </style>

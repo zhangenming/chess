@@ -52,6 +52,7 @@ export const rolesB = shuffle([
 export const positions = reactive(
   raw.map((line, i) =>
     line.map((r, j) => ({
+      key: `${i}-${j}`,
       i,
       j,
       ...(r != '空' && {
@@ -64,6 +65,8 @@ export const positions = reactive(
     }))
   )
 )
+
+console.log(positions)
 
 export const positionsFlat = positions.flat()
 

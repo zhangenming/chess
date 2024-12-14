@@ -52,11 +52,11 @@ export const rolesB = shuffle([
 export const positions = reactive(
   raw.map((line, i) =>
     line.map((r, j) => ({
-      key: `${i}-${j}`,
       i,
       j,
       ...(r != '空' && {
         qz: {
+          idx: `${i}-${j}`,
           role: r,
           jie: r === '帅' ? '帅' : '', //getArrItemRandom(i < 5 ? rolesA : rolesB),
           color: i < 5 ? ('red' as const) : ('black' as const),
@@ -65,8 +65,7 @@ export const positions = reactive(
     }))
   )
 )
-
-console.log(positions)
+;(window as any).positions = positions
 
 export const positionsFlat = positions.flat()
 

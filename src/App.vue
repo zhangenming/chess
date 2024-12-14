@@ -9,7 +9,7 @@ import { SEND } from './online'
 import 棋盘 from './components/棋盘.vue'
 
 function action({ target }) {
-  // if (!该你走了.value) return
+  if (!该你走了.value) return
 
   if (!target.classList.contains('clickable')) return
 
@@ -49,18 +49,19 @@ const 该你走了 = computed(() => {
 
   <component :is="棋盘" @click="action">
     <div
-      v-for="{ i, j, qz, key } in positionsFlat.filter((e) => e.qz)"
-      :key="key"
+      v-for="{ i, j, qz } in positionsFlat.filter((e) => e.qz).sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))"
+      :key="qz.idx"
       :style="{ top: `${i * 50}px`, left: `${j * 50 + 2}px` }"
-      :class="{
-        clickable: true,
-        roles: true,
-        canMove: moves.find((item) => item.i === i && item.j === j),
-        [qz.color]: qz,
-        kong: !qz,
-        jieCls: !qz.jie,
-        selected: i === select?.i && j === select?.j,
-      }"
+      :class="[
+        'clickable',
+        'roles',
+        qz.color,
+        {
+          canMove: moves.find((item) => item.i === i && item.j === j),
+          jieCls: !qz.jie,
+          selected: i === select?.i && j === select?.j,
+        },
+      ]"
       :i
       :j
     >

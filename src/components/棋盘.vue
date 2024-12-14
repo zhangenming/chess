@@ -83,10 +83,11 @@ import { moves } from '../move'
 .wrap {
   width: 400px;
   height: 450px;
-  outline: 15px solid beige;
-  user-select: none;
+  outline: 26px solid beige;
+  box-shadow: 0px 0px 0px 35px var(--该你走了);
 }
 .qipan {
+  user-select: none;
   position: relative;
 }
 
@@ -180,6 +181,6 @@ import { moves } from '../move'
   position: absolute;
   width: 30px;
   height: 30px;
-  transform: translate(-50%, -50%);
+  translate: -50% -50%;
 }
 </style>

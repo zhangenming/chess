@@ -47,7 +47,14 @@ const 该你走了 = computed(() => {
     <div>回合: {{ 回合 }}</div>
   </template>
 
-  <component :is="棋盘" @click="action">
+  <component
+    :is="棋盘"
+    @click="action"
+    :class="{
+      先手,
+    }"
+    :style="{ '--该你走了': 该你走了 ? myColor : 'white' }"
+  >
     <div
       v-for="{ i, j, qz } in positionsFlat.filter((e) => e.qz).sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))"
       :key="qz.idx"
@@ -76,17 +83,11 @@ body {
   justify-content: center;
   margin-top: 50px;
 }
-.app {
-  border: 5px solid #eee;
+.先手 {
+  rotate: 180deg;
 }
-.app.该你走了 {
-  border: 5px solid green;
-}
-.app.先手 {
-  transform: rotate(180deg);
-}
-.先手 .item > div {
-  transform: rotate(180deg);
+.先手 .roles {
+  rotate: 180deg;
 }
 
 .该你走了 .item:has(.black),
@@ -101,7 +102,7 @@ body {
   border-radius: 50%;
   background: white;
   position: absolute;
-  transform: translate(-50%, -50%);
+  translate: -50% -50%;
   transition-property: top, left, border-width;
   transition-duration: 0.3s;
 }
@@ -136,7 +137,7 @@ body {
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%);
+  translate: -50% -50%;
   border-radius: 50%;
   background: blue;
 }

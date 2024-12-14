@@ -1,5 +1,5 @@
 import GoEasy from 'goeasy'
-import { isMaster, isMe, positions, 先手, 回合 } from './data'
+import { isMaster, isMe, positions, 先手, 回合, username, 对手 } from './data'
 
 let channel = '大厅'
 export async function SEND(type: string, data: any) {
@@ -18,45 +18,39 @@ export async function SEND(type: string, data: any) {
 
 const { connect, pubsub } = GoEasy.getInstance({
   host: 'hangzhou.goeasy.io',
-  appkey: 'BC-c12db807824d4c98923bc16c498935bf',
+  appkey: 'BC-db04ee8988eb4f18b6b64f18afd33c40',
   modules: ['pubsub'],
 })
 
-const 身份 = (() => {
-  if (isMaster) {
-    return 'master'
-  } else {
-    return (isMe ? 'ME' : '') + Math.random().toFixed(3).slice(2)
-  }
-})()
+const 随机id = Math.random().toFixed(2).slice(2)
+const who = isMaster ? '主机' : `${username}[${随机id}]`
 
-connect({ id: 身份 })
+connect({ id: who, data: { username } })
 
 if (isMaster) {
   let memberA
   pubsub.subscribePresence({
     channel,
     onSuccess() {},
-    onPresence({ action, member, members }) {
-      console.log(action, member)
+    onPresence({ action, member: memberB, members }) {
+      console.log(action, memberB.id)
       if (action === 'join') {
         if (
           memberA &&
           members.find((e) => e.id === memberA.id) // 此时a可能已经离开
         ) {
           SEND('匹配成功', {
-            ol房间号: `-${memberA.id}-${member.id}-`,
-            ol先手: member.id,
+            ol房间号: `${memberA.id}=VS=${memberB.id}`,
+            ol先手: memberB.id,
           })
           memberA = null
         } else {
-          memberA = member
+          memberA = memberB
         }
       }
     },
   })
 } else {
-  console.log({ 身份 })
   pubsub.subscribe({
     channel,
     presence: {
@@ -66,7 +60,7 @@ if (isMaster) {
       const { type, data } = JSON.parse(content)
       console.log('接收', type, data)
 
-      if (type === '匹配成功' && data.ol房间号.includes(`-${身份}-`)) {
+      if (type === '匹配成功' && data.ol房间号.includes(who)) {
         pubsub.unsubscribe({
           channel,
           onSuccess() {},
@@ -80,7 +74,7 @@ if (isMaster) {
             enable: true,
           },
           onMessage({ content }) {
-            const { type, data } = JSON.parse(content)
+            const { type, data } = JSON.parse(content) // 两个data
             console.log('接收', type, data)
 
             if (type === '走') {
@@ -118,7 +112,9 @@ if (isMaster) {
           },
         })
 
-        先手.value = data.ol先手 === 身份
+        const [olPlayerA, olPlayerB] = data.ol房间号.split('=VS=')
+        对手.value = (olPlayerA === who ? olPlayerB : olPlayerA).slice(0, -4)
+        先手.value = data.ol先手 === who
         回合.value = 0
       }
     },

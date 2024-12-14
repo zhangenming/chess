@@ -91,6 +91,7 @@ const _moves = computed(() => {
           (j === 3 || j === 4 || j === 5) &&
           (先手.value ? i === 0 || i === 1 || i === 2 : i === 7 || i === 8 || i === 9)
       )
+    // todo 将帅不能碰面
   }
 
   console.error('move')

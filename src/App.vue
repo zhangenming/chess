@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { positions, select, 回合, 先手, myColor, rolesA, rolesB } from './data'
+import { positions, select, 回合, 先手, myColor, rolesA, rolesB, username, 对手 } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
 import './online'
@@ -34,13 +34,11 @@ const 该你走了 = computed(() => {
 </script>
 
 <template>
-  <template v-if="回合 === undefined"> 等待对手加入 </template>
+  <div>用户名: {{ username }}</div>
+  <div>对手: {{ 对手 || '等待对手加入...' }}</div>
 
-  <template v-else>
+  <template v-if="对手">
     <div>回合: {{ 回合 }}</div>
-    <div>该你走了: {{ 该你走了 }}</div>
-    <div>先手: {{ 先手 }}</div>
-    <div>myColor: {{ myColor }}</div>
   </template>
 
   <div class="app" :class="{ 该你走了, 先手 }" @click="action">

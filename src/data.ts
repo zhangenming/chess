@@ -79,3 +79,13 @@ export const drColor = computed(() => (先手.value ? 'black' : 'red'))
 
 export const isMaster = location.search.includes('master')
 export const isMe = location.search.includes('me')
+
+export const username =
+  [...new URLSearchParams(location.search).keys()].filter((k) => !['me', 'master'].includes(k))[0] ||
+  (() => {
+    const username = localStorage.getItem('username') || Math.random().toFixed(4).slice(2)
+    localStorage.setItem('username', username)
+    return username
+  })()
+
+export const 对手 = ref('')

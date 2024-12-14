@@ -150,7 +150,7 @@ import { 走棋提示2 } from '../data'
   width: 140px;
   height: 1px;
   background-color: #000;
-  transform: rotate(-45deg) translate(-68px, 68px);
+  transform: rotate(-45deg) translate(-69px, 69px);
   transform-origin: left;
 }
 

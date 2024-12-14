@@ -52,12 +52,10 @@ const 该你走了 = computed(() => {
 </script>
 
 <template>
-  <div>用户名: {{ username }}</div>
-  <div>对手: {{ 对手 || '等待对手加入...' }}</div>
-
-  <template v-if="对手">
-    <div>回合: {{ 回合 }}</div>
-  </template>
+  <div>我的用户名: {{ username }}</div>
+  <div>对手用户名: {{ 对手 }}</div>
+  <div>回合: {{ 回合 }}</div>
+  <div style="font-size: 30px">{{ 对手 ? (该你走了 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
 
   <component
     :is="棋盘"
@@ -65,12 +63,12 @@ const 该你走了 = computed(() => {
     :class="{
       先手,
     }"
-    :style="{ '--该你走了': 该你走了 ? myColor : 'white' }"
+    :style="{ '--该你走了': 该你走了 ? myColor : 'white', marginTop: '50px' }"
   >
     <div
       v-for="{ i, j, qz } in positionsFlat.filter((e) => e.qz).sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))"
       :key="qz.idx"
-      :style="{ top: `${i * 50}px`, left: `${j * 50 + 2}px` }"
+      :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
       :class="[
         'clickable',
         'roles',
@@ -91,6 +89,9 @@ const 该你走了 = computed(() => {
 </template>
 
 <style>
+#app {
+  transform: scale(0.83);
+}
 body {
   display: flex;
   justify-content: center;
@@ -108,7 +109,7 @@ body {
   cursor: pointer;
 }
 .roles {
-  font-family: cursive;
+  font-family: fangsong;
   font-size: 35px;
   line-height: 1em;
   padding: 5px;
@@ -118,6 +119,9 @@ body {
   translate: -50% -50%;
   transition-property: top, left, border-width;
   transition-duration: 0.3s;
+  text-align: center;
+  aspect-ratio: 1;
+  display: flex;
 }
 .black {
   border: 1px solid black;

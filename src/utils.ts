@@ -35,7 +35,7 @@ export function getRoleType(i: number, j: number) {
   const { qz } = positions[i][j]
   if (!qz) return 'empty'
 
-  return qz.color
+  return qz.tb
 }
 
 // 删除选中的元素 防止下次继续选中

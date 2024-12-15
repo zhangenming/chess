@@ -1,5 +1,5 @@
 import { computed } from 'vue'
-import { drColor, myColor, positions, positionsFlat, select, 先手 } from './data'
+import { drBt, myBt, positions, positionsFlat, select, 先手 } from './data'
 import { get下侧全部棋子, get上侧全部棋子, get右侧全部棋子, get左侧全部棋子, 距离i, 距离j, 距离 } from './utils'
 import type { coord } from './utils'
 
@@ -94,23 +94,23 @@ const _moves = computed(() => {
 
     const 敌方帅 = [positions[9][3], positions[0][3]].find((p) => p !== positions[x.i][x.j])
     const 见面 = []
-    return [...九宫, ...见面]
+    return [...九宫]
   }
 
   console.error('move')
 })
 
 export const moves = computed(() => {
-  return _moves.value.filter((p) => p && p.qz?.color !== myColor.value)
+  return _moves.value.filter((p) => p && p.qz?.tb !== myBt.value)
 })
 
-function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; color: string } }[], x: coord) {
+function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; tb: string } }[], x: coord) {
   let meetDr = false
   return datas
     .filter((item) => {
       if (meetDr) return false
       if (!item.qz) return true
-      if (!meetDr && item.qz.color === drColor.value) {
+      if (!meetDr && item.qz.tb === drBt.value) {
         meetDr = true
         return true
       }
@@ -118,7 +118,7 @@ function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; 
     .filter((item, i) => 距离(x, item) === i + 1)
 }
 
-function 炮可移动位置(datas: { i: number; j: number; qz?: { role: string; color: string } }[]) {
+function 炮可移动位置(datas: { i: number; j: number; qz?: { role: string; tb: string } }[]) {
   let 炮架 = false
   let 找到目标 = false
   return datas.filter((item) => {

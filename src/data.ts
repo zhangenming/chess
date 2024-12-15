@@ -59,7 +59,7 @@ export const positions = reactive(
           idx: `${i}-${j}`,
           role: r,
           jie: r === '帅' ? '帅' : '', //getArrItemRandom(i < 5 ? rolesA : rolesB),
-          color: i < 5 ? ('后手' as const) : ('先手' as const),
+          tb: i < 5 ? ('top' as const) : ('bot' as const),
         },
       }),
     }))
@@ -76,8 +76,8 @@ export const role = computed(() => select.value && positions[select.value[0]][se
 export const 回合 = ref<number | undefined>(undefined)
 export const 先手 = ref(false)
 
-export const myColor = computed(() => (先手.value ? '先手' : '后手'))
-export const drColor = computed(() => (先手.value ? '后手' : '先手'))
+export const myBt = computed(() => (先手.value ? 'bot' : 'top'))
+export const drBt = computed(() => (先手.value ? 'top' : 'bot'))
 
 export const isMaster = location.search.includes('master')
 export const isMe = location.search.includes('me')

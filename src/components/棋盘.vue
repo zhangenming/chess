@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { moves } from '../move'
-import { 走棋提示2 } from '../data'
+import { 吃子列表, 走棋提示2 } from '../data'
 </script>
 
 <template>
   <div class="wrap">
+    <!-- top吃子 -->
+    <div class="top-eat-list">
+      <span v-for="role of 吃子列表.top">{{ role }}</span>
+    </div>
+
     <div class="qipan">
       <!-- 横 -->
       <div>
@@ -187,5 +192,21 @@ import { 走棋提示2 } from '../data'
   width: 30px;
   height: 30px;
   translate: -50% -50%;
+}
+.top-eat-list {
+  position: relative;
+  top: -40px;
+  left: -20px;
+}
+.top-eat-list span {
+  border: 1px solid #111;
+  color: #111;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  width: 40px;
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

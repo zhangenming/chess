@@ -1,6 +1,19 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { positions, select, 回合, 先手, myBt, rolesA, rolesB, username, 对手, positionsFlat, 走棋提示1 } from './data'
+import {
+  positions,
+  select,
+  回合,
+  先手,
+  myBt,
+  rolesA,
+  rolesB,
+  username,
+  对手,
+  positionsFlat,
+  走棋提示1,
+  我的回合,
+} from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
 import './online'
@@ -9,7 +22,7 @@ import { SEND } from './online'
 import 棋盘 from './components/棋盘.vue'
 
 function action({ target }) {
-  if (!该你走了.value) return
+  if (!我的回合.value) return
   const { i: oldI, j: oldJ } = select.value || {}
   select.value = undefined
 
@@ -30,10 +43,6 @@ function action({ target }) {
     select.value = { i, j }
   }
 }
-
-const 该你走了 = computed(() => {
-  return 回合.value % 2 === (先手.value ? 0 : 1)
-})
 </script>
 
 <template>
@@ -43,7 +52,7 @@ const 该你走了 = computed(() => {
   <div>先手: {{ 先手 }}</div>
   <div>myBtType: {{ myBt }}</div>
 
-  <div style="font-size: 30px">{{ 对手 ? (该你走了 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
+  <div style="font-size: 30px">{{ 对手 ? (我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
 
   <component
     :is="棋盘"
@@ -53,7 +62,7 @@ const 该你走了 = computed(() => {
     }"
     :style="{
       marginTop: '50px',
-      '--该你走了': 该你走了 ? 'black' : '#999',
+      '--该你走了': 我的回合 ? 'black' : '#999',
       '--先手color': 先手 ? 'black' : 'red',
       '--后手color': 先手 ? 'red' : 'black',
       '--先手weight': 先手 ? 900 : 100,

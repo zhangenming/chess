@@ -94,3 +94,13 @@ export const 对手 = ref('')
 
 export const 走棋提示1 = ref({ i: -1, j: -1 })
 export const 走棋提示2 = ref({ i: -1, j: -1 })
+
+export const 吃子列表 = reactive<{
+  top: string[]
+  bot: string[]
+}>({
+  top: ['x', 'y'],
+  bot: [],
+})
+
+export const 我的回合 = computed(() => 回合.value % 2 === (先手.value ? 0 : 1))

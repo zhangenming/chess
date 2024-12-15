@@ -1,5 +1,5 @@
 import GoEasy from 'goeasy'
-import { isMaster, isMe, positions, 先手, 回合, username, 对手, 走棋提示1, 走棋提示2 } from './data'
+import { isMaster, isMe, positions, 先手, 回合, username, 对手, 走棋提示1, 走棋提示2, 吃子列表, 我的回合 } from './data'
 
 let channel = '大厅'
 export async function SEND(type: string, data: any) {
@@ -78,6 +78,8 @@ if (isMaster) {
             console.log('接收', type, data)
 
             if (type === '走') {
+              回合.value++
+
               const {
                 old: [selectI, selectJ],
                 clicked: [i, j],
@@ -87,6 +89,10 @@ if (isMaster) {
               const clicked = positions[i][j]
               const old = positions[selectI][selectJ]
 
+              if (clicked.qz) {
+                吃子列表[我的回合.value ? 'bot' : 'top'].push(clicked.qz.jie || 'x')
+              }
+
               clicked.qz = {
                 ...old.qz,
                 jie: jie || old.qz.jie,
@@ -95,8 +101,6 @@ if (isMaster) {
 
               走棋提示1.value = { i, j }
               走棋提示2.value = { i: selectI, j: selectJ }
-
-              回合.value++
             }
           },
         })

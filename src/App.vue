@@ -56,6 +56,8 @@ const 该你走了 = computed(() => {
       '--该你走了': 该你走了 ? 'black' : '#999',
       '--先手color': 先手 ? 'black' : 'red',
       '--后手color': 先手 ? 'red' : 'black',
+      '--先手weight': 先手 ? 900 : 100,
+      '--后手weight': 先手 ? 100 : 900,
     }"
   >
     <div
@@ -69,11 +71,12 @@ const 该你走了 = computed(() => {
           canEat: moves.find((item) => item.i === i && item.j === j),
           jieCls: !qz.jie,
           selected: i === select?.i && j === select?.j,
-          走棋提示1: 走棋提示1.i === i && 走棋提示1.j === j,
+          走棋提示: 走棋提示1.i === i && 走棋提示1.j === j,
         },
       ]"
       :i
       :j
+      :jie="qz.jie"
     >
       {{ qz.jie || '〇' }}
     </div>
@@ -101,7 +104,7 @@ body {
   background: white;
   position: absolute;
   translate: -50% -50%;
-  transition-property: top, left, border-width;
+  transition-property: all;
   transition-duration: 0.3s;
   text-align: center;
   aspect-ratio: 1;
@@ -109,25 +112,41 @@ body {
   border-radius: 50%;
   border-width: 2px;
   border-style: solid;
-  border-color: var(--先手color);
-  color: var(--先手color);
+  border-color: var(--后手color);
+  color: var(--后手color);
+  font-weight: var(--后手weight);
 }
 .bot {
-  font-weight: 900;
+  border-color: var(--先手color);
+  color: var(--先手color);
+  font-weight: var(--先手weight);
 }
 .jieCls {
   color: #aaa;
 }
+[jie='车'] {
+  border-width: 7px;
+  border-style: double;
+}
+[jie='马'] {
+  border-width: 5px;
+  border-style: double;
+}
+[jie='炮'] {
+  border-width: 5px;
+  border-style: double;
+}
 .selected {
-  border-width: 8px;
+  border-radius: 0;
+  z-index: 1;
 }
 .canMove {
   background: #111;
   width: 10px;
   height: 10px;
   padding: 5px;
-  border: 10px solid white;
-  border-radius: 50%;
+  border: 5px solid white;
+  border-radius: 1%;
   cursor: pointer;
 }
 .canEat {
@@ -141,19 +160,17 @@ body {
   left: 50%;
   top: 50%;
   translate: -50% -50%;
-  border-radius: 50%;
+  border-radius: 1%;
   background: blue;
 }
-.走棋提示1::after,
-.走棋提示2::after {
+.走棋提示::after {
   content: '';
-  width: 35px;
+  width: 45px;
   aspect-ratio: 1;
   position: absolute;
   left: 50%;
   top: 50%;
   translate: -50% -50%;
-  border-radius: 50%;
-  border: 2px solid blue;
+  border: 2px solid #111;
 }
 </style>

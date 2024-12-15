@@ -63,7 +63,7 @@ import { 走棋提示2 } from '../data'
               '位置',
               {
                 canMove: moves.find((item) => item.i === i - 1 && item.j === j - 1),
-                走棋提示2: 走棋提示2.i === i - 1 && 走棋提示2.j === j - 1,
+                走棋提示: 走棋提示2.i === i - 1 && 走棋提示2.j === j - 1,
               },
             ]"
             v-for="j in 9"

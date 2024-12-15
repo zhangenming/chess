@@ -98,21 +98,21 @@ body {
 
 .roles {
   font-family: fangsong;
+  display: flex;
+  padding: 5px;
   font-size: 35px;
   line-height: 1em;
-  padding: 5px;
-  background: white;
+  text-align: center;
+  aspect-ratio: 1;
   position: absolute;
   translate: -50% -50%;
   transition-property: all;
   transition-duration: 0.3s;
-  text-align: center;
-  aspect-ratio: 1;
-  display: flex;
   border-radius: 50%;
   border-width: 2px;
   border-style: solid;
   border-color: var(--后手color);
+  background: white;
   color: var(--后手color);
   font-weight: var(--后手weight);
 }
@@ -137,18 +137,11 @@ body {
   border-radius: 0;
   z-index: 1;
 }
-.canMove {
-  background: #111;
-  width: 10px;
-  height: 10px;
-  padding: 5px;
-  border: 10px solid white;
-  border-radius: 1%;
-  cursor: pointer;
-}
+.canMove,
 .canEat {
   cursor: pointer;
 }
+.canMove::before,
 .canEat::before {
   content: '';
   width: 10px;

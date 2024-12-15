@@ -145,7 +145,7 @@ body {
   width: 10px;
   height: 10px;
   padding: 5px;
-  border: 5px solid white;
+  border: 10px solid white;
   border-radius: 1%;
   cursor: pointer;
 }

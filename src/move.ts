@@ -89,7 +89,7 @@ const _moves = computed(() => {
       .filter(
         ({ i, j }) =>
           (j === 3 || j === 4 || j === 5) &&
-          (先手.value ? i === 0 || i === 1 || i === 2 : i === 7 || i === 8 || i === 9)
+          (先手.value ? i === 7 || i === 8 || i === 9 : i === 0 || i === 1 || i === 2)
       )
 
     const 敌方帅 = [positions[9][3], positions[0][3]].find((p) => p !== positions[x.i][x.j])

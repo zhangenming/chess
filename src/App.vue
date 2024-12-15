@@ -23,14 +23,12 @@ import 棋盘 from './components/棋盘.vue'
 function action({ target }) {
   if (!该你走了.value) return
 
-  if (!target.classList.contains('clickable')) return
+  if (!target.parentElement?.classList.contains('位置s') && !target.parentElement?.classList.contains('棋子s')) return
 
   const i = Number(target.getAttribute('i'))
   const j = Number(target.getAttribute('j'))
 
-  console.log(target, i, j)
-
-  if (target.classList.contains('canMove')) {
+  if (target.classList.contains('canMove') || target.classList.contains('canEat')) {
     const { i: oldI, j: oldJ } = select.value
     SEND('走', {
       old: [oldI, oldJ],
@@ -70,11 +68,10 @@ const 该你走了 = computed(() => {
       :key="qz.idx"
       :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
       :class="[
-        'clickable',
         'roles',
         qz.color,
         {
-          canMove: moves.find((item) => item.i === i && item.j === j),
+          canEat: moves.find((item) => item.i === i && item.j === j),
           jieCls: !qz.jie,
           selected: i === select?.i && j === select?.j,
           走棋提示1: 走棋提示1.i === i && 走棋提示1.j === j,
@@ -104,8 +101,8 @@ body {
   rotate: 180deg;
 }
 
-.该你走了 .item:has(.black),
-.canMove {
+.canMove,
+.canEat {
   cursor: pointer;
 }
 .roles {
@@ -138,7 +135,7 @@ body {
 .selected {
   border-width: 8px;
 }
-.canMove.位置 {
+.canMove {
   background: black;
   width: 10px;
   height: 10px;
@@ -146,8 +143,7 @@ body {
   border: 10px solid white;
   border-radius: 50%;
 }
-.canMove.red::before,
-.canMove.black::before {
+.canEat::before {
   content: '';
   width: 10px;
   height: 10px;

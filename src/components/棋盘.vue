@@ -16,10 +16,7 @@ import { 走棋提示2 } from '../data'
         <div class="s" v-for="i in 9" :style="{ left: `${(i - 1) * 50}px` }"></div>
       </div>
 
-      <!-- 竖noop -->
-      <div>
-        <div class="s-noop" v-for="i in 7" :style="{ left: `${i * 50}px` }"></div>
-      </div>
+      <div class="河"></div>
 
       <!-- 士 -->
       <div>
@@ -59,12 +56,10 @@ import { 走棋提示2 } from '../data'
         </div>
       </div>
 
-      <!-- 位置 -->
-      <div>
+      <div class="位置s">
         <template v-for="i in 10">
           <div
             :class="[
-              'clickable',
               '位置',
               {
                 canMove: moves.find((item) => item.i === i - 1 && item.j === j - 1),
@@ -79,8 +74,7 @@ import { 走棋提示2 } from '../data'
         </template>
       </div>
 
-      <!-- 棋子 -->
-      <div>
+      <div class="棋子s">
         <slot></slot>
       </div>
     </div>
@@ -102,13 +96,14 @@ import { 走棋提示2 } from '../data'
 .h {
   width: 400px;
   height: 1px;
-  background-color: #000;
+  background-color: #999;
   position: absolute;
   left: 0;
 }
 .h:nth-child(5),
 .h:nth-child(6) {
   height: 3px;
+  background-color: #666;
 }
 .h:nth-child(6) {
   top: 248px !important;
@@ -116,16 +111,17 @@ import { 走棋提示2 } from '../data'
 .s {
   width: 1px;
   height: 450px;
-  background-color: #000;
+  background-color: #999;
   position: absolute;
   top: 0;
 }
-.s-noop {
-  width: 1px;
-  height: 49px;
+.河 {
+  width: 302px;
+  height: 45px;
   background-color: white;
   position: absolute;
-  top: 201px;
+  left: 50px;
+  top: 203px;
 }
 .士-1,
 .士-2 {

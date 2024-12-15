@@ -79,19 +79,22 @@ const _moves = computed(() => {
 
   if (role === '卒') {
     return 先手.value
-      ? [get下侧全部棋子(x)[0], ...(x.i > 4 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
-      : [get上侧全部棋子(x)[0], ...(x.i < 5 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
+      ? [get上侧全部棋子(x)[0], ...(x.i < 5 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
+      : [get下侧全部棋子(x)[0], ...(x.i > 4 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
   }
 
   if (role === '帅') {
-    return positionsFlat
+    const 九宫 = positionsFlat
       .filter((p) => (距离i(x, p) === 1 && 距离j(x, p) === 0) || (距离i(x, p) === 0 && 距离j(x, p) === 1))
       .filter(
         ({ i, j }) =>
           (j === 3 || j === 4 || j === 5) &&
           (先手.value ? i === 0 || i === 1 || i === 2 : i === 7 || i === 8 || i === 9)
       )
-    // todo 将帅不能碰面
+
+    const 敌方帅 = [positions[9][3], positions[0][3]].find((p) => p !== positions[x.i][x.j])
+    const 见面 = []
+    return [...九宫, ...见面]
   }
 
   console.error('move')

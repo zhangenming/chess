@@ -135,19 +135,20 @@ import { 走棋提示2 } from '../data'
 .士-2 {
   top: 351px;
 }
-.士-h {
+.士-h,
+.士-s {
   width: 140px;
-  height: 1px;
-  background-color: #000;
   transform: rotate(45deg);
   transform-origin: left;
 }
 .士-s {
-  width: 140px;
-  height: 1px;
-  background-color: #000;
   transform: rotate(-45deg) translate(-69px, 69px);
-  transform-origin: left;
+}
+.士-1 :is(.士-h, .士-s) {
+  border-top: 2px dashed var(--后手color);
+}
+.士-2 :is(.士-h, .士-s) {
+  border-top: 2px dashed var(--先手color);
 }
 
 .炮 {
@@ -156,7 +157,7 @@ import { 走棋提示2 } from '../data'
 .炮 div {
   width: 10px;
   height: 10px;
-  border: 1px solid black;
+  border: 1px solid #111;
   margin: 3px;
   position: absolute;
 }

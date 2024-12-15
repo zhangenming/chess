@@ -22,6 +22,8 @@ import 棋盘 from './components/棋盘.vue'
 
 function action({ target }) {
   if (!该你走了.value) return
+  const { i: oldI, j: oldJ } = select.value || {}
+  select.value = undefined
 
   if (!target.parentElement?.classList.contains('位置s') && !target.parentElement?.classList.contains('棋子s')) return
 
@@ -29,15 +31,12 @@ function action({ target }) {
   const j = Number(target.getAttribute('j'))
 
   if (target.classList.contains('canMove') || target.classList.contains('canEat')) {
-    const { i: oldI, j: oldJ } = select.value
     SEND('走', {
       old: [oldI, oldJ],
       clicked: [i, j],
       ...(!positions[oldI][oldJ].qz?.jie && { jie: 先手.value ? rolesA.pop() : rolesB.pop() }),
     })
   }
-
-  select.value = undefined
 
   if (target.classList.contains(myColor.value)) {
     select.value = { i, j }
@@ -53,15 +52,22 @@ const 该你走了 = computed(() => {
   <div>我的用户名: {{ username }}</div>
   <div>对手用户名: {{ 对手 }}</div>
   <div>回合: {{ 回合 }}</div>
+  <div>myColor: {{ myColor }}</div>
+
   <div style="font-size: 30px">{{ 对手 ? (该你走了 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
 
   <component
     :is="棋盘"
     @click="action"
     :class="{
-      先手,
+      后手2: !先手,
     }"
-    :style="{ '--该你走了': 该你走了 ? myColor : 'white', marginTop: '50px' }"
+    :style="{
+      '--该你走了': 该你走了 ? myColor : 'white',
+      marginTop: '50px',
+      '--先手color': 先手 ? 'black' : 'red',
+      '--后手color': 先手 ? 'red' : 'black',
+    }"
   >
     <div
       v-for="{ i, j, qz } in positionsFlat.filter((e) => e.qz).sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))"
@@ -94,10 +100,10 @@ body {
   justify-content: center;
   margin-top: 50px;
 }
-.先手 {
+.后手2 {
   rotate: 180deg;
 }
-.先手 .roles {
+.后手2 .roles {
   rotate: 180deg;
 }
 
@@ -120,14 +126,14 @@ body {
   aspect-ratio: 1;
   display: flex;
 }
-.black {
-  border: 1px solid black;
-  color: black;
+.先手 {
+  border: 1px solid var(--先手color);
+  color: var(--先手color);
   font-weight: 900;
 }
-.red {
-  border: 1px solid red;
-  color: red;
+.后手 {
+  border: 1px solid var(--后手color);
+  color: var(--后手color);
 }
 .jieCls {
   color: #999;
@@ -136,7 +142,7 @@ body {
   border-width: 8px;
 }
 .canMove {
-  background: black;
+  background: #111;
   width: 10px;
   height: 10px;
   padding: 5px;

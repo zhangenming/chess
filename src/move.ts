@@ -92,9 +92,16 @@ const _moves = computed(() => {
           (先手.value ? i === 7 || i === 8 || i === 9 : i === 0 || i === 1 || i === 2)
       )
 
-    const 敌方帅 = [positions[9][3], positions[0][3]].find((p) => p !== positions[x.i][x.j])
-    const 见面 = []
-    return [...九宫]
+    const 敌方帅 = (() => {
+      const 到敌方帅的位置 = 先手.value ? get上侧全部位置(x) : get下侧全部位置(x)
+      for (const p of 到敌方帅的位置) {
+        if (!p.qz) continue
+        if (p.qz.role !== '帅') break
+        if (p.qz.role === '帅') return p
+      }
+    })()
+
+    return 敌方帅 ? [...九宫, 敌方帅] : 九宫
   }
 
   console.error('move')

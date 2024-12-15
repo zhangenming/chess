@@ -1,6 +1,6 @@
 import { computed } from 'vue'
 import { drBt, myBt, positions, positionsFlat, select, 先手 } from './data'
-import { get下侧全部棋子, get上侧全部棋子, get右侧全部棋子, get左侧全部棋子, 距离i, 距离j, 距离 } from './utils'
+import { get下侧全部位置, get上侧全部位置, get右侧全部位置, get左侧全部位置, 距离i, 距离j, 距离 } from './utils'
 import type { coord } from './utils'
 
 const _moves = computed(() => {
@@ -12,10 +12,10 @@ const _moves = computed(() => {
 
   if (role === '车') {
     return [
-      ...军可移动位置(get下侧全部棋子(x), x),
-      ...军可移动位置(get上侧全部棋子(x), x),
-      ...军可移动位置(get右侧全部棋子(x), x),
-      ...军可移动位置(get左侧全部棋子(x), x),
+      ...军可移动位置(get下侧全部位置(x), x),
+      ...军可移动位置(get上侧全部位置(x), x),
+      ...军可移动位置(get右侧全部位置(x), x),
+      ...军可移动位置(get左侧全部位置(x), x),
     ]
   }
 
@@ -24,16 +24,16 @@ const _moves = computed(() => {
       .filter((p) => (距离i(x, p) === 1 && 距离j(x, p) === 2) || (距离i(x, p) === 2 && 距离j(x, p) === 1))
       .filter(({ i, j }) => {
         if (i - x.i === 2) {
-          return get下侧全部棋子(x)[0].qz === undefined
+          return get下侧全部位置(x)[0].qz === undefined
         }
         if (i - x.i === -2) {
-          return get上侧全部棋子(x)[0].qz === undefined
+          return get上侧全部位置(x)[0].qz === undefined
         }
         if (j - x.j === 2) {
-          return get右侧全部棋子(x)[0].qz === undefined
+          return get右侧全部位置(x)[0].qz === undefined
         }
         if (j - x.j === -2) {
-          return get左侧全部棋子(x)[0].qz === undefined
+          return get左侧全部位置(x)[0].qz === undefined
         }
         console.error('马')
       })
@@ -41,10 +41,10 @@ const _moves = computed(() => {
 
   if (role === '炮') {
     return [
-      ...炮可移动位置(get下侧全部棋子(x)),
-      ...炮可移动位置(get上侧全部棋子(x)),
-      ...炮可移动位置(get右侧全部棋子(x)),
-      ...炮可移动位置(get左侧全部棋子(x)),
+      ...炮可移动位置(get下侧全部位置(x)),
+      ...炮可移动位置(get上侧全部位置(x)),
+      ...炮可移动位置(get右侧全部位置(x)),
+      ...炮可移动位置(get左侧全部位置(x)),
     ]
   }
 
@@ -79,8 +79,8 @@ const _moves = computed(() => {
 
   if (role === '卒') {
     return 先手.value
-      ? [get上侧全部棋子(x)[0], ...(x.i < 5 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
-      : [get下侧全部棋子(x)[0], ...(x.i > 4 ? [get右侧全部棋子(x)[0], get左侧全部棋子(x)[0]] : [])]
+      ? [get上侧全部位置(x)[0], ...(x.i < 5 ? [get右侧全部位置(x)[0], get左侧全部位置(x)[0]] : [])]
+      : [get下侧全部位置(x)[0], ...(x.i > 4 ? [get右侧全部位置(x)[0], get左侧全部位置(x)[0]] : [])]
   }
 
   if (role === '帅') {

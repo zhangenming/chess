@@ -126,15 +126,12 @@ body {
 }
 [jie='车'] {
   border-width: 7px;
-  border-style: double;
 }
 [jie='马'] {
   border-width: 5px;
-  border-style: double;
 }
 [jie='炮'] {
   border-width: 5px;
-  border-style: double;
 }
 .selected {
   border-radius: 0;
@@ -165,7 +162,7 @@ body {
 }
 .走棋提示::after {
   content: '';
-  width: 45px;
+  width: 50px;
   aspect-ratio: 1;
   position: absolute;
   left: 50%;

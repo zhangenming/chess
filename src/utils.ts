@@ -12,22 +12,22 @@ export function 距离j(a: coord, b: coord) {
   return Math.abs(a.j - b.j)
 }
 
-export function get左侧全部棋子({ i, j }: coord) {
+export function get左侧全部位置({ i, j }: coord) {
   return positions[i].slice(0, j).reverse()
 }
 
-export function get右侧全部棋子({ i, j }: coord) {
+export function get右侧全部位置({ i, j }: coord) {
   return positions[i].slice(j + 1)
 }
 
-export function get上侧全部棋子({ i, j }: coord) {
+export function get上侧全部位置({ i, j }: coord) {
   return positions
     .slice(0, i)
     .map((line) => line[j])
     .reverse()
 }
 
-export function get下侧全部棋子({ i, j }: coord) {
+export function get下侧全部位置({ i, j }: coord) {
   return positions.slice(i + 1).map((line) => line[j])
 }
 

@@ -16,6 +16,7 @@ import {
 } from './data'
 
 let channel = '大厅'
+
 export async function SEND(type: string, data: any) {
   console.log('SEND', type, data)
 
@@ -30,14 +31,13 @@ export async function SEND(type: string, data: any) {
   })
 }
 
+const who = isMaster ? '主机' : `${我的id}[${Math.random().toFixed(2).slice(2)}]`
+
 const { connect, pubsub } = GoEasy.getInstance({
   host: 'hangzhou.goeasy.io',
   appkey: isBoss ? 'BC-c12db807824d4c98923bc16c498935bf' : 'BC-db04ee8988eb4f18b6b64f18afd33c40', // online2 : home
   modules: ['pubsub'],
 })
-
-const 随机id = Math.random().toFixed(2).slice(2)
-const who = isMaster ? '主机' : `${我的id}[${随机id}]`
 
 connect({ id: who, data: { username: 我的id } })
 

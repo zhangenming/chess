@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { moves } from '../move'
+import { moves } from '../data'
 import { 吃子列表, 走棋提示2 } from '../data'
 </script>
 

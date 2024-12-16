@@ -13,8 +13,8 @@ export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
 ]
 
-export const qzA = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '帅', '卒', '卒', '卒', '卒', '卒']
-export const qzB = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '帅', '卒', '卒', '卒', '卒', '卒']
+export const qzA = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
+export const qzB = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
 
 export type coord = { i: number; j: number }
 
@@ -47,13 +47,6 @@ export function get下侧全部位置({ i, j }: coord) {
   return positions.slice(i + 1).map((line) => line[j])
 }
 
-export function getRoleType(i: number, j: number) {
-  const { qz } = positions[i][j]
-  if (!qz) return 'empty'
-
-  return qz.tb
-}
-
 // 删除选中的元素 防止下次继续选中
 export function getArrItemRandom<T>(arr: T[]) {
   const index = 0 // Math.floor(Math.random() * arr.length)
@@ -80,4 +73,10 @@ export function getMyId() {
       return username
     })()
   )
+}
+
+export function test(bool: any, text: any) {
+  if (bool) {
+    console.error(text)
+  }
 }

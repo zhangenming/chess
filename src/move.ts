@@ -1,25 +1,34 @@
 import { computed } from 'vue'
-import { positions, positionsFlat, drBt, myBt, select, is先手 } from './data'
+import { positions, positionsFlat, is先手, drBt } from './data'
 import { get下侧全部位置, get上侧全部位置, get右侧全部位置, get左侧全部位置, 距离i, 距离j, 距离 } from './utils'
 import type { coord } from './utils'
 
-const _moves = computed(() => {
-  const S = select.value
-  if (!S) return []
+type item = { i: number; j: number }
 
-  const { role: _r, jie } = positions[S.i][S.j].qz
-  const role = jie || _r
+export function getItemMoves(S: item) {
+  const 敌人阵营 = positions[S.i][S.j].qz?.tb === 'top' ? 'bot' : 'top'
+  return _getItemMoves(S, 敌人阵营).filter((e) => {
+    // 存在棋子 说明是吃 需要判断是敌人棋子
+    if (e.qz) return e.qz.tb === 敌人阵营
+    // 不存在棋子 说明是走 不需要判断
+    return true
+  })
+}
 
-  if (role === '车') {
+function _getItemMoves(S: item, 敌人阵营: string) {
+  const { jie, role } = positions[S.i][S.j].qz
+  const item = jie || role
+
+  if (item === '车') {
     return [
-      ...军可移动位置(get下侧全部位置(S), S),
-      ...军可移动位置(get上侧全部位置(S), S),
-      ...军可移动位置(get右侧全部位置(S), S),
-      ...军可移动位置(get左侧全部位置(S), S),
+      ...军可移动位置(get下侧全部位置(S), S, 敌人阵营),
+      ...军可移动位置(get上侧全部位置(S), S, 敌人阵营),
+      ...军可移动位置(get右侧全部位置(S), S, 敌人阵营),
+      ...军可移动位置(get左侧全部位置(S), S, 敌人阵营),
     ]
   }
 
-  if (role === '马') {
+  if (item === '马') {
     return positionsFlat
       .filter((p) => (距离i(S, p) === 1 && 距离j(S, p) === 2) || (距离i(S, p) === 2 && 距离j(S, p) === 1))
       .filter(({ i, j }) => {
@@ -39,7 +48,7 @@ const _moves = computed(() => {
       })
   }
 
-  if (role === '炮') {
+  if (item === '炮') {
     return [
       ...炮可移动位置(get下侧全部位置(S)),
       ...炮可移动位置(get上侧全部位置(S)),
@@ -48,7 +57,7 @@ const _moves = computed(() => {
     ]
   }
 
-  if (role === '象') {
+  if (item === '象') {
     return positionsFlat
       .filter((p) => 距离i(S, p) === 2 && 距离j(S, p) === 2)
       .filter(({ i, j }) => {
@@ -68,7 +77,7 @@ const _moves = computed(() => {
       })
   }
 
-  if (role === '士') {
+  if (item === '士') {
     return positionsFlat
       .filter((p) => 距离i(S, p) === 1 && 距离j(S, p) === 1)
       .filter(({ j }) => {
@@ -77,22 +86,25 @@ const _moves = computed(() => {
       })
   }
 
-  if (role === '卒') {
-    return is先手.value
-      ? [get上侧全部位置(S)[0], ...(S.i < 5 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]] : [])]
-      : [get下侧全部位置(S)[0], ...(S.i > 4 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]] : [])]
+  if (item === '卒') {
+    // 敌人阵营 绝对值
+    // drBt 相对值
+    return 敌人阵营 === drBt.value
+      ? [get上侧全部位置(S)[0], ...(S.i < 5 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]].filter(Boolean) : [])]
+      : [get下侧全部位置(S)[0], ...(S.i > 4 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]].filter(Boolean) : [])]
+    // 什么时候可以走左右的判断还有问题
   }
 
-  if (role === '帅') {
+  if (item === '帅') {
     const 九宫 = positionsFlat
       .filter((p) => (距离i(S, p) === 1 && 距离j(S, p) === 0) || (距离i(S, p) === 0 && 距离j(S, p) === 1))
       .filter(
         ({ i, j }) =>
-          (j === 3 || j === 4 || j === 5) &&
-          (is先手.value ? i === 7 || i === 8 || i === 9 : i === 0 || i === 1 || i === 2)
+          (j === 3 || j === 4 || j === 5) && (i === 0 || i === 1 || i === 2 || i === 7 || i === 8 || i === 9)
       )
 
     const 敌方帅 = (() => {
+      //is先手 ???
       const 到敌方帅的位置 = is先手.value ? get上侧全部位置(S) : get下侧全部位置(S)
       for (const p of 到敌方帅的位置) {
         if (!p.qz) continue
@@ -103,21 +115,19 @@ const _moves = computed(() => {
 
     return 敌方帅 ? [...九宫, 敌方帅] : 九宫
   }
+}
 
-  console.error('move')
-})
-
-export const moves = computed(() => {
-  return _moves.value.filter((p) => p && p.qz?.tb !== myBt.value)
-})
-
-function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; tb: string } }[], x: coord) {
+function 军可移动位置(
+  datas: { i: number; j: number; qz?: { role: string; tb: string } }[],
+  x: coord,
+  敌人阵营: string
+) {
   let meetDr = false
   return datas
     .filter((item) => {
-      if (meetDr) return false
+      if (meetDr) return false // 这个判断必须首先判断 遇到敌人之后 无论是空地还是棋子 都要返回false
       if (!item.qz) return true
-      if (!meetDr && item.qz.tb === drBt.value) {
+      if (!meetDr && item.qz.tb === 敌人阵营) {
         meetDr = true
         return true
       }

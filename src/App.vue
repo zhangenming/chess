@@ -6,6 +6,7 @@ import {
   回合,
   is先手,
   myBt,
+  drBt,
   rolesA,
   rolesB,
   我的id,
@@ -16,7 +17,7 @@ import {
   moves,
   offline,
 } from './data'
-import { getRoleType } from './utils'
+import { test } from './utils'
 import './online'
 import { SEND } from './online'
 
@@ -39,10 +40,18 @@ function action({ target }) {
       clicked: [i, j],
       ...(!positions[oldI][oldJ].qz?.jie && { jie: is先手.value ? rolesA.pop() : rolesB.pop() }),
     })
+
+    test(positions[oldI][oldJ].qz?.tb === positions[i][j].qz?.tb, '吃自己')
   }
 
   if (target.classList.contains(myBt.value)) {
     select.value = { i, j }
+  }
+
+  if (offline) {
+    if (target.classList.contains(drBt.value)) {
+      select.value = { i, j }
+    }
   }
 }
 </script>
@@ -51,7 +60,7 @@ function action({ target }) {
   <div>我的id: {{ 我的id }}</div>
   <div>对手id: {{ 对手id }}</div>
   <div>回合: {{ 回合 }}</div>
-  <div>先手: {{ is先手 }}</div>
+  <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
   <div>myBtType: {{ myBt }}</div>
 
   <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
@@ -60,7 +69,7 @@ function action({ target }) {
     :is="棋盘"
     @click="action"
     :class="{
-      need反转: !is先手,
+      后手需要反转: !is先手,
     }"
     :style="{
       marginTop: '50px',
@@ -100,10 +109,10 @@ body {
   justify-content: center;
   transform: scale(0.83);
 }
-.need反转 {
+.后手需要反转 {
   rotate: 180deg;
 }
-.need反转 .roles {
+.后手需要反转 .roles {
   rotate: 180deg;
 }
 

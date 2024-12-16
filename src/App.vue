@@ -13,8 +13,9 @@ import {
   positionsFlat,
   走棋提示1,
   is我的回合,
+  moves,
+  offline,
 } from './data'
-import { moves } from './move'
 import { getRoleType } from './utils'
 import './online'
 import { SEND } from './online'
@@ -22,7 +23,8 @@ import { SEND } from './online'
 import 棋盘 from './components/棋盘.vue'
 
 function action({ target }) {
-  if (!is我的回合.value) return
+  if (!is我的回合.value && !offline) return
+
   const { i: oldI, j: oldJ } = select.value || {}
   select.value = undefined
 

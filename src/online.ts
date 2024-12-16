@@ -12,6 +12,7 @@ import {
   吃子列表,
   is我的回合,
   isBoss,
+  offline,
 } from './data'
 
 let channel = '大厅'
@@ -62,6 +63,12 @@ if (isMaster) {
       }
     },
   })
+} else if (offline) {
+  channel = 'offline_channel'
+  pubsub.subscribe({
+    channel,
+    onMessage: gameTick,
+  })
 } else {
   pubsub.subscribe({
     channel,
@@ -89,36 +96,7 @@ if (isMaster) {
           presence: {
             enable: true,
           },
-          onMessage({ content }) {
-            const { type, data } = JSON.parse(content) // 两个data
-            console.log('接收', type, data)
-
-            if (type === '走') {
-              回合.value++
-
-              const {
-                old: [selectI, selectJ],
-                clicked: [i, j],
-                jie,
-              } = data
-
-              const clicked = positions[i][j]
-              const old = positions[selectI][selectJ]
-
-              if (clicked.qz) {
-                吃子列表[is我的回合.value ? 'bot' : 'top'].push(clicked.qz.jie || 'x')
-              }
-
-              clicked.qz = {
-                ...old.qz,
-                jie: jie || old.qz.jie,
-              }
-              delete old.qz
-
-              走棋提示1.value = { i, j }
-              走棋提示2.value = { i: selectI, j: selectJ }
-            }
-          },
+          onMessage: gameTick,
         })
 
         pubsub.subscribePresence({
@@ -145,3 +123,34 @@ if (isMaster) {
 //     }
 //   }
 // }, 3333)
+
+function gameTick({ content }) {
+  const { type, data } = JSON.parse(content) // 两个data
+  console.log('接收', type, data)
+
+  if (type === '走') {
+    回合.value++
+
+    const {
+      old: [selectI, selectJ],
+      clicked: [i, j],
+      jie,
+    } = data
+
+    const clicked = positions[i][j]
+    const old = positions[selectI][selectJ]
+
+    if (clicked.qz) {
+      吃子列表[is我的回合.value ? 'bot' : 'top'].push(clicked.qz.jie || 'x')
+    }
+
+    clicked.qz = {
+      ...old.qz,
+      jie: jie || old.qz.jie,
+    }
+    delete old.qz
+
+    走棋提示1.value = { i, j }
+    走棋提示2.value = { i: selectI, j: selectJ }
+  }
+}

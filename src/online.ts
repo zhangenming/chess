@@ -1,11 +1,24 @@
 import GoEasy from 'goeasy'
-import { isMaster, isMe, positions, 先手, 回合, username, 对手, 走棋提示1, 走棋提示2, 吃子列表, 我的回合 } from './data'
+import {
+  isMaster,
+  isMe,
+  positions,
+  is先手,
+  回合,
+  我的id,
+  对手id,
+  走棋提示1,
+  走棋提示2,
+  吃子列表,
+  is我的回合,
+  isBoss,
+} from './data'
 
 let channel = '大厅'
 export async function SEND(type: string, data: any) {
   console.log('SEND', type, data)
 
-  await new Promise((resolve) => setTimeout(resolve, 回合.value * 10))
+  await new Promise((resolve) => setTimeout(resolve, 回合.value / 2))
 
   pubsub.publish({
     channel,
@@ -18,14 +31,14 @@ export async function SEND(type: string, data: any) {
 
 const { connect, pubsub } = GoEasy.getInstance({
   host: 'hangzhou.goeasy.io',
-  appkey: 'BC-db04ee8988eb4f18b6b64f18afd33c40',
+  appkey: isBoss ? 'BC-c12db807824d4c98923bc16c498935bf' : 'BC-db04ee8988eb4f18b6b64f18afd33c40', // online2 : home
   modules: ['pubsub'],
 })
 
 const 随机id = Math.random().toFixed(2).slice(2)
-const who = isMaster ? '主机' : `${username}[${随机id}]`
+const who = isMaster ? '主机' : `${我的id}[${随机id}]`
 
-connect({ id: who, data: { username } })
+connect({ id: who, data: { username: 我的id } })
 
 if (isMaster) {
   let memberA
@@ -40,8 +53,7 @@ if (isMaster) {
           members.find((e) => e.id === memberA.id) // 此时a可能已经离开
         ) {
           SEND('匹配成功', {
-            ol房间号: `${memberA.id}=VS=${memberB.id}`,
-            ol先手: memberB.id,
+            ol房间号: `${memberA.id}--VS--${memberB.id}`,
           })
           memberA = null
         } else {
@@ -68,6 +80,10 @@ if (isMaster) {
 
         channel = data.ol房间号
 
+        const [后手, 先手] = data.ol房间号.split('--VS--')
+        is先手.value = 先手 === who
+        对手id.value = 先手 === who ? 后手 : 先手
+
         pubsub.subscribe({
           channel,
           presence: {
@@ -90,7 +106,7 @@ if (isMaster) {
               const old = positions[selectI][selectJ]
 
               if (clicked.qz) {
-                吃子列表[我的回合.value ? 'bot' : 'top'].push(clicked.qz.jie || 'x')
+                吃子列表[is我的回合.value ? 'bot' : 'top'].push(clicked.qz.jie || 'x')
               }
 
               clicked.qz = {
@@ -118,11 +134,6 @@ if (isMaster) {
             }
           },
         })
-
-        const [olPlayerA, olPlayerB] = data.ol房间号.split('=VS=')
-        对手.value = (olPlayerA === who ? olPlayerB : olPlayerA).slice(0, -4)
-        先手.value = data.ol先手 === who
-        回合.value = 0
       }
     },
   })

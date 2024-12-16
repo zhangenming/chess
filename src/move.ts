@@ -1,39 +1,39 @@
 import { computed } from 'vue'
-import { drBt, myBt, positions, positionsFlat, select, 先手 } from './data'
+import { positions, positionsFlat, drBt, myBt, select, is先手 } from './data'
 import { get下侧全部位置, get上侧全部位置, get右侧全部位置, get左侧全部位置, 距离i, 距离j, 距离 } from './utils'
 import type { coord } from './utils'
 
 const _moves = computed(() => {
-  const x = select.value
-  if (!x) return []
+  const S = select.value
+  if (!S) return []
 
-  const { role: _r, jie } = positions[x.i][x.j].qz
+  const { role: _r, jie } = positions[S.i][S.j].qz
   const role = jie || _r
 
   if (role === '车') {
     return [
-      ...军可移动位置(get下侧全部位置(x), x),
-      ...军可移动位置(get上侧全部位置(x), x),
-      ...军可移动位置(get右侧全部位置(x), x),
-      ...军可移动位置(get左侧全部位置(x), x),
+      ...军可移动位置(get下侧全部位置(S), S),
+      ...军可移动位置(get上侧全部位置(S), S),
+      ...军可移动位置(get右侧全部位置(S), S),
+      ...军可移动位置(get左侧全部位置(S), S),
     ]
   }
 
   if (role === '马') {
     return positionsFlat
-      .filter((p) => (距离i(x, p) === 1 && 距离j(x, p) === 2) || (距离i(x, p) === 2 && 距离j(x, p) === 1))
+      .filter((p) => (距离i(S, p) === 1 && 距离j(S, p) === 2) || (距离i(S, p) === 2 && 距离j(S, p) === 1))
       .filter(({ i, j }) => {
-        if (i - x.i === 2) {
-          return get下侧全部位置(x)[0].qz === undefined
+        if (i - S.i === 2) {
+          return get下侧全部位置(S)[0].qz === undefined
         }
-        if (i - x.i === -2) {
-          return get上侧全部位置(x)[0].qz === undefined
+        if (i - S.i === -2) {
+          return get上侧全部位置(S)[0].qz === undefined
         }
-        if (j - x.j === 2) {
-          return get右侧全部位置(x)[0].qz === undefined
+        if (j - S.j === 2) {
+          return get右侧全部位置(S)[0].qz === undefined
         }
-        if (j - x.j === -2) {
-          return get左侧全部位置(x)[0].qz === undefined
+        if (j - S.j === -2) {
+          return get左侧全部位置(S)[0].qz === undefined
         }
         console.error('马')
       })
@@ -41,28 +41,28 @@ const _moves = computed(() => {
 
   if (role === '炮') {
     return [
-      ...炮可移动位置(get下侧全部位置(x)),
-      ...炮可移动位置(get上侧全部位置(x)),
-      ...炮可移动位置(get右侧全部位置(x)),
-      ...炮可移动位置(get左侧全部位置(x)),
+      ...炮可移动位置(get下侧全部位置(S)),
+      ...炮可移动位置(get上侧全部位置(S)),
+      ...炮可移动位置(get右侧全部位置(S)),
+      ...炮可移动位置(get左侧全部位置(S)),
     ]
   }
 
   if (role === '象') {
     return positionsFlat
-      .filter((p) => 距离i(x, p) === 2 && 距离j(x, p) === 2)
+      .filter((p) => 距离i(S, p) === 2 && 距离j(S, p) === 2)
       .filter(({ i, j }) => {
-        if (i - x.i === 2 && j - x.j === 2) {
-          return positions[x.i + 1][x.j + 1].qz === undefined
+        if (i - S.i === 2 && j - S.j === 2) {
+          return positions[S.i + 1][S.j + 1].qz === undefined
         }
-        if (i - x.i === -2 && j - x.j === -2) {
-          return positions[x.i - 1][x.j - 1].qz === undefined
+        if (i - S.i === -2 && j - S.j === -2) {
+          return positions[S.i - 1][S.j - 1].qz === undefined
         }
-        if (i - x.i === 2 && j - x.j === -2) {
-          return positions[x.i + 1][x.j - 1].qz === undefined
+        if (i - S.i === 2 && j - S.j === -2) {
+          return positions[S.i + 1][S.j - 1].qz === undefined
         }
-        if (i - x.i === -2 && j - x.j === 2) {
-          return positions[x.i - 1][x.j + 1].qz === undefined
+        if (i - S.i === -2 && j - S.j === 2) {
+          return positions[S.i - 1][S.j + 1].qz === undefined
         }
         console.error('象')
       })
@@ -70,7 +70,7 @@ const _moves = computed(() => {
 
   if (role === '士') {
     return positionsFlat
-      .filter((p) => 距离i(x, p) === 1 && 距离j(x, p) === 1)
+      .filter((p) => 距离i(S, p) === 1 && 距离j(S, p) === 1)
       .filter(({ j }) => {
         if (jie) return true
         return j === 3 || j === 4 || j === 5
@@ -78,22 +78,22 @@ const _moves = computed(() => {
   }
 
   if (role === '卒') {
-    return 先手.value
-      ? [get上侧全部位置(x)[0], ...(x.i < 5 ? [get右侧全部位置(x)[0], get左侧全部位置(x)[0]] : [])]
-      : [get下侧全部位置(x)[0], ...(x.i > 4 ? [get右侧全部位置(x)[0], get左侧全部位置(x)[0]] : [])]
+    return is先手.value
+      ? [get上侧全部位置(S)[0], ...(S.i < 5 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]] : [])]
+      : [get下侧全部位置(S)[0], ...(S.i > 4 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]] : [])]
   }
 
   if (role === '帅') {
     const 九宫 = positionsFlat
-      .filter((p) => (距离i(x, p) === 1 && 距离j(x, p) === 0) || (距离i(x, p) === 0 && 距离j(x, p) === 1))
+      .filter((p) => (距离i(S, p) === 1 && 距离j(S, p) === 0) || (距离i(S, p) === 0 && 距离j(S, p) === 1))
       .filter(
         ({ i, j }) =>
           (j === 3 || j === 4 || j === 5) &&
-          (先手.value ? i === 7 || i === 8 || i === 9 : i === 0 || i === 1 || i === 2)
+          (is先手.value ? i === 7 || i === 8 || i === 9 : i === 0 || i === 1 || i === 2)
       )
 
     const 敌方帅 = (() => {
-      const 到敌方帅的位置 = 先手.value ? get上侧全部位置(x) : get下侧全部位置(x)
+      const 到敌方帅的位置 = is先手.value ? get上侧全部位置(S) : get下侧全部位置(S)
       for (const p of 到敌方帅的位置) {
         if (!p.qz) continue
         if (p.qz.role !== '帅') break

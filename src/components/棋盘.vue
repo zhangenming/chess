@@ -6,9 +6,9 @@ import { 吃子列表, 走棋提示2 } from '../data'
 <template>
   <div class="wrap">
     <!-- top吃子 -->
-    <div class="top-eat-list">
+    <!-- <div class="吃子列表cls">
       <span v-for="role of 吃子列表.top">{{ role }}</span>
-    </div>
+    </div> -->
 
     <div class="qipan">
       <!-- 横 -->
@@ -193,12 +193,12 @@ import { 吃子列表, 走棋提示2 } from '../data'
   height: 30px;
   translate: -50% -50%;
 }
-.top-eat-list {
+.吃子列表cls {
   position: relative;
   top: -40px;
   left: -20px;
 }
-.top-eat-list span {
+.吃子列表cls span {
   border: 1px solid #111;
   color: #111;
   border-radius: 50%;

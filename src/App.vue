@@ -4,15 +4,15 @@ import {
   positions,
   select,
   回合,
-  先手,
+  is先手,
   myBt,
   rolesA,
   rolesB,
-  username,
-  对手,
+  我的id,
+  对手id,
   positionsFlat,
   走棋提示1,
-  我的回合,
+  is我的回合,
 } from './data'
 import { moves } from './move'
 import { getRoleType } from './utils'
@@ -22,7 +22,7 @@ import { SEND } from './online'
 import 棋盘 from './components/棋盘.vue'
 
 function action({ target }) {
-  if (!我的回合.value) return
+  if (!is我的回合.value) return
   const { i: oldI, j: oldJ } = select.value || {}
   select.value = undefined
 
@@ -35,7 +35,7 @@ function action({ target }) {
     SEND('走', {
       old: [oldI, oldJ],
       clicked: [i, j],
-      ...(!positions[oldI][oldJ].qz?.jie && { jie: 先手.value ? rolesA.pop() : rolesB.pop() }),
+      ...(!positions[oldI][oldJ].qz?.jie && { jie: is先手.value ? rolesA.pop() : rolesB.pop() }),
     })
   }
 
@@ -46,27 +46,27 @@ function action({ target }) {
 </script>
 
 <template>
-  <div>我的用户名: {{ username }}</div>
-  <div>对手用户名: {{ 对手 }}</div>
+  <div>我的id: {{ 我的id }}</div>
+  <div>对手id: {{ 对手id }}</div>
   <div>回合: {{ 回合 }}</div>
-  <div>先手: {{ 先手 }}</div>
+  <div>先手: {{ is先手 }}</div>
   <div>myBtType: {{ myBt }}</div>
 
-  <div style="font-size: 30px">{{ 对手 ? (我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
+  <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
 
   <component
     :is="棋盘"
     @click="action"
     :class="{
-      need反转: !先手,
+      need反转: !is先手,
     }"
     :style="{
       marginTop: '50px',
-      '--该你走了': 我的回合 ? 'black' : '#999',
-      '--先手color': 先手 ? 'black' : 'red',
-      '--后手color': 先手 ? 'red' : 'black',
-      '--先手weight': 先手 ? 900 : 100,
-      '--后手weight': 先手 ? 100 : 900,
+      '--该你走了': is我的回合 ? 'black' : '#999',
+      '--先手color': is先手 ? 'black' : 'red',
+      '--后手color': is先手 ? 'red' : 'black',
+      '--先手weight': is先手 ? 900 : 100,
+      '--后手weight': is先手 ? 100 : 900,
     }"
   >
     <div

@@ -1,5 +1,21 @@
 import { positions } from './data'
 
+export const raw = [
+  ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
+  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
+  ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
+  ['卒', '空', '卒', '空', '卒', '空', '卒', '空', '卒'],
+  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
+  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
+  ['卒', '空', '卒', '空', '卒', '空', '卒', '空', '卒'],
+  ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
+  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
+  ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
+]
+
+export const qzA = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '帅', '卒', '卒', '卒', '卒', '卒']
+export const qzB = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '帅', '卒', '卒', '卒', '卒', '卒']
+
 export type coord = { i: number; j: number }
 
 export function 距离(a: coord, b: coord) {
@@ -53,4 +69,15 @@ export function shuffle<T>(arr: T[]) {
     ;[arr[i], arr[j]] = [arr[j], arr[i]]
   }
   return arr
+}
+
+export function getMyId() {
+  return (
+    [...new URLSearchParams(location.search).keys()].filter((k) => !['master', 'boss', 'me'].includes(k))[0] ||
+    (() => {
+      const username = localStorage.getItem('username') || Math.random().toFixed(4).slice(2)
+      localStorage.setItem('username', username)
+      return username
+    })()
+  )
 }

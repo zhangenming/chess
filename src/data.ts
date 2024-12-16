@@ -1,53 +1,8 @@
 import { computed, reactive, ref, watch } from 'vue'
-import { getArrItemRandom, shuffle } from './utils'
+import { getArrItemRandom, getMyId, qzA, qzB, raw, shuffle } from './utils'
 
-const raw = [
-  ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
-  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
-  ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
-  ['卒', '空', '卒', '空', '卒', '空', '卒', '空', '卒'],
-  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
-  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
-  ['卒', '空', '卒', '空', '卒', '空', '卒', '空', '卒'],
-  ['空', '炮', '空', '空', '空', '空', '空', '炮', '空'],
-  ['空', '空', '空', '空', '空', '空', '空', '空', '空'],
-  ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
-]
-
-export const rolesA = shuffle([
-  '士',
-  '卒',
-  '马',
-  '卒',
-  '车',
-  '象',
-  '车',
-  '炮',
-  '炮',
-  '卒',
-  '马',
-  '卒',
-  '士',
-  '象',
-  '卒',
-])
-export const rolesB = shuffle([
-  '卒',
-  '车',
-  '炮',
-  '卒',
-  '马',
-  '象',
-  '车',
-  '炮',
-  '卒',
-  '卒',
-  '士',
-  '卒',
-  '马',
-  '象',
-  '士',
-])
+export const rolesA = shuffle(qzA)
+export const rolesB = shuffle(qzB)
 
 export const positions = reactive(
   raw.map((line, i) =>
@@ -69,28 +24,20 @@ export const positions = reactive(
 
 export const positionsFlat = positions.flat()
 
-export const select = ref<{ i: number; j: number }>()
+export const 回合 = ref(0)
+export const is先手 = ref(false)
+export const 对手id = ref()
+export const 我的id = getMyId() // 非响应式
 
-export const role = computed(() => select.value && positions[select.value[0]][select.value[1]])
-
-export const 回合 = ref<number | undefined>(undefined)
-export const 先手 = ref(false)
-
-export const myBt = computed(() => (先手.value ? 'bot' : 'top'))
-export const drBt = computed(() => (先手.value ? 'top' : 'bot'))
+export const is我的回合 = computed(() => 回合.value % 2 === (is先手.value ? 0 : 1))
+export const myBt = computed(() => (is先手.value ? 'bot' : 'top'))
+export const drBt = computed(() => (is先手.value ? 'top' : 'bot'))
 
 export const isMaster = location.search.includes('master')
+export const isBoss = location.search.includes('boss')
 export const isMe = location.search.includes('me')
 
-export const username =
-  [...new URLSearchParams(location.search).keys()].filter((k) => !['me', 'master'].includes(k))[0] ||
-  (() => {
-    const username = localStorage.getItem('username') || Math.random().toFixed(4).slice(2)
-    localStorage.setItem('username', username)
-    return username
-  })()
-
-export const 对手 = ref('')
+export const select = ref<{ i: number; j: number }>()
 
 export const 走棋提示1 = ref({ i: -1, j: -1 })
 export const 走棋提示2 = ref({ i: -1, j: -1 })
@@ -102,5 +49,3 @@ export const 吃子列表 = reactive<{
   top: ['x', 'y'],
   bot: [],
 })
-
-export const 我的回合 = computed(() => 回合.value % 2 === (先手.value ? 0 : 1))

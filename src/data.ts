@@ -1,6 +1,6 @@
 import { computed, reactive, ref, watch } from 'vue'
-import { getArrItemRandom, getMyId, qzA, qzB, raw, shuffle } from './utils'
-import { getItemMoves } from './move'
+import { getMyId, qzA, qzB, raw, shuffle } from './utils'
+import { getQzMoves } from './move'
 
 export const rolesA = shuffle(qzA)
 export const rolesB = shuffle(qzB)
@@ -56,20 +56,20 @@ export const moves = computed(() => {
   const S = select.value
   if (!S) return []
 
-  return getItemMoves(S)
+  return getQzMoves(S)
 })
 
-const allItem = computed(() => {
+export const allQz = computed(() => {
   return positionsFlat.filter((p) => p.qz)
 })
-// const allItem2 = () => positions.flat().filter((p) => p.qz)
+// export const allQz2 = () => positions.flat().filter((p) => p.qz)
 
-const allMyItem = computed(() => {
-  return allItem.value.filter((p) => p.qz.tb === myBt.value)
+export const allMyQz = computed(() => {
+  return allQz.value.filter((p) => p.qz.tb === myBt.value)
 })
-const allDrItem = computed(() => {
-  return allItem.value.filter((p) => p.qz.tb !== myBt.value)
+export const allDrQz = computed(() => {
+  return allQz.value.filter((p) => p.qz.tb !== myBt.value)
 })
 
-console.log(allMyItem.value.map(getItemMoves))
-console.log(allDrItem.value.map(getItemMoves))
+console.log(allMyQz.value.map(getQzMoves))
+console.log(allDrQz.value.map(getQzMoves))

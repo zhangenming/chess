@@ -11,7 +11,7 @@ import {
   rolesB,
   我的id,
   对手id,
-  positionsFlat,
+  allQz,
   走棋提示1,
   is我的回合,
   moves,
@@ -81,7 +81,7 @@ function action({ target }) {
     }"
   >
     <div
-      v-for="{ i, j, qz } in positionsFlat.filter((e) => e.qz).sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))"
+      v-for="{ i, j, qz } in allQz.sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))"
       :key="qz.idx"
       :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
       :class="[

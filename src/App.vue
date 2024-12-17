@@ -61,6 +61,7 @@ function action({ target }) {
   <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
 
   <component
+    v-if="对手id"
     :is="棋盘"
     @click="action"
     :style="{
@@ -117,11 +118,11 @@ body {
   translate: -50% -50%;
   transition-property: all;
   transition-duration: 0.3s;
+  background: color-mix(in oklab, currentColor, white 90%);
   border-radius: 50%;
   border-width: 2px;
   border-style: solid;
   border-color: var(--后手color);
-  background: white;
   color: var(--后手color);
   font-weight: var(--后手weight);
 }

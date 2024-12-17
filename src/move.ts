@@ -113,38 +113,37 @@ export function getQzMoves(S: item) {
 
       return 敌方帅 ? [...九宫, 敌方帅] : 九宫
     }
+
+    function 军可移动位置(
+      datas: { i: number; j: number; qz?: { role: string; tb: string } }[],
+      x: coord,
+      敌人阵营: string
+    ) {
+      let meetDr = false
+      return datas
+        .filter((item) => {
+          if (meetDr) return false // 这个判断必须首先判断 遇到敌人之后 无论是空地还是棋子 都要返回false
+          if (!item.qz) return true
+          if (!meetDr && item.qz.tb === 敌人阵营) {
+            meetDr = true
+            return true
+          }
+        })
+        .filter((item, i) => 距离(x, item) === i + 1)
+    }
+    function 炮可移动位置(datas: { i: number; j: number; qz?: { role: string; tb: string } }[]) {
+      let 炮架 = false
+      let 找到目标 = false
+      return datas.filter((item) => {
+        if (!炮架 && !item.qz) return true
+        if (炮架 && item.qz && !找到目标) {
+          找到目标 = true
+          return true
+        }
+        if (item.qz) {
+          炮架 = true
+        }
+      })
+    }
   }
-}
-
-function 军可移动位置(
-  datas: { i: number; j: number; qz?: { role: string; tb: string } }[],
-  x: coord,
-  敌人阵营: string
-) {
-  let meetDr = false
-  return datas
-    .filter((item) => {
-      if (meetDr) return false // 这个判断必须首先判断 遇到敌人之后 无论是空地还是棋子 都要返回false
-      if (!item.qz) return true
-      if (!meetDr && item.qz.tb === 敌人阵营) {
-        meetDr = true
-        return true
-      }
-    })
-    .filter((item, i) => 距离(x, item) === i + 1)
-}
-
-function 炮可移动位置(datas: { i: number; j: number; qz?: { role: string; tb: string } }[]) {
-  let 炮架 = false
-  let 找到目标 = false
-  return datas.filter((item) => {
-    if (!炮架 && !item.qz) return true
-    if (炮架 && item.qz && !找到目标) {
-      找到目标 = true
-      return true
-    }
-    if (item.qz) {
-      炮架 = true
-    }
-  })
 }

@@ -28,6 +28,7 @@ export async function SEND(type: string, data: any) {
     message: JSON.stringify({
       type,
       data,
+      time: Date.now(),
     }),
   })
 }
@@ -126,7 +127,7 @@ if (isMaster) {
 // }, 3333)
 
 function gameTick({ content }) {
-  const { type, data } = JSON.parse(content) // 两个data
+  const { type, data, time } = JSON.parse(content) // 两个data
   console.log('接收', type, data)
 
   if (type === '走') {
@@ -136,7 +137,6 @@ function gameTick({ content }) {
       old: [selectI, selectJ],
       clicked: [i, j],
       jie,
-      time,
     } = data
 
     const clicked = positions[i][j]

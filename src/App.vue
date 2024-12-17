@@ -36,7 +36,6 @@ function action({ target }) {
       old: [oldI, oldJ],
       clicked: [i, j],
       ...(!positions[oldI][oldJ].qz?.jie && { jie: getItemRandom(roles[positions[oldI][oldJ].qz.tb]) }),
-      time: Date.now(),
     })
 
     test(positions[oldI][oldJ].qz?.tb === positions[i][j].qz?.tb, '吃自己')

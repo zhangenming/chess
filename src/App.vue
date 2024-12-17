@@ -35,9 +35,9 @@ function action({ target }) {
     const { qz: qzNew } = positions[i][j]
     const { qz: qzOld } = positions[oldI][oldJ]
     // old -> clicked
-    SEND('走', {
-      old: [oldI, oldJ],
-      clicked: [i, j],
+    SEND('走棋', {
+      old: `${oldI}-${oldJ}`,
+      clicked: `${i}-${j}`,
       ...(!qzOld.jie && { jie: getItemRandom(roles[qzOld.tb]) }),
       ...(qzNew && !qzNew.jie && { jieEat: getItemRandom(roles[qzNew.tb]) }),
     })
@@ -87,7 +87,7 @@ function action({ target }) {
           canEat: moves.find((item) => item.i === i && item.j === j),
           jieCls: !qz.jie,
           selected: i === select?.i && j === select?.j,
-          走棋提示: 走棋提示1.i === i && 走棋提示1.j === j,
+          走棋提示: 走棋提示1 === `${i}-${j}`,
         },
       ]"
       :i

@@ -14,7 +14,7 @@ import {
   offline,
   roles,
 } from './data'
-import { getItemRandom } from './utils'
+import { getItemRandom, ij2item } from './utils'
 
 let channel = '大厅'
 
@@ -130,18 +130,13 @@ function gameTick({ content }) {
   const { type, data, time } = JSON.parse(content) // 两个data
   console.log('接收', type, data)
 
-  if (type === '走') {
+  if (type === '走棋') {
     回合.value++
 
-    const {
-      old: [selectI, selectJ],
-      clicked: [i, j],
-      jie,
-      jieEat,
-    } = data
+    const { old: oldI, clicked: clickedI, jie, jieEat } = data
 
-    const clicked = positions[i][j]
-    const old = positions[selectI][selectJ]
+    const clicked = ij2item(clickedI)
+    const old = ij2item(oldI)
 
     const { qz } = clicked
     if (qz) {
@@ -154,9 +149,8 @@ function gameTick({ content }) {
     }
     delete old.qz
 
-    走棋提示1.value = { i, j }
-    走棋提示2.value = { i: selectI, j: selectJ }
-
-    console.log(+new Date() - time)
+    // todo refac 数据依附到棋盘上
+    走棋提示1.value = clickedI
+    走棋提示2.value = oldI
   }
 }

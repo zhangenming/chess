@@ -18,8 +18,8 @@ export const offline = location.search.includes('offline')
 
 export const select = ref<{ i: number; j: number }>()
 
-export const 走棋提示1 = ref({ i: -1, j: -1 })
-export const 走棋提示2 = ref({ i: -1, j: -1 })
+export const 走棋提示1 = ref('')
+export const 走棋提示2 = ref('')
 
 export const 吃子列表 = reactive<{
   top: string[]

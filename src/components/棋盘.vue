@@ -64,19 +64,19 @@ import { 吃子列表, 走棋提示2 } from '../data'
         </div>
 
         <div class="位置s">
-          <template v-for="i in 10">
+          <template v-for="i in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
             <div
               :class="[
                 '位置',
                 {
-                  canMove: moves.find((item) => item.i === i - 1 && item.j === j - 1),
-                  走棋提示: 走棋提示2.i === i - 1 && 走棋提示2.j === j - 1,
+                  canMove: moves.find((item) => item.i === i && item.j === j),
+                  走棋提示: 走棋提示2 === `${i}-${j}`,
                 },
               ]"
-              v-for="j in 9"
-              :style="{ top: `${(i - 1) * 50}px`, left: `${(j - 1) * 50}px` }"
-              :i="i - 1"
-              :j="j - 1"
+              v-for="j in [0, 1, 2, 3, 4, 5, 6, 7, 8]"
+              :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
+              :i="i"
+              :j="j"
             ></div>
           </template>
         </div>

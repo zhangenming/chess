@@ -78,3 +78,8 @@ export function test(bool: any, text: any) {
     console.error(text)
   }
 }
+
+export function ij2item(s: string) {
+  const [i, j] = s.split('-')
+  return positions[i][j]
+}

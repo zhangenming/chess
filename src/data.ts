@@ -5,26 +5,6 @@ import { getQzMoves } from './move'
 export const rolesA = shuffle(qzA)
 export const rolesB = shuffle(qzB)
 
-export const positions = reactive(
-  raw.map((line, i) =>
-    line.map((r, j) => ({
-      i,
-      j,
-      ...(r != '空' && {
-        qz: {
-          idx: `${i}-${j}`,
-          role: r,
-          jie: r === '帅' ? '帅' : '',
-          tb: i < 5 ? ('top' as const) : ('bot' as const),
-        },
-      }),
-    }))
-  )
-)
-;(window as any).positions = positions
-
-export const positionsFlat = positions.flat()
-
 export const 回合 = ref(0)
 export const is先手 = ref(true)
 export const 对手id = ref()
@@ -59,17 +39,67 @@ export const moves = computed(() => {
   return getQzMoves(S)
 })
 
+type 位置 = {
+  i: number
+  j: number
+}
+type 棋子 = {
+  idx: string
+  role: string
+  jie?: string
+  tb: 'top' | 'bot'
+}
+type 位置with棋子 = 位置 & { qz: 棋子 }
+
+export const positions = reactive(
+  raw.map((line, i) =>
+    line.map((r, j) => ({
+      i,
+      j,
+      ...(r != '空' && {
+        qz: {
+          idx: `${i}-${j}`,
+          role: r,
+          jie: r === '帅' ? '帅' : '',
+          tb: i < 5 ? ('top' as const) : ('bot' as const),
+        },
+      }),
+    }))
+  )
+)
+;(window as any).positions = positions
+
+export const positionsFlat = positions.flat()
+
 export const allQz = computed(() => {
   return positionsFlat.filter((p) => p.qz)
 })
 // export const allQz2 = () => positions.flat().filter((p) => p.qz)
 
-export const allMyQz = computed(() => {
+export const allQzMy = computed(() => {
   return allQz.value.filter((p) => p.qz.tb === myBt.value)
 })
-export const allDrQz = computed(() => {
+export const allQzDr = computed(() => {
   return allQz.value.filter((p) => p.qz.tb !== myBt.value)
 })
 
-console.log(allMyQz.value.map(getQzMoves))
-console.log(allDrQz.value.map(getQzMoves))
+// todo 保护
+export const 我能吃的棋子 = computed(() => {
+  return allQzDr.value
+    .map(getQzMoves)
+    .flat()
+    .filter((p) => p.qz)
+})
+export const 我能吃的棋子_舒服_但被保护有损失 = computed(() => {
+  return
+})
+export const 我能吃的棋子_得劲_无损失 = computed(() => {
+  return
+})
+
+export const 危险_我要被吃的棋子 = computed(() => {
+  return allQzMy.value
+    .map(getQzMoves)
+    .flat()
+    .filter((p) => p.qz?.tb === drBt.value)
+})

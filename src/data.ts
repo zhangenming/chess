@@ -2,11 +2,6 @@ import { computed, reactive, ref, watch } from 'vue'
 import { getMyId, qzA, qzB, raw, shuffle } from './utils'
 import { getQzMoves } from './move'
 
-export const roles = {
-  top: shuffle(qzA),
-  bot: shuffle(qzB),
-}
-
 export const 回合 = ref(0)
 export const is先手 = ref(true)
 export const 对手id = ref()
@@ -52,6 +47,11 @@ type 棋子 = {
   tb: 'top' | 'bot'
 }
 type 位置with棋子 = 位置 & { qz: 棋子 }
+
+export const roles = {
+  top: shuffle(qzA),
+  bot: shuffle(qzB),
+}
 
 export const positions = reactive(
   raw.map((line, i) =>

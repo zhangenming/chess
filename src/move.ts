@@ -88,8 +88,8 @@ export function getQzMoves(S: item) {
 
     if (item === '卒') {
       return (is敌人棋子 ? !is先手.value : is先手.value)
-        ? [get上侧全部位置(S)[0], ...(S.i < 5 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]].filter(Boolean) : [])]
-        : [get下侧全部位置(S)[0], ...(S.i > 4 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]].filter(Boolean) : [])]
+        ? [get上侧全部位置(S)[0], ...(S.i < 5 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]] : [])].filter(Boolean)
+        : [get下侧全部位置(S)[0], ...(S.i > 4 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]] : [])].filter(Boolean)
       // 什么时候可以走左右的判断还有问题
     }
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { computed } from 'vue'
 import {
   positions,
   select,
@@ -17,7 +16,6 @@ import {
   offline,
 } from './data'
 import { test } from './utils'
-import './online'
 import { SEND } from './online'
 
 import 棋盘 from './components/棋盘.vue'
@@ -38,19 +36,15 @@ function action({ target }) {
       old: [oldI, oldJ],
       clicked: [i, j],
       ...(!positions[oldI][oldJ].qz?.jie && { jie: roles[positions[oldI][oldJ].qz.tb].pop() }),
+      time: Date.now(),
     })
 
     test(positions[oldI][oldJ].qz?.tb === positions[i][j].qz?.tb, '吃自己')
   }
 
-  if (target.classList.contains(myBt.value)) {
+  // offline的话交替行走俩人的棋子 否则只能走自己的棋子
+  if (target.classList.contains(offline ? (is我的回合.value ? myBt.value : drBt.value) : myBt.value)) {
     select.value = { i, j }
-  }
-
-  if (offline) {
-    if (target.classList.contains(drBt.value)) {
-      select.value = { i, j }
-    }
   }
 }
 </script>

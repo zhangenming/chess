@@ -10,7 +10,6 @@ import {
   走棋提示1,
   走棋提示2,
   吃子列表,
-  is我的回合,
   isBoss,
   offline,
   roles,
@@ -136,6 +135,7 @@ function gameTick({ content }) {
       old: [selectI, selectJ],
       clicked: [i, j],
       jie,
+      time,
     } = data
 
     const clicked = positions[i][j]
@@ -154,5 +154,7 @@ function gameTick({ content }) {
 
     走棋提示1.value = { i, j }
     走棋提示2.value = { i: selectI, j: selectJ }
+
+    console.log(+new Date() - time)
   }
 }

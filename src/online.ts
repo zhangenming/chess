@@ -14,6 +14,7 @@ import {
   offline,
   roles,
 } from './data'
+import { getItemRandom } from './utils'
 
 let channel = '大厅'
 
@@ -143,7 +144,7 @@ function gameTick({ content }) {
 
     const { qz } = clicked
     if (qz) {
-      吃子列表[qz.tb === 'top' ? 'bot' : 'top'].push(qz.jie || roles[qz.tb].pop())
+      吃子列表[qz.tb === 'top' ? 'bot' : 'top'].push(qz.jie || getItemRandom(roles[qz.tb]))
     }
 
     clicked.qz = {

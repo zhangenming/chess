@@ -47,21 +47,19 @@ export function get下侧全部位置({ i, j }: coord) {
   return positions.slice(i + 1).map((line) => line[j])
 }
 
-// 删除选中的元素 防止下次继续选中
-export function getArrItemRandom<T>(arr: T[]) {
-  const index = 0 // Math.floor(Math.random() * arr.length)
-  const item = arr[index]
-  arr.splice(index, 1)
-  return item
-}
+// 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)
+export function getItemRandom<T>(arr: T[]) {
+  shuffle(arr)
+  return arr.pop()
 
-// 洗牌算法
-export function shuffle<T>(arr: T[]) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1))
-    ;[arr[i], arr[j]] = [arr[j], arr[i]]
+  // 洗牌算法 原地修改
+  function shuffle<T>(arr: T[]) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1))
+      ;[arr[i], arr[j]] = [arr[j], arr[i]]
+    }
+    return arr
   }
-  return arr
 }
 
 export function getMyId() {

@@ -1,5 +1,5 @@
 import { computed, reactive, ref, watch } from 'vue'
-import { getMyId, qzA, qzB, raw, shuffle } from './utils'
+import { getMyId, qzA, qzB, raw } from './utils'
 import { getQzMoves } from './move'
 
 export const 回合 = ref(0)
@@ -49,8 +49,8 @@ type 棋子 = {
 type 位置with棋子 = 位置 & { qz: 棋子 }
 
 export const roles = {
-  top: shuffle(qzA),
-  bot: shuffle(qzB),
+  top: qzA,
+  bot: qzB,
 }
 
 export const positions = reactive(

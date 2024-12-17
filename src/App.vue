@@ -15,7 +15,7 @@ import {
   moves,
   offline,
 } from './data'
-import { test } from './utils'
+import { test, getItemRandom } from './utils'
 import { SEND } from './online'
 
 import 棋盘 from './components/棋盘.vue'
@@ -35,7 +35,7 @@ function action({ target }) {
     SEND('走', {
       old: [oldI, oldJ],
       clicked: [i, j],
-      ...(!positions[oldI][oldJ].qz?.jie && { jie: roles[positions[oldI][oldJ].qz.tb].pop() }),
+      ...(!positions[oldI][oldJ].qz?.jie && { jie: getItemRandom(roles[positions[oldI][oldJ].qz.tb]) }),
       time: Date.now(),
     })
 

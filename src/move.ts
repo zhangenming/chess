@@ -1,13 +1,31 @@
 import { computed } from 'vue'
 import { positions, positionsFlat, is先手, drBt } from './data'
-import { get下侧全部位置, get上侧全部位置, get右侧全部位置, get左侧全部位置, 距离i, 距离j, 距离 } from './utils'
+import {
+  get下侧全部位置,
+  get上侧全部位置,
+  get右侧全部位置,
+  get左侧全部位置,
+  距离i,
+  距离j,
+  距离,
+  ij2item,
+} from './utils'
 import type { coord } from './utils'
 
 type item = { i: number; j: number }
 
-export function getQzMoves(S: item) {
-  const 敌人阵营 = positions[S.i][S.j].qz?.tb === 'top' ? 'bot' : 'top'
-  const is敌人棋子 = positions[S.i][S.j].qz?.tb === drBt.value
+export function getQzMoves(S: {
+  qz: {
+    idx: string
+    role: string
+    jie: string
+    tb: 'top' | 'bot'
+  }
+  i: number
+  j: number
+}) {
+  const 敌人阵营 = S.qz?.tb === 'top' ? 'bot' : 'top'
+  const is敌人棋子 = S.qz?.tb === drBt.value
   return _getQzMoves(S).filter((e) => {
     // 存在棋子 说明是吃 需要判断是敌人棋子
     if (e.qz) return e.qz.tb === 敌人阵营

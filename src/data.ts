@@ -1,5 +1,5 @@
 import { computed, reactive, ref, watch } from 'vue'
-import { getMyId, qzA, qzB, raw } from './utils'
+import { getMyId, ij2item, qzA, qzB, raw } from './utils'
 import { getQzMoves } from './move'
 
 export const 回合 = ref(0)
@@ -16,7 +16,7 @@ export const isBoss = location.search.includes('boss')
 export const isMe = location.search.includes('me')
 export const offline = location.search.includes('offline')
 
-export const select = ref<{ i: number; j: number }>()
+export const 起始棋子 = ref('')
 
 export const 走棋提示1 = ref('')
 export const 走棋提示2 = ref('')
@@ -30,10 +30,10 @@ export const 吃子列表 = reactive<{
 })
 
 export const moves = computed(() => {
-  const S = select.value
+  const S = 起始棋子.value
   if (!S) return []
 
-  return getQzMoves(S)
+  return getQzMoves(ij2item(S))
 })
 
 type 位置 = {

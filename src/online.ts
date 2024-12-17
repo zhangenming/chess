@@ -18,21 +18,6 @@ import { getItemRandom, ij2item } from './utils'
 
 let channel = '大厅'
 
-export async function SEND(type: string, data: any) {
-  console.log('SEND', type, data)
-
-  await new Promise((resolve) => setTimeout(resolve, 回合.value / 2))
-
-  pubsub.publish({
-    channel,
-    message: JSON.stringify({
-      type,
-      data,
-      time: Date.now(),
-    }),
-  })
-}
-
 const who = isMaster ? '主机' : `${我的id}[${Math.random().toFixed(2).slice(2)}]`
 
 const { connect, pubsub } = GoEasy.getInstance({
@@ -43,6 +28,7 @@ const { connect, pubsub } = GoEasy.getInstance({
 
 connect({ id: who, data: { username: 我的id } })
 
+// GoEasy
 if (isMaster) {
   let memberA
   pubsub.subscribePresence({
@@ -56,7 +42,7 @@ if (isMaster) {
           members.find((e) => e.id === memberA.id) // 此时a可能已经离开
         ) {
           SEND('匹配成功', {
-            ol房间号: `${memberA.id}--VS--${memberB.id}`,
+            ol_房间号: `${memberA.id}--VS--${memberB.id}`,
           })
           memberA = null
         } else {
@@ -69,7 +55,7 @@ if (isMaster) {
   channel = 'offline_channel'
   pubsub.subscribe({
     channel,
-    onMessage: gameTick,
+    onMessage: RECEIVE,
   })
 } else {
   pubsub.subscribe({
@@ -81,15 +67,15 @@ if (isMaster) {
       const { type, data } = JSON.parse(content)
       console.log('接收', type, data)
 
-      if (type === '匹配成功' && data.ol房间号.includes(who)) {
+      if (type === '匹配成功' && data.ol_房间号.includes(who)) {
         pubsub.unsubscribe({
           channel,
           onSuccess() {},
         })
 
-        channel = data.ol房间号
+        channel = data.ol_房间号
 
-        const [后手, 先手] = data.ol房间号.split('--VS--')
+        const [后手, 先手] = data.ol_房间号.split('--VS--')
         is先手.value = 先手 === who
         对手id.value = 先手 === who ? 后手 : 先手
 
@@ -98,7 +84,7 @@ if (isMaster) {
           presence: {
             enable: true,
           },
-          onMessage: gameTick,
+          onMessage: RECEIVE,
         })
 
         pubsub.subscribePresence({
@@ -126,31 +112,82 @@ if (isMaster) {
 //   }
 // }, 3333)
 
-function gameTick({ content }) {
-  const { type, data, time } = JSON.parse(content) // 两个data
-  console.log('接收', type, data)
+//
+//
+//
+// gameTick
+export async function SEND(type: string, data = {}) {
+  console.log('1 SEND', type, data)
+
+  await new Promise((resolve) => setTimeout(resolve, 回合.value / 2))
+
+  pubsub.publish({
+    channel,
+    message: JSON.stringify({
+      type,
+      data,
+      time: Date.now(),
+    }),
+  })
+}
+
+//todo 多步悔棋
+const 悔棋数据 = []
+// 两种思路
+// 1. 可变数据 记录走棋数据，然后悔棋的时候，根据走棋数据，反向走棋
+// 2. 不可变数据 时间旅行
+
+function RECEIVE({ content }) {
+  const { type, data, time } = JSON.parse(content)
+  console.log('2 RECEIVE', +new Date() - time, type, data)
+  console.log('\n')
 
   if (type === '走棋') {
     回合.value++
 
-    const { old: oldI, clicked: clickedI, jie, jieEat } = data
+    // old -> clicked
+    const { ol_起始棋子, ol_目标位置, ol_jie, ol_jieEat } = data
 
-    const clicked = ij2item(clickedI)
-    const old = ij2item(oldI)
+    const clicked = ij2item(ol_目标位置)
+    const old = ij2item(ol_起始棋子)
 
     const { qz } = clicked
     if (qz) {
-      吃子列表[qz.tb === 'top' ? 'bot' : 'top'].push(qz.jie || jieEat)
+      吃子列表[qz.tb === 'top' ? 'bot' : 'top'].push(qz.jie || ol_jieEat)
     }
 
     clicked.qz = {
       ...old.qz,
-      jie: jie || old.qz.jie,
+      jie: ol_jie || old.qz.jie,
     }
     delete old.qz
 
+    悔棋数据.push(data)
+
     // todo refac 数据依附到棋盘上
-    走棋提示1.value = clickedI
-    走棋提示2.value = oldI
+    走棋提示1.value = ol_目标位置
+    走棋提示2.value = ol_起始棋子
+  }
+
+  if (type === '发起悔棋') {
+    //  clicked -> old
+    const { ol_起始棋子, ol_目标位置, ol_jie, ol_jieEat } = 悔棋数据.pop()
+
+    const clicked = ij2item(ol_目标位置)
+    const old = ij2item(ol_起始棋子)
+
+    // 1.走 暗子
+    // 2.走
+    // 3.吃
+    // 4.吃 暗子
+    old.qz = clicked.qz
+    delete clicked.qz
   }
 }
+
+// setInterval(() => {
+//   console.log({
+//     走棋提示1: 走棋提示1.value,
+//     走棋提示2: 走棋提示2.value,
+//   })
+// }, 1000)

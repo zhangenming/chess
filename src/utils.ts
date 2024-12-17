@@ -47,7 +47,7 @@ export function get下侧全部位置({ i, j }: coord) {
   return positions.slice(i + 1).map((line) => line[j])
 }
 
-// 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)
+// 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)保证悔完棋的时候随机
 export function getItemRandom<T>(arr: T[]) {
   shuffle(arr)
   return arr.pop()
@@ -64,7 +64,7 @@ export function getItemRandom<T>(arr: T[]) {
 
 export function getMyId() {
   return (
-    [...new URLSearchParams(location.search).keys()].filter((k) => !['master', 'boss', 'me'].includes(k))[0] ||
+    new URLSearchParams(location.search).get('id') ||
     (() => {
       const username = localStorage.getItem('username') || Math.random().toFixed(4).slice(2)
       localStorage.setItem('username', username)
@@ -81,5 +81,5 @@ export function test(bool: any, text: any) {
 
 export function ij2item(s: string) {
   const [i, j] = s.split('-')
-  return positions[i][j]
+  return positions[Number(i)][Number(j)]
 }

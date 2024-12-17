@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {
   positions,
-  select,
+  起始棋子,
   回合,
   is先手,
   myBt,
@@ -15,7 +15,7 @@ import {
   moves,
   offline,
 } from './data'
-import { test, getItemRandom } from './utils'
+import { test, getItemRandom, ij2item } from './utils'
 import { SEND } from './online'
 
 import 棋盘 from './components/棋盘.vue'
@@ -23,39 +23,38 @@ import 棋盘 from './components/棋盘.vue'
 function action({ target }) {
   if (!is我的回合.value && !offline) return
 
-  const { i: oldI, j: oldJ } = select.value || {}
-  select.value = undefined
+  const ol_起始棋子 = 起始棋子.value
+  起始棋子.value = undefined
 
   if (!target.parentElement?.classList.contains('位置s') && !target.parentElement?.classList.contains('棋子s')) return
 
-  const i = Number(target.getAttribute('i'))
-  const j = Number(target.getAttribute('j'))
+  const 目标位置 = `${target.getAttribute('i')}-${target.getAttribute('j')}`
 
   if (target.classList.contains('canMove') || target.classList.contains('canEat')) {
-    const { qz: qzNew } = positions[i][j]
-    const { qz: qzOld } = positions[oldI][oldJ]
-    // old -> clicked
+    const qz起始棋子 = ij2item(ol_起始棋子).qz
+    const qz目标位置 = ij2item(目标位置).qz
+
     SEND('走棋', {
-      old: `${oldI}-${oldJ}`,
-      clicked: `${i}-${j}`,
-      ...(!qzOld.jie && { jie: getItemRandom(roles[qzOld.tb]) }),
-      ...(qzNew && !qzNew.jie && { jieEat: getItemRandom(roles[qzNew.tb]) }),
+      ol_起始棋子,
+      ol_目标位置: 目标位置,
+      ...(!qz起始棋子.jie && { ol_jie: getItemRandom(roles[qz起始棋子.tb]) }),
+      ...(qz目标位置 && !qz目标位置.jie && { ol_jieEat: getItemRandom(roles[qz目标位置.tb]) }),
     })
 
-    test(qzOld.tb === qzNew?.tb, '吃自己')
+    test(qz起始棋子.tb === qz目标位置?.tb, '吃自己')
   }
 
   // offline的话交替行走俩人的棋子 否则只能走自己的棋子
   if (target.classList.contains(offline ? (is我的回合.value ? myBt.value : drBt.value) : myBt.value)) {
-    select.value = { i, j }
+    起始棋子.value = 目标位置
   }
 }
 </script>
 
 <template>
-  <div>我的id: {{ 我的id }}</div>
-  <div>对手id: {{ 对手id }}</div>
-  <div>回合: {{ 回合 }}</div>
+  <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
+
+  <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
   <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
   <div>myBtType: {{ myBt }}</div>
 
@@ -86,7 +85,7 @@ function action({ target }) {
         {
           canEat: moves.find((item) => item.i === i && item.j === j),
           jieCls: !qz.jie,
-          selected: i === select?.i && j === select?.j,
+          selected: 起始棋子 === `${i}-${j}`,
           走棋提示: 走棋提示1 === `${i}-${j}`,
         },
       ]"

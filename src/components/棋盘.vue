@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { moves } from '../data'
+import { SEND } from '../online'
 import { 吃子列表, 走棋提示2 } from '../data'
 </script>
 

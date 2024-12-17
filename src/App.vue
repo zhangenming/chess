@@ -32,13 +32,17 @@ function action({ target }) {
   const j = Number(target.getAttribute('j'))
 
   if (target.classList.contains('canMove') || target.classList.contains('canEat')) {
+    const { qz: qzNew } = positions[i][j]
+    const { qz: qzOld } = positions[oldI][oldJ]
+    // old -> clicked
     SEND('走', {
       old: [oldI, oldJ],
       clicked: [i, j],
-      ...(!positions[oldI][oldJ].qz?.jie && { jie: getItemRandom(roles[positions[oldI][oldJ].qz.tb]) }),
+      ...(!qzOld.jie && { jie: getItemRandom(roles[qzOld.tb]) }),
+      ...(qzNew && !qzNew.jie && { jieEat: getItemRandom(roles[qzNew.tb]) }),
     })
 
-    test(positions[oldI][oldJ].qz?.tb === positions[i][j].qz?.tb, '吃自己')
+    test(qzOld.tb === qzNew?.tb, '吃自己')
   }
 
   // offline的话交替行走俩人的棋子 否则只能走自己的棋子
@@ -60,9 +64,6 @@ function action({ target }) {
   <component
     :is="棋盘"
     @click="action"
-    :class="{
-      后手需要反转: !is先手,
-    }"
     :style="{
       marginTop: '50px',
       '--该你走了': is我的回合 ? 'black' : '#999',
@@ -70,8 +71,9 @@ function action({ target }) {
       '--后手color': is先手 ? 'red' : 'black',
       '--先手weight': is先手 ? 900 : 100,
       '--后手weight': is先手 ? 100 : 900,
-      '--top_color': 'red',
-      '--bot_color': 'black',
+      '--top_color': is先手 ? 'red' : 'black',
+      '--bot_color': is先手 ? 'black' : 'red',
+      '--后手需要反转': is先手 ? '0deg' : '180deg',
     }"
   >
     <div
@@ -102,12 +104,6 @@ body {
   display: flex;
   justify-content: center;
   transform: scale(0.83);
-}
-.后手需要反转 {
-  rotate: 180deg;
-}
-.后手需要反转 .roles {
-  rotate: 180deg;
 }
 
 .roles {

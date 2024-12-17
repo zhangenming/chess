@@ -4,10 +4,10 @@ import { 吃子列表, 走棋提示2 } from '../data'
 </script>
 
 <template>
-  <div>
+  <div class="container">
     <div class="吃子列表top">
       <span v-if="吃子列表.top.length === 0" style="opacity: 0"></span>
-      <span v-for="role of 吃子列表.top">{{ role }}</span>
+      <span v-for="(role, idx) of 吃子列表.top" :idx="idx" :style="{ order: idx }">{{ role }}</span>
       <!-- 最多15个 -->
     </div>
 
@@ -89,7 +89,7 @@ import { 吃子列表, 走棋提示2 } from '../data'
 
     <div class="吃子列表top 吃子列表bot">
       <span v-if="吃子列表.bot.length === 0" style="opacity: 0"></span>
-      <span v-for="role of 吃子列表.bot">{{ role }}</span>
+      <span v-for="(role, idx) of 吃子列表.bot" :idx="idx" :style="{ order: idx }">{{ role }}</span>
     </div>
   </div>
 </template>
@@ -205,13 +205,13 @@ import { 吃子列表, 走棋提示2 } from '../data'
   position: relative;
   display: flex;
   gap: 3px;
-  flex-direction: row-reverse;
+  justify-content: flex-end;
   left: 35px;
   top: -40px;
   color: var(--bot_color);
 }
 .吃子列表bot {
-  flex-direction: row;
+  justify-content: flex-start;
   left: -35px;
   top: 40px;
   color: var(--top_color);
@@ -226,5 +226,10 @@ import { 吃子列表, 走棋提示2 } from '../data'
   align-items: center;
   justify-content: center;
   margin: 0 -3px;
+}
+.container,
+.container .棋子s .roles,
+.container .吃子列表top span {
+  transform: rotate(var(--后手需要反转));
 }
 </style>

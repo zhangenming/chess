@@ -137,6 +137,7 @@ function gameTick({ content }) {
       old: [selectI, selectJ],
       clicked: [i, j],
       jie,
+      jieEat,
     } = data
 
     const clicked = positions[i][j]
@@ -144,7 +145,7 @@ function gameTick({ content }) {
 
     const { qz } = clicked
     if (qz) {
-      吃子列表[qz.tb === 'top' ? 'bot' : 'top'].push(qz.jie || getItemRandom(roles[qz.tb]))
+      吃子列表[qz.tb === 'top' ? 'bot' : 'top'].push(qz.jie || jieEat)
     }
 
     clicked.qz = {

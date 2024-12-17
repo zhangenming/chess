@@ -7,8 +7,7 @@ import {
   is先手,
   myBt,
   drBt,
-  rolesA,
-  rolesB,
+  roles,
   我的id,
   对手id,
   allQz,
@@ -38,7 +37,7 @@ function action({ target }) {
     SEND('走', {
       old: [oldI, oldJ],
       clicked: [i, j],
-      ...(!positions[oldI][oldJ].qz?.jie && { jie: is先手.value ? rolesA.pop() : rolesB.pop() }),
+      ...(!positions[oldI][oldJ].qz?.jie && { jie: roles[positions[oldI][oldJ].qz.tb].pop() }),
     })
 
     test(positions[oldI][oldJ].qz?.tb === positions[i][j].qz?.tb, '吃自己')
@@ -78,6 +77,8 @@ function action({ target }) {
       '--后手color': is先手 ? 'red' : 'black',
       '--先手weight': is先手 ? 900 : 100,
       '--后手weight': is先手 ? 100 : 900,
+      '--top_color': 'red',
+      '--bot_color': 'black',
     }"
   >
     <div

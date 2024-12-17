@@ -4,84 +4,92 @@ import { 吃子列表, 走棋提示2 } from '../data'
 </script>
 
 <template>
-  <div class="wrap">
-    <!-- top吃子 -->
-    <!-- <div class="吃子列表cls">
+  <div>
+    <div class="吃子列表top">
+      <span v-if="吃子列表.top.length === 0" style="opacity: 0"></span>
       <span v-for="role of 吃子列表.top">{{ role }}</span>
-    </div> -->
+      <!-- 最多15个 -->
+    </div>
 
-    <div class="qipan">
-      <!-- 横 -->
-      <div>
-        <div class="h" v-for="i in 10" :style="{ top: `${(i - 1) * 50}px` }"></div>
-      </div>
-
-      <!-- 竖 -->
-      <div>
-        <div class="s" v-for="i in 9" :style="{ left: `${(i - 1) * 50}px` }"></div>
-      </div>
-
-      <div class="河"></div>
-
-      <!-- 士 -->
-      <div>
-        <div class="士-1">
-          <div class="士-h"></div>
-          <div class="士-s"></div>
-        </div>
-        <div class="士-2">
-          <div class="士-h"></div>
-          <div class="士-s"></div>
-        </div>
-      </div>
-
-      <!-- 炮 -->
-      <div>
+    <div class="wrap">
+      <div class="qipan">
+        <!-- 横 -->
         <div>
-          <div class="炮" style="top: 100px; left: 50px">
-            <div v-for="i in 4"></div>
-          </div>
-          <div class="炮" style="top: 100px; left: 350px">
-            <div v-for="i in 4"></div>
-          </div>
-          <div class="炮" :style="{ top: '150px', left: `${(i - 1) * 100}px` }" v-for="i in 5">
-            <div v-for="i in 4"></div>
-          </div>
+          <div class="h" v-for="i in 10" :style="{ top: `${(i - 1) * 50}px` }"></div>
         </div>
+
+        <!-- 竖 -->
         <div>
-          <div class="炮" style="top: 350px; left: 50px">
-            <div v-for="i in 4"></div>
+          <div class="s" v-for="i in 9" :style="{ left: `${(i - 1) * 50}px` }"></div>
+        </div>
+
+        <div class="河"></div>
+
+        <!-- 士 -->
+        <div>
+          <div class="士-1">
+            <div class="士-h"></div>
+            <div class="士-s"></div>
           </div>
-          <div class="炮" style="top: 350px; left: 350px">
-            <div v-for="i in 4"></div>
-          </div>
-          <div class="炮" :style="{ top: '300px', left: `${(i - 1) * 100}px` }" v-for="i in 5">
-            <div v-for="i in 4"></div>
+          <div class="士-2">
+            <div class="士-h"></div>
+            <div class="士-s"></div>
           </div>
         </div>
-      </div>
 
-      <div class="位置s">
-        <template v-for="i in 10">
-          <div
-            :class="[
-              '位置',
-              {
-                canMove: moves.find((item) => item.i === i - 1 && item.j === j - 1),
-                走棋提示: 走棋提示2.i === i - 1 && 走棋提示2.j === j - 1,
-              },
-            ]"
-            v-for="j in 9"
-            :style="{ top: `${(i - 1) * 50}px`, left: `${(j - 1) * 50}px` }"
-            :i="i - 1"
-            :j="j - 1"
-          ></div>
-        </template>
-      </div>
+        <!-- 炮 -->
+        <div>
+          <div>
+            <div class="炮" style="top: 100px; left: 50px">
+              <div v-for="i in 4"></div>
+            </div>
+            <div class="炮" style="top: 100px; left: 350px">
+              <div v-for="i in 4"></div>
+            </div>
+            <div class="炮" :style="{ top: '150px', left: `${(i - 1) * 100}px` }" v-for="i in 5">
+              <div v-for="i in 4"></div>
+            </div>
+          </div>
+          <div>
+            <div class="炮" style="top: 350px; left: 50px">
+              <div v-for="i in 4"></div>
+            </div>
+            <div class="炮" style="top: 350px; left: 350px">
+              <div v-for="i in 4"></div>
+            </div>
+            <div class="炮" :style="{ top: '300px', left: `${(i - 1) * 100}px` }" v-for="i in 5">
+              <div v-for="i in 4"></div>
+            </div>
+          </div>
+        </div>
 
-      <div class="棋子s">
-        <slot></slot>
+        <div class="位置s">
+          <template v-for="i in 10">
+            <div
+              :class="[
+                '位置',
+                {
+                  canMove: moves.find((item) => item.i === i - 1 && item.j === j - 1),
+                  走棋提示: 走棋提示2.i === i - 1 && 走棋提示2.j === j - 1,
+                },
+              ]"
+              v-for="j in 9"
+              :style="{ top: `${(i - 1) * 50}px`, left: `${(j - 1) * 50}px` }"
+              :i="i - 1"
+              :j="j - 1"
+            ></div>
+          </template>
+        </div>
+
+        <div class="棋子s">
+          <slot></slot>
+        </div>
       </div>
+    </div>
+
+    <div class="吃子列表top 吃子列表bot">
+      <span v-if="吃子列表.bot.length === 0" style="opacity: 0"></span>
+      <span v-for="role of 吃子列表.bot">{{ role }}</span>
     </div>
   </div>
 </template>
@@ -193,20 +201,30 @@ import { 吃子列表, 走棋提示2 } from '../data'
   height: 30px;
   translate: -50% -50%;
 }
-.吃子列表cls {
+.吃子列表top {
   position: relative;
+  display: flex;
+  gap: 3px;
+  flex-direction: row-reverse;
+  left: 35px;
   top: -40px;
-  left: -20px;
+  color: var(--bot_color);
 }
-.吃子列表cls span {
-  border: 1px solid #111;
-  color: #111;
+.吃子列表bot {
+  flex-direction: row;
+  left: -35px;
+  top: 40px;
+  color: var(--top_color);
+}
+.吃子列表top span {
+  border: 1px solid currentColor;
   border-radius: 50%;
   aspect-ratio: 1;
-  width: 40px;
+  width: 35px;
   font-size: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 -3px;
 }
 </style>

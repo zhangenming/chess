@@ -13,6 +13,7 @@ import {
   is我的回合,
   isBoss,
   offline,
+  roles,
 } from './data'
 
 let channel = '大厅'
@@ -140,8 +141,9 @@ function gameTick({ content }) {
     const clicked = positions[i][j]
     const old = positions[selectI][selectJ]
 
-    if (clicked.qz) {
-      吃子列表[is我的回合.value ? 'bot' : 'top'].push(clicked.qz.jie || 'x')
+    const { qz } = clicked
+    if (qz) {
+      吃子列表[qz.tb === 'top' ? 'bot' : 'top'].push(qz.jie || roles[qz.tb].pop())
     }
 
     clicked.qz = {

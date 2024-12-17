@@ -2,8 +2,10 @@ import { computed, reactive, ref, watch } from 'vue'
 import { getMyId, qzA, qzB, raw, shuffle } from './utils'
 import { getQzMoves } from './move'
 
-export const rolesA = shuffle(qzA)
-export const rolesB = shuffle(qzB)
+export const roles = {
+  top: shuffle(qzA),
+  bot: shuffle(qzB),
+}
 
 export const 回合 = ref(0)
 export const is先手 = ref(true)
@@ -28,7 +30,7 @@ export const 吃子列表 = reactive<{
   top: string[]
   bot: string[]
 }>({
-  top: ['x', 'y'],
+  top: [],
   bot: [],
 })
 

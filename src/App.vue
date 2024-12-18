@@ -5,14 +5,14 @@ import {
   myBt,
   我的id,
   对手id,
-  allQz,
   走棋提示1,
   is我的回合,
   moves,
-  能吃的棋子,
-  能吃的棋子_被保护,
-  能吃的棋子_无保护,
-  被吃的棋子,
+  所有棋子,
+  我吃敌_被保护,
+  我吃敌_无保护,
+  敌吃我_被保护,
+  敌吃我_无保护,
   offline,
   buff,
 } from './data'
@@ -27,7 +27,7 @@ import 棋盘 from './components/棋盘.vue'
   <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
   <div>myBtType: {{ myBt }}</div>
 
-  <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
+  <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到敌...') : '等待对手加入...' }}</div>
 
   <component
     v-if="对手id || offline"
@@ -46,7 +46,7 @@ import 棋盘 from './components/棋盘.vue'
     }"
   >
     <div
-      v-for="{ i, j, qz } in allQz"
+      v-for="{ i, j, qz } in 所有棋子"
       :key="qz.idx"
       :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
       :class="[
@@ -58,8 +58,10 @@ import 棋盘 from './components/棋盘.vue'
           selected: 起始棋子 === `${i}-${j}`,
           走棋提示: 走棋提示1 === `${i}-${j}`,
           ...(buff && {
-            能吃的棋子_被保护cls: 能吃的棋子_被保护.find((item) => item.i === i && item.j === j),
-            能吃的棋子_无保护cls: 能吃的棋子_无保护.find((item) => item.i === i && item.j === j),
+            我吃敌_被保护cls: 我吃敌_被保护.find((item) => item.i === i && item.j === j),
+            我吃敌_无保护cls: 我吃敌_无保护.find((item) => item.i === i && item.j === j),
+            敌吃我_被保护cls: 敌吃我_被保护.find((item) => item.i === i && item.j === j),
+            敌吃我_无保护cls: 敌吃我_无保护.find((item) => item.i === i && item.j === j),
           }),
         },
       ]"
@@ -124,25 +126,31 @@ body {
   cursor: pointer;
 }
 .canMove::before,
-:is(.能吃的棋子_被保护cls, .能吃的棋子_无保护cls)::after {
+:is(.我吃敌_被保护cls, .我吃敌_无保护cls, .敌吃我_被保护cls, .敌吃我_无保护cls)::after {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
   translate: -50% -50%;
   border-radius: 1%;
-  width: 10px;
-  height: 10px;
+  width: 6px;
+  height: 6px;
   background: black;
 }
-.能吃的棋子_被保护cls::after {
-  width: 6px;
-  height: 6px;
+.canMove::before {
+  width: 10px;
+  height: 10px;
+}
+.我吃敌_被保护cls::after {
   background: green;
 }
-.能吃的棋子_无保护cls::after {
-  width: 6px;
-  height: 6px;
+.我吃敌_无保护cls::after {
+  background: red;
+}
+.敌吃我_被保护cls::after {
+  background: green;
+}
+.敌吃我_无保护cls::after {
   background: red;
 }
 /* .走棋提示::after {

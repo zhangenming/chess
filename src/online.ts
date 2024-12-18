@@ -14,7 +14,7 @@ import {
   offline,
   roles,
 } from './data'
-import { getItemRandom, ij2item } from './utils'
+import { getItemRandom, ij2item, 取反 } from './utils'
 
 let channel = '大厅'
 
@@ -153,7 +153,7 @@ function RECEIVE({ content }) {
 
     const { qz } = clicked
     if (qz) {
-      吃子列表[qz.tb === 'top' ? 'bot' : 'top'].push(qz.jie || ol_jieEat)
+      吃子列表[取反(qz.tb)].push(qz.jie || ol_jieEat)
     }
 
     clicked.qz = {

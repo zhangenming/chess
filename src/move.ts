@@ -9,6 +9,7 @@ import {
   距离j,
   距离,
   ij2item,
+  取反,
 } from './utils'
 import type { coord } from './utils'
 
@@ -24,7 +25,7 @@ export function getQzMoves(S: {
   i: number
   j: number
 }) {
-  const 敌人阵营 = S.qz?.tb === 'top' ? 'bot' : 'top'
+  const 敌人阵营 = 取反(S.qz.tb)
   const is敌人棋子 = S.qz?.tb === drBt.value
   return _getQzMoves(S).filter((e) => {
     // 存在棋子 说明是吃 需要判断是敌人棋子

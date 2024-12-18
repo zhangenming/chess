@@ -83,3 +83,9 @@ export function ij2item(s: string) {
   const [i, j] = s.split('-')
   return positions[Number(i)][Number(j)]
 }
+
+export function 取反(tb: 'top' | 'bot') {
+  if (tb === 'top') return 'bot'
+  if (tb === 'bot') return 'top'
+  throw new Error('取反失败')
+}

@@ -81,7 +81,7 @@ if (isMaster) {
               console.log('对方退出')
               if (!isMe) {
                 alert('对方退出')
-                location.reload()
+                location.reload() //todo
               }
             }
           },

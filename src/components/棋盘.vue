@@ -144,7 +144,7 @@ import { 吃子列表, 走子提示 } from '../data'
   opacity: 0.3;
   position: absolute;
   width: 100px;
-  height: 100px;
+  aspect-ratio: 1;
   left: 151px;
 }
 .士-2 {
@@ -171,7 +171,7 @@ import { 吃子列表, 走子提示 } from '../data'
 }
 .炮 div {
   width: 10px;
-  height: 10px;
+  aspect-ratio: 1;
   border: 1px solid #111;
   margin: 3px;
   position: absolute;
@@ -200,7 +200,7 @@ import { 吃子列表, 走子提示 } from '../data'
 .位置 {
   position: absolute;
   width: 30px;
-  height: 30px;
+  aspect-ratio: 1;
   translate: -50% -50%;
 }
 .吃子列表top {
@@ -232,10 +232,12 @@ import { 吃子列表, 走子提示 } from '../data'
 }
 
 .走子提示 {
-  width: 50px;
+  width: 35px;
   aspect-ratio: 1;
-  border: 5px solid #111;
   translate: -50% -50%;
   position: absolute;
+  z-index: 1;
+  background: #1500fb;
+  opacity: 0.5;
 }
 </style>

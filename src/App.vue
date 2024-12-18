@@ -11,10 +11,10 @@ import {
   is我的回合,
   moves,
   所有棋子,
-  我吃敌_被保护,
-  我吃敌_无保护,
-  敌吃我_被保护,
-  敌吃我_无保护,
+  我吃_敌_被保护,
+  我吃_敌_无保护,
+  敌吃_我_被保护,
+  敌吃_我_无保护,
   offline,
   buff,
   is将军,
@@ -64,10 +64,10 @@ effect(() => {
           jieCls: !qz.jie,
           selected: 起始棋子 === `${i}-${j}`,
           ...(buff && {
-            我吃敌_被保护cls: 我吃敌_被保护.find((item) => item.i === i && item.j === j),
-            我吃敌_无保护cls: 我吃敌_无保护.find((item) => item.i === i && item.j === j),
-            敌吃我_被保护cls: 敌吃我_被保护.find((item) => item.i === i && item.j === j),
-            敌吃我_无保护cls: 敌吃我_无保护.find((item) => item.i === i && item.j === j),
+            我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
+            我吃敌无保护cls: 我吃_敌_无保护.find((item) => item.i === i && item.j === j),
+            敌吃我被保护cls: 敌吃_我_被保护.find((item) => item.i === i && item.j === j),
+            敌吃我无保护cls: 敌吃_我_无保护.find((item) => item.i === i && item.j === j),
           }),
         },
       ]"
@@ -132,31 +132,31 @@ body {
   cursor: pointer;
 }
 .canMove::before,
-:is(.我吃敌_被保护cls, .我吃敌_无保护cls, .敌吃我_被保护cls, .敌吃我_无保护cls)::after {
+:is(.我吃敌被保护cls, .我吃敌无保护cls, .敌吃我被保护cls, .敌吃我无保护cls)::after {
   content: '';
   position: absolute;
   left: 50%;
   top: 50%;
   translate: -50% -50%;
   border-radius: 1%;
-  width: 6px;
-  height: 6px;
+  aspect-ratio: 1;
+  width: 10px;
   background: black;
 }
-.canMove::before {
-  width: 10px;
-  height: 10px;
-}
-.我吃敌_被保护cls::after {
+.我吃敌被保护cls::after {
   background: green;
+  width: 5px;
 }
-.我吃敌_无保护cls::after {
-  background: red;
-}
-.敌吃我_被保护cls::after {
+.敌吃我被保护cls::after {
   background: green;
+  width: 5px;
 }
-.敌吃我_无保护cls::after {
+.我吃敌无保护cls::after {
   background: red;
+  width: 15px;
+}
+.敌吃我无保护cls::after {
+  background: red;
+  width: 15px;
 }
 </style>

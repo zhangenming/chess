@@ -77,55 +77,58 @@ export const positions = reactive(
 ;(window as any).positions = positions
 
 export const positionsFlat = positions.flat()
+
 export const 所有棋子 = computed(() => {
   return positionsFlat.filter((p) => p.qz).sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))
 })
+
 // 我
-export const 我棋子 = computed(() => {
+const 我棋子 = computed(() => {
   return 所有棋子.value.filter((p) => p.qz.tb === myBt.value)
 })
-export const 我吃_敌我 = computed(() => {
+const 我吃_敌我 = computed(() => {
   return 我棋子.value
     .map(getQzMoves)
     .flat()
     .filter((p) => p.qz)
 })
-export const 我吃_我 = computed(() => {
+const 我吃_我 = computed(() => {
   return 我吃_敌我.value.filter((p) => p.qz.tb === myBt.value)
 })
-export const 我吃_敌 = computed(() => {
+const 我吃_敌 = computed(() => {
   return 我吃_敌我.value.filter((p) => p.qz.tb !== myBt.value)
 })
-export const 我吃敌_被保护 = computed(() => {
+export const 我吃_敌_被保护 = computed(() => {
   return 我吃_敌.value.filter((p) => 敌吃_敌.value.includes(p))
 })
-export const 我吃敌_无保护 = computed(() => {
+export const 我吃_敌_无保护 = computed(() => {
   return 我吃_敌.value.filter((p) => !敌吃_敌.value.includes(p))
 })
+
 // 敌
-export const 敌棋子 = computed(() => {
+const 敌棋子 = computed(() => {
   return 所有棋子.value.filter((p) => p.qz.tb !== myBt.value)
 })
-export const 敌吃_敌我 = computed(() => {
+const 敌吃_敌我 = computed(() => {
   return 敌棋子.value
     .map(getQzMoves)
     .flat()
     .filter((p) => p.qz)
 })
-export const 敌吃_敌 = computed(() => {
+const 敌吃_敌 = computed(() => {
   return 敌吃_敌我.value.filter((p) => p.qz.tb !== myBt.value)
 })
-export const 敌吃我 = computed(() => {
+const 敌吃_我 = computed(() => {
   return 敌吃_敌我.value.filter((p) => p.qz.tb === myBt.value)
 })
-export const 敌吃我_被保护 = computed(() => {
-  return 敌吃我.value.filter((p) => 我吃_我.value.includes(p))
+export const 敌吃_我_被保护 = computed(() => {
+  return 敌吃_我.value.filter((p) => 我吃_我.value.includes(p))
 })
-export const 敌吃我_无保护 = computed(() => {
-  return 敌吃我.value.filter((p) => !我吃_我.value.includes(p))
+export const 敌吃_我_无保护 = computed(() => {
+  return 敌吃_我.value.filter((p) => !我吃_我.value.includes(p))
 })
 // 不完全 不会提示送子
 
 export const is将军 = computed(() => {
-  return 敌吃我.value.some((p) => p.qz.role === '帅')
+  return 敌吃_我.value.some((p) => p.qz.role === '帅')
 })

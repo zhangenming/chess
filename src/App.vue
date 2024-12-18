@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import {
-  positions,
   起始棋子,
-  回合,
   is先手,
   myBt,
   drBt,

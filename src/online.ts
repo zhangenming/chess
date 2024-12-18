@@ -1,20 +1,6 @@
 import GoEasy from 'goeasy'
-import {
-  isMaster,
-  isMe,
-  positions,
-  is先手,
-  回合,
-  我的id,
-  对手id,
-  走棋提示1,
-  走棋提示2,
-  吃子列表,
-  isBoss,
-  offline,
-  roles,
-} from './data'
-import { getItemRandom, ij2item, 取反 } from './utils'
+import { isMaster, isMe, is先手, 回合, 我的id, 对手id, 走棋提示1, 走棋提示2, 吃子列表, isBoss, offline } from './data'
+import { ij2item, 取反 } from './utils'
 
 let channel = '大厅'
 

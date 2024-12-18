@@ -1,16 +1,5 @@
-import { computed } from 'vue'
 import { positions, positionsFlat, is先手, drBt } from './data'
-import {
-  get下侧全部位置,
-  get上侧全部位置,
-  get右侧全部位置,
-  get左侧全部位置,
-  距离i,
-  距离j,
-  距离,
-  ij2item,
-  取反,
-} from './utils'
+import { get下侧全部位置, get上侧全部位置, get右侧全部位置, get左侧全部位置, 距离i, 距离j, 距离, 取反 } from './utils'
 import type { coord } from './utils'
 
 type item = { i: number; j: number }

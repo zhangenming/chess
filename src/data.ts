@@ -1,4 +1,4 @@
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { getMyId, ij2item, qzA, qzB, raw } from './utils'
 import { getQzMoves } from './move'
 

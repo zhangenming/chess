@@ -74,7 +74,7 @@ export const positions = reactive(
 export const positionsFlat = positions.flat()
 
 export const allQz = computed(() => {
-  return positionsFlat.filter((p) => p.qz)
+  return positionsFlat.filter((p) => p.qz).sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))
 })
 // export const allQz2 = () => positions.flat().filter((p) => p.qz)
 

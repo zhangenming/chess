@@ -2,8 +2,6 @@ import { positions, positionsFlat, is先手, drBt } from './data'
 import { get下侧全部位置, get上侧全部位置, get右侧全部位置, get左侧全部位置, 距离i, 距离j, 距离, 取反 } from './utils'
 import type { coord } from './utils'
 
-type item = { i: number; j: number }
-
 export function getQzMoves(S: {
   qz: {
     idx: string
@@ -16,6 +14,7 @@ export function getQzMoves(S: {
 }) {
   const 敌人阵营 = 取反(S.qz.tb)
   const is敌人棋子 = S.qz?.tb === drBt.value
+
   return _getQzMoves(S).filter((e) => {
     // 存在棋子 说明是吃 需要判断是敌人棋子
     if (e.qz) return e.qz.tb === 敌人阵营
@@ -23,7 +22,7 @@ export function getQzMoves(S: {
     return true
   })
 
-  function _getQzMoves(S: item) {
+  function _getQzMoves(S: coord) {
     const { jie, role } = positions[S.i][S.j].qz
     const item = jie || role
 
@@ -104,10 +103,7 @@ export function getQzMoves(S: {
     if (item === '帅') {
       const 九宫 = positionsFlat
         .filter((p) => (距离i(S, p) === 1 && 距离j(S, p) === 0) || (距离i(S, p) === 0 && 距离j(S, p) === 1))
-        .filter(
-          ({ i, j }) =>
-            (j === 3 || j === 4 || j === 5) && (i === 0 || i === 1 || i === 2 || i === 7 || i === 8 || i === 9)
-        )
+        .filter(({ i, j }) => (j === 3 || j === 4 || j === 5) && (i === 0 || i === 1 || i === 2 || i === 7 || i === 8 || i === 9))
 
       const 敌方帅 = (() => {
         //is先手 ???
@@ -122,11 +118,7 @@ export function getQzMoves(S: {
       return 敌方帅 ? [...九宫, 敌方帅] : 九宫
     }
 
-    function 军可移动位置(
-      datas: { i: number; j: number; qz?: { role: string; tb: string } }[],
-      x: coord,
-      敌人阵营: string
-    ) {
+    function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; tb: string } }[], x: coord, 敌人阵营: string) {
       let meetDr = false
       return datas
         .filter((item) => {

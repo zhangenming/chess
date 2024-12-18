@@ -59,7 +59,7 @@ export function RECEIVE({ content }) {
       起点.qz.jie = ol_揭开暗子
     }
     if (终点.qz) {
-      吃子列表[起点.qz.tb].push(终点.qz.jie || ol_吃掉暗子)
+      吃子列表[起点.qz.tb].push(终点.qz.jie || ol_吃掉暗子) //todo
     }
 
     终点.qz = 起点.qz

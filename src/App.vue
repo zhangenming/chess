@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { 起始棋子, is先手, myBt, 我的id, 对手id, allQz, 走棋提示1, is我的回合, moves } from './data'
+import { 起始棋子, is先手, myBt, 我的id, 对手id, allQz, 走棋提示1, is我的回合, moves, offline } from './data'
 import { action } from './gameTick'
 import 棋盘 from './components/棋盘.vue'
 </script>
@@ -14,7 +14,7 @@ import 棋盘 from './components/棋盘.vue'
   <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
 
   <component
-    v-if="对手id"
+    v-if="对手id || offline"
     :is="棋盘"
     @click="action"
     :style="{
@@ -30,7 +30,7 @@ import 棋盘 from './components/棋盘.vue'
     }"
   >
     <div
-      v-for="{ i, j, qz } in allQz.sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))"
+      v-for="{ i, j, qz } in allQz"
       :key="qz.idx"
       :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
       :class="[

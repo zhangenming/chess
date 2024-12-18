@@ -232,8 +232,11 @@ import { 吃子列表, 走子提示 } from '../data'
 }
 
 .走子提示 {
-  width: 35px;
+  width: 45px;
+  border-radius: 50%;
   aspect-ratio: 1;
+  /* 事件穿透 */
+  pointer-events: none;
   translate: -50% -50%;
   position: absolute;
   z-index: 1;

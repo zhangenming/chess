@@ -1,4 +1,4 @@
-import { positions, positionsFlat, is先手, drBt } from './data'
+import { positions, positionsFlat, is先手, drTB } from './data'
 import { get下侧全部位置, get上侧全部位置, get右侧全部位置, get左侧全部位置, 距离i, 距离j, 距离, 取反 } from './utils'
 import type { coord } from './utils'
 
@@ -13,7 +13,7 @@ export function getQzMoves(S: {
   i: number
   j: number
 }) {
-  const is敌人棋子 = S.qz?.tb === drBt.value
+  const is敌人棋子 = S.qz?.tb === drTB.value
 
   const { jie, role } = positions[S.i][S.j].qz
   const item = jie || role

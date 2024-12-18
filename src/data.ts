@@ -8,8 +8,8 @@ export const 对手id = ref()
 export const 我的id = getMyId() // 非响应式
 
 export const is我的回合 = computed(() => 回合.value % 2 === (is先手.value ? 0 : 1))
-export const myBt = computed(() => (is先手.value ? 'bot' : 'top'))
-export const drBt = computed(() => (is先手.value ? 'top' : 'bot'))
+export const myTB = computed(() => (is先手.value ? 'bot' : 'top'))
+export const drTB = computed(() => (is先手.value ? 'top' : 'bot'))
 
 export const isMaster = location.search.includes('master')
 export const isBoss = location.search.includes('boss')
@@ -35,7 +35,7 @@ export const moves = computed(() => {
 
   return getQzMoves(ij2item(S)).filter((e) => {
     // 存在棋子 说明是吃 需要判断是敌人棋子
-    if (e.qz) return e.qz.tb === drBt.value
+    if (e.qz) return e.qz.tb === drTB.value
     // 不存在棋子 说明是走 不需要判断
     return true
   })
@@ -84,7 +84,7 @@ export const 所有棋子 = computed(() => {
 
 // 我
 const 我棋子 = computed(() => {
-  return 所有棋子.value.filter((p) => p.qz.tb === myBt.value)
+  return 所有棋子.value.filter((p) => p.qz.tb === myTB.value)
 })
 const 我吃_敌我 = computed(() => {
   return 我棋子.value
@@ -93,10 +93,10 @@ const 我吃_敌我 = computed(() => {
     .filter((p) => p.qz)
 })
 const 我吃_我 = computed(() => {
-  return 我吃_敌我.value.filter((p) => p.qz.tb === myBt.value)
+  return 我吃_敌我.value.filter((p) => p.qz.tb === myTB.value)
 })
 const 我吃_敌 = computed(() => {
-  return 我吃_敌我.value.filter((p) => p.qz.tb !== myBt.value)
+  return 我吃_敌我.value.filter((p) => p.qz.tb !== myTB.value)
 })
 export const 我吃_敌_被保护 = computed(() => {
   return 我吃_敌.value.filter((p) => 敌吃_敌.value.includes(p))
@@ -107,7 +107,7 @@ export const 我吃_敌_无保护 = computed(() => {
 
 // 敌
 const 敌棋子 = computed(() => {
-  return 所有棋子.value.filter((p) => p.qz.tb !== myBt.value)
+  return 所有棋子.value.filter((p) => p.qz.tb !== myTB.value)
 })
 const 敌吃_敌我 = computed(() => {
   return 敌棋子.value
@@ -116,10 +116,10 @@ const 敌吃_敌我 = computed(() => {
     .filter((p) => p.qz)
 })
 const 敌吃_敌 = computed(() => {
-  return 敌吃_敌我.value.filter((p) => p.qz.tb !== myBt.value)
+  return 敌吃_敌我.value.filter((p) => p.qz.tb !== myTB.value)
 })
 const 敌吃_我 = computed(() => {
-  return 敌吃_敌我.value.filter((p) => p.qz.tb === myBt.value)
+  return 敌吃_敌我.value.filter((p) => p.qz.tb === myTB.value)
 })
 export const 敌吃_我_被保护 = computed(() => {
   return 敌吃_我.value.filter((p) => 我吃_我.value.includes(p))

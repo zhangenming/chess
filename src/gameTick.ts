@@ -1,4 +1,4 @@
-import { 回合, 吃子列表, 走子提示, drBt, is我的回合, myBt, offline, roles, 起始棋子 } from './data'
+import { 回合, 吃子列表, 走子提示, drTB, is我的回合, myTB, offline, roles, 起始棋子 } from './data'
 import { SEND } from './online'
 import { getItemRandom, ij2item, test } from './utils'
 
@@ -28,7 +28,7 @@ export function action({ target }) {
   }
 
   // offline的话交替行走俩人的棋子 否则只能走自己的棋子
-  if (target.classList.contains(offline ? (is我的回合.value ? myBt.value : drBt.value) : myBt.value)) {
+  if (target.classList.contains(offline ? (is我的回合.value ? myTB.value : drTB.value) : myTB.value)) {
     起始棋子.value = 目标位置
   }
 }
@@ -59,7 +59,7 @@ export function RECEIVE({ content }) {
       起点.qz.jie = ol_揭开暗子
     }
     if (终点.qz) {
-      吃子列表[起点.qz.tb].push(终点.qz.jie || ol_吃掉暗子) //todo
+      吃子列表[起点.qz.tb].push(终点.qz.jie || (终点.qz.tb === myTB.value ? '' : ol_吃掉暗子))
     }
 
     终点.qz = 起点.qz

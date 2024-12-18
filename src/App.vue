@@ -5,7 +5,7 @@ import { action } from './gameTick'
 import {
   起始棋子,
   is先手,
-  myBt,
+  myTB,
   我的id,
   对手id,
   is我的回合,
@@ -32,7 +32,7 @@ effect(() => {
 
   <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
   <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
-  <div>myBtType: {{ myBt }}</div>
+  <div>myBtType: {{ myTB }}</div>
 
   <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到敌...') : '等待对手加入...' }}</div>
 

@@ -124,3 +124,8 @@ export const 敌吃我_被保护 = computed(() => {
 export const 敌吃我_无保护 = computed(() => {
   return 敌吃我.value.filter((p) => !我吃_我.value.includes(p))
 })
+// 不完全 不会提示送子
+
+export const is将军 = computed(() => {
+  return 敌吃我.value.some((p) => p.qz.role === '帅')
+})

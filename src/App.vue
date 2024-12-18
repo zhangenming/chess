@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { effect } from 'vue'
+import 棋盘 from './components/棋盘.vue'
+import { action } from './gameTick'
 import {
   起始棋子,
   is先手,
@@ -14,9 +17,14 @@ import {
   敌吃我_无保护,
   offline,
   buff,
+  is将军,
 } from './data'
-import { action } from './gameTick'
-import 棋盘 from './components/棋盘.vue'
+
+effect(() => {
+  if (is将军.value) {
+    alert('将军')
+  }
+})
 </script>
 
 <template>

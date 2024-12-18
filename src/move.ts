@@ -2,6 +2,7 @@ import { positions, positionsFlat, is先手, drBt } from './data'
 import { get下侧全部位置, get上侧全部位置, get右侧全部位置, get左侧全部位置, 距离i, 距离j, 距离, 取反 } from './utils'
 import type { coord } from './utils'
 
+// 所有可能的移动位置(符合规则) 包括吃棋(敌我)
 export function getQzMoves(S: {
   qz: {
     idx: string
@@ -12,12 +13,11 @@ export function getQzMoves(S: {
   i: number
   j: number
 }) {
-  const 敌人阵营 = 取反(S.qz.tb)
   const is敌人棋子 = S.qz?.tb === drBt.value
 
   return _getQzMoves(S).filter((e) => {
     // 存在棋子 说明是吃 需要判断是敌人棋子
-    if (e.qz) return e.qz.tb === 敌人阵营
+    // if (e.qz) return e.qz.tb === 敌人阵营 // todo
     // 不存在棋子 说明是走 不需要判断
     return true
   })
@@ -25,15 +25,6 @@ export function getQzMoves(S: {
   function _getQzMoves(S: coord) {
     const { jie, role } = positions[S.i][S.j].qz
     const item = jie || role
-
-    if (item === '车') {
-      return [
-        ...军可移动位置(get下侧全部位置(S), S, 敌人阵营),
-        ...军可移动位置(get上侧全部位置(S), S, 敌人阵营),
-        ...军可移动位置(get右侧全部位置(S), S, 敌人阵营),
-        ...军可移动位置(get左侧全部位置(S), S, 敌人阵营),
-      ]
-    }
 
     if (item === '马') {
       return positionsFlat
@@ -53,15 +44,6 @@ export function getQzMoves(S: {
           }
           console.error('马')
         })
-    }
-
-    if (item === '炮') {
-      return [
-        ...炮可移动位置(get下侧全部位置(S)),
-        ...炮可移动位置(get上侧全部位置(S)),
-        ...炮可移动位置(get右侧全部位置(S)),
-        ...炮可移动位置(get左侧全部位置(S)),
-      ]
     }
 
     if (item === '象') {
@@ -93,6 +75,24 @@ export function getQzMoves(S: {
         })
     }
 
+    if (item === '车') {
+      return [
+        ...军可移动位置(get下侧全部位置(S)),
+        ...军可移动位置(get上侧全部位置(S)),
+        ...军可移动位置(get右侧全部位置(S)),
+        ...军可移动位置(get左侧全部位置(S)),
+      ]
+    }
+
+    if (item === '炮') {
+      return [
+        ...炮可移动位置(get下侧全部位置(S)),
+        ...炮可移动位置(get上侧全部位置(S)),
+        ...炮可移动位置(get右侧全部位置(S)),
+        ...炮可移动位置(get左侧全部位置(S)),
+      ]
+    }
+
     if (item === '卒') {
       return (is敌人棋子 ? !is先手.value : is先手.value)
         ? [get上侧全部位置(S)[0], ...(S.i < 5 ? [get右侧全部位置(S)[0], get左侧全部位置(S)[0]] : [])].filter(Boolean)
@@ -118,18 +118,16 @@ export function getQzMoves(S: {
       return 敌方帅 ? [...九宫, 敌方帅] : 九宫
     }
 
-    function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; tb: string } }[], x: coord, 敌人阵营: string) {
-      let meetDr = false
-      return datas
-        .filter((item) => {
-          if (meetDr) return false // 这个判断必须首先判断 遇到敌人之后 无论是空地还是棋子 都要返回false
-          if (!item.qz) return true
-          if (!meetDr && item.qz.tb === 敌人阵营) {
-            meetDr = true
-            return true
-          }
-        })
-        .filter((item, i) => 距离(x, item) === i + 1)
+    function 军可移动位置(datas: { i: number; j: number; qz?: { role: string; tb: string } }[]) {
+      let meetQz = false // 敌我棋子
+      return datas.filter((item) => {
+        if (meetQz) return false // 这个判断必须首先判断 遇到敌人之后 无论是空地还是棋子 都要返回false
+        if (!item.qz) return true
+        if (!meetQz && item.qz) {
+          meetQz = true
+          return true
+        }
+      })
     }
     function 炮可移动位置(datas: { i: number; j: number; qz?: { role: string; tb: string } }[]) {
       let 炮架 = false

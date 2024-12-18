@@ -15,6 +15,7 @@ export const isMaster = location.search.includes('master')
 export const isBoss = location.search.includes('boss')
 export const isMe = location.search.includes('me')
 export const offline = location.search.includes('offline')
+export const buff = location.search.includes('buff')
 
 export const 起始棋子 = ref('')
 
@@ -85,23 +86,22 @@ export const allQzDr = computed(() => {
   return allQz.value.filter((p) => p.qz.tb !== myBt.value)
 })
 
-// todo 保护
-export const 我能吃的棋子 = computed(() => {
-  return allQzDr.value
+export const 能吃的棋子 = computed(() => {
+  return allQzMy.value
     .map(getQzMoves)
     .flat()
     .filter((p) => p.qz)
 })
-export const 我能吃的棋子_舒服_但被保护有损失 = computed(() => {
-  return
+export const 能吃的棋子_被保护 = computed(() => {
+  return 能吃的棋子.value.filter((p) => 被吃的棋子.value.includes(p))
 })
-export const 我能吃的棋子_得劲_无损失 = computed(() => {
-  return
+export const 能吃的棋子_无保护 = computed(() => {
+  return 能吃的棋子.value.filter((p) => !被吃的棋子.value.includes(p))
 })
 
-export const 危险_我要被吃的棋子 = computed(() => {
-  return allQzMy.value
+export const 被吃的棋子 = computed(() => {
+  return allQzDr.value
     .map(getQzMoves)
     .flat()
-    .filter((p) => p.qz?.tb === drBt.value)
+    .filter((p) => p.qz)
 })

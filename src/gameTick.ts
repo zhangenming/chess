@@ -13,7 +13,7 @@ export function action({ target }) {
 
   const 目标位置 = `${target.getAttribute('i')}-${target.getAttribute('j')}`
 
-  if (target.classList.contains('canMove') || target.classList.contains('canEat')) {
+  if (target.classList.contains('canMove')) {
     const qz起始棋子 = ij2item(ol_起始棋子).qz
     const qz目标位置 = ij2item(目标位置).qz
 

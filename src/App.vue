@@ -1,5 +1,21 @@
 <script setup lang="ts">
-import { 起始棋子, is先手, myBt, 我的id, 对手id, allQz, 走棋提示1, is我的回合, moves, offline } from './data'
+import {
+  起始棋子,
+  is先手,
+  myBt,
+  我的id,
+  对手id,
+  allQz,
+  走棋提示1,
+  is我的回合,
+  moves,
+  能吃的棋子,
+  能吃的棋子_被保护,
+  能吃的棋子_无保护,
+  被吃的棋子,
+  offline,
+  buff,
+} from './data'
 import { action } from './gameTick'
 import 棋盘 from './components/棋盘.vue'
 </script>
@@ -37,10 +53,14 @@ import 棋盘 from './components/棋盘.vue'
         'roles',
         qz.tb,
         {
-          canEat: moves.find((item) => item.i === i && item.j === j),
+          canMove: moves.find((item) => item.i === i && item.j === j),
           jieCls: !qz.jie,
           selected: 起始棋子 === `${i}-${j}`,
           走棋提示: 走棋提示1 === `${i}-${j}`,
+          ...(buff && {
+            能吃的棋子_被保护cls: 能吃的棋子_被保护.find((item) => item.i === i && item.j === j),
+            能吃的棋子_无保护cls: 能吃的棋子_无保护.find((item) => item.i === i && item.j === j),
+          }),
         },
       ]"
       :i
@@ -100,23 +120,32 @@ body {
   border-radius: 0;
   z-index: 1;
 }
-.canMove,
-.canEat {
+.canMove {
   cursor: pointer;
 }
 .canMove::before,
-.canEat::before {
+:is(.能吃的棋子_被保护cls, .能吃的棋子_无保护cls)::after {
   content: '';
-  width: 10px;
-  height: 10px;
   position: absolute;
   left: 50%;
   top: 50%;
   translate: -50% -50%;
   border-radius: 1%;
-  background: blue;
+  width: 10px;
+  height: 10px;
+  background: black;
 }
-.走棋提示::after {
+.能吃的棋子_被保护cls::after {
+  width: 6px;
+  height: 6px;
+  background: green;
+}
+.能吃的棋子_无保护cls::after {
+  width: 6px;
+  height: 6px;
+  background: red;
+}
+/* .走棋提示::after {
   content: '';
   width: 50px;
   aspect-ratio: 1;
@@ -125,5 +154,5 @@ body {
   top: 50%;
   translate: -50% -50%;
   border: 2px solid #111;
-}
+} */
 </style>

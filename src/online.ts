@@ -115,10 +115,3 @@ export async function SEND(type: string, data = {}) {
     }),
   })
 }
-
-// setInterval(() => {
-//   console.log({
-//     走棋提示1: 走棋提示1.value,
-//     走棋提示2: 走棋提示2.value,
-//   })
-// }, 1000)

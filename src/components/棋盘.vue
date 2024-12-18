@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { moves } from '../data'
-import { 吃子列表, 走棋提示2 } from '../data'
+import { 吃子列表, 走子提示 } from '../data'
 </script>
 
 <template>
@@ -13,6 +13,9 @@ import { 吃子列表, 走棋提示2 } from '../data'
 
     <div class="wrap">
       <div class="qipan">
+        <div class="走子提示" v-if="走子提示" :style="{ left: 走子提示[0].j * 50 + 'px', top: 走子提示[0].i * 50 + 'px' }"></div>
+        <div class="走子提示" v-if="走子提示" :style="{ left: 走子提示[1].j * 50 + 'px', top: 走子提示[1].i * 50 + 'px' }"></div>
+
         <!-- 横 -->
         <div>
           <div class="h" v-for="i in 10" :style="{ top: `${(i - 1) * 50}px` }"></div>
@@ -70,7 +73,6 @@ import { 吃子列表, 走棋提示2 } from '../data'
                 '位置',
                 {
                   canMove: moves.find((item) => item.i === i && item.j === j),
-                  走棋提示: 走棋提示2 === `${i}-${j}`,
                 },
               ]"
               v-for="j in [0, 1, 2, 3, 4, 5, 6, 7, 8]"
@@ -227,5 +229,13 @@ import { 吃子列表, 走棋提示2 } from '../data'
 .container .棋子s .roles,
 .container .吃子列表top {
   transform: rotate(var(--后手需要反转));
+}
+
+.走子提示 {
+  width: 50px;
+  aspect-ratio: 1;
+  border: 5px solid #111;
+  translate: -50% -50%;
+  position: absolute;
 }
 </style>

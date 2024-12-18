@@ -5,7 +5,6 @@ import {
   myBt,
   我的id,
   对手id,
-  走棋提示1,
   is我的回合,
   moves,
   所有棋子,
@@ -56,7 +55,6 @@ import 棋盘 from './components/棋盘.vue'
           canMove: moves.find((item) => item.i === i && item.j === j),
           jieCls: !qz.jie,
           selected: 起始棋子 === `${i}-${j}`,
-          走棋提示: 走棋提示1 === `${i}-${j}`,
           ...(buff && {
             我吃敌_被保护cls: 我吃敌_被保护.find((item) => item.i === i && item.j === j),
             我吃敌_无保护cls: 我吃敌_无保护.find((item) => item.i === i && item.j === j),
@@ -153,14 +151,4 @@ body {
 .敌吃我_无保护cls::after {
   background: red;
 }
-/* .走棋提示::after {
-  content: '';
-  width: 50px;
-  aspect-ratio: 1;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  border: 2px solid #111;
-} */
 </style>

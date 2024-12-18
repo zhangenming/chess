@@ -19,8 +19,7 @@ export const buff = location.search.includes('buff')
 
 export const 起始棋子 = ref('')
 
-export const 走棋提示1 = ref('')
-export const 走棋提示2 = ref('')
+export const 走子提示 = ref<[{ i: number; j: number }, { i: number; j: number }]>()
 
 export const 吃子列表 = reactive<{
   top: string[]

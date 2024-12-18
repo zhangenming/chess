@@ -1,4 +1,4 @@
-import { 回合, 吃子列表, 走棋提示1, 走棋提示2, drBt, is我的回合, myBt, offline, roles, 起始棋子 } from './data'
+import { 回合, 吃子列表, 走子提示, drBt, is我的回合, myBt, offline, roles, 起始棋子 } from './data'
 import { SEND } from './online'
 import { getItemRandom, ij2item, test } from './utils'
 
@@ -65,24 +65,23 @@ export function RECEIVE({ content }) {
     终点.qz = 起点.qz
     delete 起点.qz
 
-    走棋提示1.value = ol_目标位置
-    走棋提示2.value = ol_起始棋子
+    走子提示.value = [起点, 终点]
 
     悔棋数据.push(data)
   }
 
-  if (type === '发起悔棋') {
-    //  终点 -> 起点
-    const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = 悔棋数据.pop()
+  //   if (type === '发起悔棋') {
+  //     //  终点 -> 起点
+  //     const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = 悔棋数据.pop()
 
-    const 终点 = ij2item(ol_目标位置)
-    const 起点 = ij2item(ol_起始棋子)
+  //     const 终点 = ij2item(ol_目标位置)
+  //     const 起点 = ij2item(ol_起始棋子)
 
-    // 1.走 暗子
-    // 2.走
-    // 3.吃
-    // 4.吃 暗子
-    起点.qz = 终点.qz
-    delete 终点.qz
-  }
+  //     // 1.走 暗子
+  //     // 2.走
+  //     // 3.吃
+  //     // 4.吃 暗子
+  //     起点.qz = 终点.qz
+  //     delete 终点.qz
+  //   }
 }

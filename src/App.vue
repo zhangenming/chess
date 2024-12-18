@@ -19,6 +19,7 @@ import { SEND } from './online'
 import 棋盘 from './components/棋盘.vue'
 
 function action({ target }) {
+  // 这里的逻辑只有我方阵营会执行
   if (!is我的回合.value && !offline) return
 
   const ol_起始棋子 = 起始棋子.value
@@ -35,8 +36,8 @@ function action({ target }) {
     SEND('走棋', {
       ol_起始棋子,
       ol_目标位置: 目标位置,
-      ...(!qz起始棋子.jie && { ol_jie: getItemRandom(roles[qz起始棋子.tb]) }),
-      ...(qz目标位置 && !qz目标位置.jie && { ol_jieEat: getItemRandom(roles[qz目标位置.tb]) }),
+      ...(!qz起始棋子.jie && { ol_揭开暗子: getItemRandom(roles[qz起始棋子.tb]) }),
+      ...(qz目标位置 && !qz目标位置.jie && { ol_吃掉暗子: getItemRandom(roles[qz目标位置.tb]) }),
     })
 
     test(qz起始棋子.tb === qz目标位置?.tb, '吃自己')

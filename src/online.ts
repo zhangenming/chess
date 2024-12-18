@@ -132,19 +132,19 @@ function RECEIVE({ content }) {
     回合.value++
 
     // old -> clicked
-    const { ol_起始棋子, ol_目标位置, ol_jie, ol_jieEat } = data
+    const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = data
 
     const clicked = ij2item(ol_目标位置)
     const old = ij2item(ol_起始棋子)
 
     const { qz } = clicked
     if (qz) {
-      吃子列表[取反(qz.tb)].push(qz.jie || ol_jieEat)
+      吃子列表[取反(qz.tb)].push(qz.jie || ol_吃掉暗子)
     }
 
     clicked.qz = {
       ...old.qz,
-      jie: ol_jie || old.qz.jie,
+      jie: ol_揭开暗子 || old.qz.jie,
     }
     delete old.qz
 
@@ -157,7 +157,7 @@ function RECEIVE({ content }) {
 
   if (type === '发起悔棋') {
     //  clicked -> old
-    const { ol_起始棋子, ol_目标位置, ol_jie, ol_jieEat } = 悔棋数据.pop()
+    const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = 悔棋数据.pop()
 
     const clicked = ij2item(ol_目标位置)
     const old = ij2item(ol_起始棋子)

@@ -1,6 +1,6 @@
 import GoEasy from 'goeasy'
 import { isMaster, isMe, is先手, 回合, 我的id, 对手id, 走棋提示1, 走棋提示2, 吃子列表, isBoss, offline } from './data'
-import { ij2item, 取反 } from './utils'
+import { ij2item, test, 取反 } from './utils'
 
 let channel = '大厅'
 
@@ -131,43 +131,42 @@ function RECEIVE({ content }) {
   if (type === '走棋') {
     回合.value++
 
-    // old -> clicked
+    // 起点 -> 终点
     const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = data
 
-    const clicked = ij2item(ol_目标位置)
-    const old = ij2item(ol_起始棋子)
+    const 起点 = ij2item(ol_起始棋子)
+    const 终点 = ij2item(ol_目标位置)
 
-    const { qz } = clicked
-    if (qz) {
-      吃子列表[取反(qz.tb)].push(qz.jie || ol_吃掉暗子)
+    if (ol_揭开暗子) {
+      test(起点.qz.jie, '起点不应该已经揭开')
+      起点.qz.jie = ol_揭开暗子
+    }
+    if (终点.qz) {
+      吃子列表[取反(终点.qz.tb)].push(终点.qz.jie || ol_吃掉暗子)
     }
 
-    clicked.qz = {
-      ...old.qz,
-      jie: ol_揭开暗子 || old.qz.jie,
-    }
-    delete old.qz
+    终点.qz = 起点.qz
+    delete 起点.qz
 
-    悔棋数据.push(data)
-
-    // todo refac 数据依附到棋盘上
     走棋提示1.value = ol_目标位置
     走棋提示2.value = ol_起始棋子
+
+    悔棋数据.push(data)
   }
 
   if (type === '发起悔棋') {
-    //  clicked -> old
+    //  终点 -> 起点
     const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = 悔棋数据.pop()
 
-    const clicked = ij2item(ol_目标位置)
-    const old = ij2item(ol_起始棋子)
+    const 终点 = ij2item(ol_目标位置)
+    const 起点 = ij2item(ol_起始棋子)
 
     // 1.走 暗子
     // 2.走
     // 3.吃
     // 4.吃 暗子
-    old.qz = clicked.qz
-    delete clicked.qz
+    起点.qz = 终点.qz
+    delete 终点.qz
   }
 }
 

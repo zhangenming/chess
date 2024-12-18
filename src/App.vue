@@ -1,53 +1,7 @@
 <script setup lang="ts">
-import {
-  起始棋子,
-  is先手,
-  myBt,
-  drBt,
-  roles,
-  我的id,
-  对手id,
-  allQz,
-  走棋提示1,
-  is我的回合,
-  moves,
-  offline,
-} from './data'
-import { test, getItemRandom, ij2item } from './utils'
-import { SEND } from './online'
-
+import { 起始棋子, is先手, myBt, 我的id, 对手id, allQz, 走棋提示1, is我的回合, moves } from './data'
+import { action } from './gameTick'
 import 棋盘 from './components/棋盘.vue'
-
-function action({ target }) {
-  // 这里的逻辑只有我方阵营会执行
-  if (!is我的回合.value && !offline) return
-
-  const ol_起始棋子 = 起始棋子.value
-  起始棋子.value = undefined
-
-  if (!target.parentElement?.classList.contains('位置s') && !target.parentElement?.classList.contains('棋子s')) return
-
-  const 目标位置 = `${target.getAttribute('i')}-${target.getAttribute('j')}`
-
-  if (target.classList.contains('canMove') || target.classList.contains('canEat')) {
-    const qz起始棋子 = ij2item(ol_起始棋子).qz
-    const qz目标位置 = ij2item(目标位置).qz
-
-    SEND('走棋', {
-      ol_起始棋子,
-      ol_目标位置: 目标位置,
-      ...(!qz起始棋子.jie && { ol_揭开暗子: getItemRandom(roles[qz起始棋子.tb]) }),
-      ...(qz目标位置 && !qz目标位置.jie && { ol_吃掉暗子: getItemRandom(roles[qz目标位置.tb]) }),
-    })
-
-    test(qz起始棋子.tb === qz目标位置?.tb, '吃自己')
-  }
-
-  // offline的话交替行走俩人的棋子 否则只能走自己的棋子
-  if (target.classList.contains(offline ? (is我的回合.value ? myBt.value : drBt.value) : myBt.value)) {
-    起始棋子.value = 目标位置
-  }
-}
 </script>
 
 <template>

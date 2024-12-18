@@ -1,6 +1,6 @@
 import GoEasy from 'goeasy'
-import { isMaster, isMe, is先手, 回合, 我的id, 对手id, 走棋提示1, 走棋提示2, 吃子列表, isBoss, offline } from './data'
-import { ij2item, test, 取反 } from './utils'
+import { isMaster, isMe, is先手, 回合, 我的id, 对手id, isBoss, offline } from './data'
+import { RECEIVE } from './gameTick'
 
 let channel = '大厅'
 
@@ -101,7 +101,6 @@ if (isMaster) {
 //
 //
 //
-// gameTick
 export async function SEND(type: string, data = {}) {
   console.log('1 SEND', type, data)
 
@@ -115,59 +114,6 @@ export async function SEND(type: string, data = {}) {
       time: Date.now(),
     }),
   })
-}
-
-//todo 多步悔棋
-const 悔棋数据 = []
-// 两种思路
-// 1. 可变数据 记录走棋数据，然后悔棋的时候，根据走棋数据，反向走棋
-// 2. 不可变数据 时间旅行
-
-function RECEIVE({ content }) {
-  const { type, data, time } = JSON.parse(content)
-  console.log('2 RECEIVE', +new Date() - time, type, data)
-  console.log('\n')
-
-  if (type === '走棋') {
-    回合.value++
-
-    // 起点 -> 终点
-    const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = data
-
-    const 起点 = ij2item(ol_起始棋子)
-    const 终点 = ij2item(ol_目标位置)
-
-    if (ol_揭开暗子) {
-      test(起点.qz.jie, '起点不应该已经揭开')
-      起点.qz.jie = ol_揭开暗子
-    }
-    if (终点.qz) {
-      吃子列表[起点.qz.tb].push(终点.qz.jie || ol_吃掉暗子)
-    }
-
-    终点.qz = 起点.qz
-    delete 起点.qz
-
-    走棋提示1.value = ol_目标位置
-    走棋提示2.value = ol_起始棋子
-
-    悔棋数据.push(data)
-  }
-
-  if (type === '发起悔棋') {
-    //  终点 -> 起点
-    const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = 悔棋数据.pop()
-
-    const 终点 = ij2item(ol_目标位置)
-    const 起点 = ij2item(ol_起始棋子)
-
-    // 1.走 暗子
-    // 2.走
-    // 3.吃
-    // 4.吃 暗子
-    起点.qz = 终点.qz
-    delete 终点.qz
-  }
 }
 
 // setInterval(() => {

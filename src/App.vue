@@ -145,11 +145,11 @@ body {
 }
 .我吃敌被保护cls::after {
   background: green;
-  width: 5px;
+  width: 7px;
 }
 .敌吃我被保护cls::after {
   background: green;
-  width: 5px;
+  width: 7px;
 }
 .我吃敌无保护cls::after {
   background: red;

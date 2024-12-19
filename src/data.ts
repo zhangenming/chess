@@ -17,7 +17,7 @@ export const isMe = location.search.includes('me')
 export const offline = location.search.includes('offline')
 export const buff = location.search.includes('buff')
 
-export const 起始棋子 = ref('') // `${i}-${j}`// todo 棋子
+export const 起始棋子 = ref<string>() // `${i}-${j}`// todo 棋子
 
 export const 走子提示 = ref<[{ i: number; j: number }, { i: number; j: number }]>()
 
@@ -25,7 +25,7 @@ export const moves = computed(() => {
   const S = 起始棋子.value
   if (!S) return []
 
-  return get棋子_可移动_位置(stringIJ2棋子(S))
+  return get棋子_可移动_位置(stringIJ2棋子(S)!)
 })
 
 export const 暗棋棋子 = {

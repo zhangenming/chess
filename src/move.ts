@@ -14,7 +14,10 @@ import {
 } from './utils'
 
 // 得到所有符合规则的移动位置 包括空位/敌我吃棋
-export function get棋子_可移动_位置(棋子: t棋子) {
+export function get棋子_可移动_位置(棋子: t棋子): {
+  i: number
+  j: number
+}[] {
   const is敌人棋子 = 棋子?.tb === drTB.value
 
   const { jie, role } = 棋子
@@ -107,8 +110,10 @@ export function get棋子_可移动_位置(棋子: t棋子) {
       }
     })()
 
-    return [...九宫, ...[敌方帅].filter(Boolean)]
+    return 敌方帅 ? [...九宫, 敌方帅] : 九宫
   }
+
+  return []
 
   function filter军可移动位置(位置s: { i: number; j: number }[]) {
     let meetQz = false

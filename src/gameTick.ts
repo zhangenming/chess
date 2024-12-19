@@ -1,9 +1,9 @@
-import { 回合, 走子提示, drTB, is我的回合, myTB, offline, 起始棋子 } from './data'
+import { 回合, 走子提示, drTB, is我的回合, myTB, offline, 起始棋子, 全部棋子 } from './data'
 import { SEND } from './online'
 import { get暗棋Random, stringIJ2棋子, test } from './utils'
 
 // 这里的逻辑 只有我方阵营会执行
-export function action({ target }) {
+export function action({ target }: { target: HTMLElement }) {
   if (!is我的回合.value && !offline) return
 
   const ol_起始位置 = 起始棋子.value
@@ -13,8 +13,8 @@ export function action({ target }) {
 
   const 目标位置 = `${target.getAttribute('i')}-${target.getAttribute('j')}`
 
-  if (target.classList.contains('canMove')) {
-    const 起始棋子 = stringIJ2棋子(ol_起始位置)
+  if (ol_起始位置 && target.classList.contains('canMove')) {
+    const 起始棋子 = stringIJ2棋子(ol_起始位置)!
     const 目标棋子 = stringIJ2棋子(目标位置)
 
     SEND('走棋', {
@@ -40,7 +40,7 @@ const 悔棋数据 = []
 // 2. 不可变数据 时间旅行
 
 // 这里的逻辑 双方阵营会执行
-export function RECEIVE({ content }) {
+export function RECEIVE({ content }: any) {
   const { type, data, time } = JSON.parse(content)
   console.log('2 RECEIVE', +new Date() - time, type, data)
   console.log('\n')
@@ -51,19 +51,17 @@ export function RECEIVE({ content }) {
     // 起点 -> 终点
     const { ol_起始位置, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = data
 
-    const 起点棋子 = stringIJ2棋子(ol_起始位置)
+    const 起点棋子 = stringIJ2棋子(ol_起始位置)!
     const 终点棋子 = stringIJ2棋子(ol_目标位置)
 
     if (ol_揭开暗子) {
       起点棋子.jie = ol_揭开暗子
     }
     if (终点棋子) {
-      // 终点棋子.deadIdx = 敌棋子.value.filter((e) => e.deadIdx !== 0).length + 1
-      console.log(终点棋子.deadIdx)
+      终点棋子.deadIdx = 全部棋子.filter((e) => e.deadIdx !== 0).filter((e) => e.tb === 终点棋子.tb).length + 1
     }
 
-    起点棋子.i = Number(ol_目标位置.split('-')[0])
-    起点棋子.j = Number(ol_目标位置.split('-')[1])
+    ;[起点棋子.i, 起点棋子.j] = ol_目标位置.split('-').map(Number)
 
     // 走子提示.value = [起点棋子, 终点棋子]
 

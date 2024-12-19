@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { 可移动位置 } from '../data'
-import { 走子提示 } from '../data'
+import { 可移动位置, 走子提示, isTop回合, isBot回合 } from '../data'
 
 const 走子提示format = computed(() => 走子提示.value!.map((item) => item.split('-').map((n) => Number(n) * 50 + 'px')))
 </script>
@@ -25,11 +24,11 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
 
     <!-- 士 -->
     <div>
-      <div class="士-1">
+      <div class="士-1" :style="isTop回合 && 'background:color-mix(in oklab, var(--top_color), white 50%)'">
         <div class="士-h"></div>
         <div class="士-s"></div>
       </div>
-      <div class="士-2">
+      <div class="士-2" :style="isBot回合 && 'background:color-mix(in oklab, var(--bot_color), white 50%)'">
         <div class="士-h"></div>
         <div class="士-s"></div>
       </div>
@@ -131,7 +130,6 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
 }
 .士-1,
 .士-2 {
-  background-color: #6ce5fa;
   opacity: 0.3;
   position: absolute;
   width: 100px;
@@ -151,10 +149,10 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
   transform: rotate(-45deg) translate(-69px, 69px);
 }
 .士-1 :is(.士-h, .士-s) {
-  border-top: 2px dashed var(--后手color);
+  border-top: 2px dashed var(--top_color);
 }
 .士-2 :is(.士-h, .士-s) {
-  border-top: 2px dashed var(--先手color);
+  border-top: 2px dashed var(--bot_color);
 }
 
 .炮 {

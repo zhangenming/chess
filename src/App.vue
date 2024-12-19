@@ -36,13 +36,11 @@ import {
     @click="action"
     :style="{
       '--该你走了': is我的回合 ? 'black' : '#999',
-      '--先手color': is先手 ? 'black' : 'red',
-      '--后手color': is先手 ? 'red' : 'black',
-      '--先手weight': is先手 ? 900 : 100,
-      '--后手weight': is先手 ? 100 : 900,
+      '--后手需要反转': is先手 ? '0deg' : '180deg',
+      '--top_weight': is先手 ? 100 : 900,
+      '--bot_weight': is先手 ? 900 : 100,
       '--top_color': is先手 ? 'red' : 'black',
       '--bot_color': is先手 ? 'black' : 'red',
-      '--后手需要反转': is先手 ? '0deg' : '180deg',
     }"
   >
     <div
@@ -114,14 +112,14 @@ body {
   border-radius: 50%;
   border-width: 2px;
   border-style: solid;
-  border-color: var(--后手color);
-  color: var(--后手color);
-  font-weight: var(--后手weight);
+  border-color: var(--top_color);
+  color: var(--top_color);
+  font-weight: var(--top_weight);
 }
 .bot {
-  border-color: var(--先手color);
-  color: var(--先手color);
-  font-weight: var(--先手weight);
+  border-color: var(--bot_color);
+  color: var(--bot_color);
+  font-weight: var(--bot_weight);
 }
 .jieCls {
   color: #aaa;

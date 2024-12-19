@@ -8,6 +8,8 @@ export const 对手id = ref()
 export const 我的id = getMyId() // 非响应式
 
 export const is我的回合 = computed(() => 回合.value % 2 === (is先手.value ? 0 : 1))
+export const isTop回合 = computed(() => 回合.value % 2 === 1)
+export const isBot回合 = computed(() => 回合.value % 2 === 0)
 export const myTB = computed(() => (is先手.value ? 'bot' : 'top'))
 export const drTB = computed(() => (is先手.value ? 'top' : 'bot'))
 

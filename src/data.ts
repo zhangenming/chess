@@ -1,5 +1,5 @@
 import { computed, reactive, ref } from 'vue'
-import { getMyId, stringIJ2棋子, qzA, qzB, raw, 位置2棋子 } from './utils'
+import { getMyId, stringIJ2棋子, raw, 位置2棋子 } from './utils'
 import { get棋子_可移动_位置 } from './move'
 
 export const 回合 = ref(0)
@@ -30,11 +30,6 @@ export const 可移动位置 = computed(() => {
   const 棋子 = stringIJ2棋子(S)!
   return get棋子_可移动_位置(棋子).filter((位置) => 位置2棋子(位置)?.tb != 棋子.tb)
 })
-
-export const 棋子仓库 = {
-  top: qzA,
-  bot: qzB,
-}
 
 export type t棋子 = {
   tb: 'top' | 'bot'

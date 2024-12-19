@@ -1,4 +1,4 @@
-import { 所有位置, 棋子仓库, 所有棋子, type t棋子 } from './data'
+import { 所有位置, 所有棋子, type t棋子 } from './data'
 
 export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
@@ -13,8 +13,13 @@ export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
 ]
 
-export const qzA = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
-export const qzB = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
+const qzA = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
+const qzB = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
+
+const 暗子牌库 = {
+  top: qzA,
+  bot: qzB,
+}
 
 export type 位置or棋子 = { i: number; j: number }
 
@@ -59,7 +64,7 @@ export function get下侧全部位置({ i, j }: 位置or棋子) {
 
 // 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)保证悔完棋的时候随机
 export function get暗棋Random(type: 'top' | 'bot') {
-  const arr = 棋子仓库[type]
+  const arr = 暗子牌库[type]
   shuffle(arr)
   return arr.pop()
 

@@ -30,11 +30,12 @@ effect(() => {
 <template>
   <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
 
-  <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
-  <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
-  <div>myBtType: {{ myTB }}</div>
-
-  <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到敌...') : '等待对手加入...' }}</div>
+  <div>
+    <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
+    <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
+    <div>myBtType: {{ myTB }}</div>
+    <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到敌...') : '等待对手加入...' }}</div>
+  </div>
 
   <component
     v-if="对手id || offline"

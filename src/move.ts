@@ -90,8 +90,8 @@ export function get棋子_可移动_位置(棋子: t棋子): {
 
   if (item === '卒') {
     return (is敌人棋子 ? !is先手.value : is先手.value)
-      ? [get上侧位置(棋子), ...(棋子.i < 5 ? [get右侧位置(棋子), get左侧位置(棋子)] : [])].filter(Boolean)
-      : [get下侧位置(棋子), ...(棋子.i > 4 ? [get右侧位置(棋子), get左侧位置(棋子)] : [])].filter(Boolean)
+      ? [get上侧位置(棋子), ...(棋子.i < 5 ? [get右侧位置(棋子), get左侧位置(棋子)] : [])].filter((e) => e !== undefined)
+      : [get下侧位置(棋子), ...(棋子.i > 4 ? [get右侧位置(棋子), get左侧位置(棋子)] : [])].filter((e) => e !== undefined)
   }
 
   if (item === '帅') {

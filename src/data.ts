@@ -19,7 +19,7 @@ export const isMe = location.search.includes('me')
 export const offline = location.search.includes('offline')
 export const buff = location.search.includes('buff')
 
-export const 起点位置 = ref<string>() // `${i}-${j}`// todo 棋子
+export const 起点位置 = ref<string>()
 
 export const 走子提示 = ref<[string, string]>()
 
@@ -79,7 +79,11 @@ export const 我棋子 = computed(() => {
   return 所有棋子.filter((p) => p.tb === myTB.value)
 })
 export const 我吃_敌我 = computed(() => {
-  return 我棋子.value.map(get棋子_可移动_位置).flat().map(位置2棋子).filter(Boolean) as t棋子[]
+  return 我棋子.value
+    .map(get棋子_可移动_位置)
+    .flat()
+    .map(位置2棋子)
+    .filter((e) => e !== undefined)
 })
 export const 我吃_我 = computed(() => {
   return 我吃_敌我.value.filter((p) => p.tb === myTB.value)
@@ -99,7 +103,11 @@ export const 敌棋子 = computed(() => {
   return 所有棋子.filter((p) => p.tb !== myTB.value)
 })
 export const 敌吃_敌我 = computed(() => {
-  return 敌棋子.value.map(get棋子_可移动_位置).flat().map(位置2棋子).filter(Boolean) as t棋子[]
+  return 敌棋子.value
+    .map(get棋子_可移动_位置)
+    .flat()
+    .map(位置2棋子)
+    .filter((e) => e !== undefined)
 })
 export const 敌吃_敌 = computed(() => {
   return 敌吃_敌我.value.filter((p) => p.tb !== myTB.value)

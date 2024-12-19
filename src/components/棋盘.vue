@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { moves } from '../data'
-import { 吃子列表, 走子提示 } from '../data'
+import { 走子提示 } from '../data'
 </script>
 
 <template>
   <div class="qipanWrap">
-    <div class="吃子列表top">
-      <span v-if="吃子列表.top.length === 0" style="opacity: 0"></span>
-      <span v-for="(role, idx) of 吃子列表.top">{{ role }}</span>
-      <!-- 最多15个 -->
-    </div>
-
     <div class="qipan">
       <div class="走子提示" v-if="走子提示" :style="{ left: 走子提示[0].j * 50 + 'px', top: 走子提示[0].i * 50 + 'px' }"></div>
       <div class="走子提示" v-if="走子提示" :style="{ left: 走子提示[1].j * 50 + 'px', top: 走子提示[1].i * 50 + 'px' }"></div>
@@ -85,11 +79,6 @@ import { 吃子列表, 走子提示 } from '../data'
       <div class="棋子s">
         <slot></slot>
       </div>
-    </div>
-
-    <div class="吃子列表top 吃子列表bot">
-      <span v-if="吃子列表.bot.length === 0" style="opacity: 0"></span>
-      <span v-for="(role, idx) of 吃子列表.bot">{{ role }}</span>
     </div>
   </div>
 </template>

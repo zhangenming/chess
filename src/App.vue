@@ -56,7 +56,14 @@ effect(() => {
     <div
       v-for="{ i, j, qz } in 所有棋子"
       :key="qz.idx"
-      :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
+      :style="
+        qz.deadIdx === 0
+          ? { top: `${i * 50}px`, left: `${j * 50}px` }
+          : {
+              top: '10px',
+              left: '10px',
+            }
+      "
       :class="[
         'roles',
         qz.tb,
@@ -70,6 +77,7 @@ effect(() => {
             敌吃我被保护cls: 敌吃_我_被保护.find((item) => item.i === i && item.j === j),
             敌吃我无保护cls: 敌吃_我_无保护.find((item) => item.i === i && item.j === j),
           }),
+          dead: qz.deadIdx !== 0,
         },
       ]"
       :i

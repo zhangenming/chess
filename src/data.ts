@@ -21,14 +21,6 @@ export const 起始棋子 = ref('')
 
 export const 走子提示 = ref<[{ i: number; j: number }, { i: number; j: number }]>()
 
-export const 吃子列表 = reactive<{
-  top: string[]
-  bot: string[]
-}>({
-  top: [],
-  bot: [],
-})
-
 export const moves = computed(() => {
   const S = 起始棋子.value
   if (!S) return []
@@ -69,6 +61,7 @@ export const positions = reactive(
           role: r,
           jie: r === '帅' ? '帅' : '',
           tb: i < 5 ? ('top' as const) : ('bot' as const),
+          deadIdx: 0, // 死亡顺序 0表示存活
         },
       }),
     }))
@@ -83,7 +76,7 @@ export const 所有棋子 = computed(() => {
 })
 
 // 我
-const 我棋子 = computed(() => {
+export const 我棋子 = computed(() => {
   return 所有棋子.value.filter((p) => p.qz.tb === myTB.value)
 })
 const 我吃_敌我 = computed(() => {
@@ -106,7 +99,7 @@ export const 我吃_敌_无保护 = computed(() => {
 })
 
 // 敌
-const 敌棋子 = computed(() => {
+export const 敌棋子 = computed(() => {
   return 所有棋子.value.filter((p) => p.qz.tb !== myTB.value)
 })
 const 敌吃_敌我 = computed(() => {

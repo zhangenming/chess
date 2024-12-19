@@ -1,4 +1,4 @@
-import { 回合, 吃子列表, 走子提示, drTB, is我的回合, myTB, offline, roles, 起始棋子 } from './data'
+import { 回合, 走子提示, drTB, is我的回合, myTB, offline, roles, 起始棋子, 敌棋子, 我棋子 } from './data'
 import { SEND } from './online'
 import { getItemRandom, ij2item, test } from './utils'
 
@@ -59,9 +59,11 @@ export function RECEIVE({ content }) {
       起点.qz.jie = ol_揭开暗子
     }
     if (终点.qz) {
-      吃子列表[起点.qz.tb].push(终点.qz.jie || (终点.qz.tb === myTB.value ? '' : ol_吃掉暗子))
+      终点.qz.deadIdx = 敌棋子.value.filter((e) => e.qz.deadIdx !== 0).length + 1
+      console.log(终点.qz.deadIdx)
     }
 
+    // todo
     终点.qz = 起点.qz
     delete 起点.qz
 

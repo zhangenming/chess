@@ -128,11 +128,11 @@ export function get棋子_可移动_位置(棋子: t棋子): {
   }
   function filter炮可移动位置(位置s: { i: number; j: number }[]) {
     let 炮架 = false
-    let 找到目标 = false
+    let 找到终点 = false
     return 位置s.filter((位置) => {
       if (!炮架 && !位置2棋子(位置)) return true
-      if (炮架 && 位置2棋子(位置) && !找到目标) {
-        找到目标 = true
+      if (炮架 && 位置2棋子(位置) && !找到终点) {
+        找到终点 = true
         return true
       }
       if (位置2棋子(位置)) {

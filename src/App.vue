@@ -2,7 +2,7 @@
 import { effect } from 'vue'
 import 棋盘 from './components/棋盘.vue'
 import { action } from './gameTick'
-import { 起始棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves, 全部棋子, offline, buff } from './data'
+import { 起点棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves, 全部棋子, offline, buff } from './data'
 </script>
 
 <template>
@@ -48,7 +48,7 @@ import { 起始棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves
         {
           canMove: moves.find((item) => item.i === i && item.j === j),
           jieCls: !jie,
-          selected: 起始棋子 === `${i}-${j}`,
+          selected: 起点棋子 === `${i}-${j}`,
           dead: deadIdx !== 0,
         },
       ]"

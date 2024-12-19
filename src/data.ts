@@ -17,18 +17,18 @@ export const isMe = location.search.includes('me')
 export const offline = location.search.includes('offline')
 export const buff = location.search.includes('buff')
 
-export const 起始棋子 = ref<string>() // `${i}-${j}`// todo 棋子
+export const 起点棋子 = ref<string>() // `${i}-${j}`// todo 棋子
 
 export const 走子提示 = ref<[{ i: number; j: number }, { i: number; j: number }]>()
 
 export const moves = computed(() => {
-  const S = 起始棋子.value
+  const S = 起点棋子.value
   if (!S) return []
 
   return get棋子_可移动_位置(stringIJ2棋子(S)!)
 })
 
-export const 暗棋棋子 = {
+export const 棋子仓库 = {
   top: qzA,
   bot: qzB,
 }
@@ -53,7 +53,7 @@ export const 位置 = reactive(
         全部棋子.push({
           tb: i < 5 ? 'top' : 'bot',
           role,
-          jie: role === '帅' ? '帅' : '',
+          jie: role === '帅' ? '帅' : '', // todo 〇
           deadIdx: 0, // 死亡顺序 0表示存活
 
           i,

@@ -1,4 +1,4 @@
-import { 位置, 棋子仓库, 全部棋子, type t棋子 } from './data'
+import { 所有位置, 棋子仓库, 所有棋子, type t棋子 } from './data'
 
 export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
@@ -29,32 +29,32 @@ export function 距离j(a: 位置, b: 位置) {
 }
 
 export function get左侧位置({ i, j }: 位置) {
-  return 位置[i][j - 1]
+  return 所有位置[i][j - 1]
 }
 export function get右侧位置({ i, j }: 位置) {
-  return 位置[i][j + 1]
+  return 所有位置[i][j + 1]
 }
 export function get上侧位置({ i, j }: 位置) {
-  return 位置[i - 1][j]
+  return 所有位置[i - 1][j]
 }
 export function get下侧位置({ i, j }: 位置) {
-  return 位置[i + 1][j]
+  return 所有位置[i + 1][j]
 }
 
 export function get左侧全部位置({ i, j }: 位置) {
-  return 位置[i].slice(0, j).reverse()
+  return 所有位置[i].slice(0, j).reverse()
 }
 export function get右侧全部位置({ i, j }: 位置) {
-  return 位置[i].slice(j + 1)
+  return 所有位置[i].slice(j + 1)
 }
 export function get上侧全部位置({ i, j }: 位置) {
-  return 位置
+  return 所有位置
     .slice(0, i)
     .map((line) => line[j])
     .reverse()
 }
 export function get下侧全部位置({ i, j }: 位置) {
-  return 位置.slice(i + 1).map((line) => line[j])
+  return 所有位置.slice(i + 1).map((line) => line[j])
 }
 
 // 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)保证悔完棋的时候随机
@@ -91,12 +91,12 @@ export function test(bool: any, text: any) {
 }
 
 export function 位置2棋子({ i, j }: 位置): t棋子 | undefined {
-  return 全部棋子.find((e) => e.i === i && e.j === j)
+  return 所有棋子.find((e) => e.i === i && e.j === j)
 }
 
 export function stringIJ2棋子(s: string): t棋子 | undefined {
   const [i, j] = s.split('-').map((e) => Number(e))
-  return 全部棋子.find((e) => e.i === i && e.j === j)
+  return 所有棋子.find((e) => e.i === i && e.j === j)
 }
 
 export function 取反(tb: 'top' | 'bot') {

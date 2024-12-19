@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { moves } from '../data'
+import { 可移动位置 } from '../data'
 import { 走子提示 } from '../data'
 </script>
 
@@ -64,7 +64,7 @@ import { 走子提示 } from '../data'
           :class="[
             '位置',
             {
-              canMove: moves.find((item) => item.i === i && item.j === j),
+              canMove: 可移动位置.find((item) => item.i === i && item.j === j),
             },
           ]"
           v-for="j in [0, 1, 2, 3, 4, 5, 6, 7, 8]"

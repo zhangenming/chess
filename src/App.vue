@@ -2,7 +2,22 @@
 import { effect } from 'vue'
 import 棋盘 from './components/棋盘.vue'
 import { action } from './gameTick'
-import { 起点位置, is先手, myTB, 我的id, 对手id, is我的回合, moves, 全部棋子, offline, buff } from './data'
+import {
+  起点位置,
+  is先手,
+  myTB,
+  我的id,
+  对手id,
+  is我的回合,
+  可移动位置,
+  所有棋子,
+  offline,
+  buff,
+  我吃_敌_被保护,
+  我吃_敌_无保护,
+  敌吃_我_被保护,
+  敌吃_我_无保护,
+} from './data'
 </script>
 
 <template>
@@ -31,7 +46,7 @@ import { 起点位置, is先手, myTB, 我的id, 对手id, is我的回合, moves
     }"
   >
     <div
-      v-for="{ i, j, idx, tb, role, jie, deadIdx } in 全部棋子"
+      v-for="{ i, j, idx, tb, role, jie, deadIdx } in 所有棋子"
       :key="idx"
       :style="
         deadIdx === 0
@@ -54,10 +69,16 @@ import { 起点位置, is先手, myTB, 我的id, 对手id, is我的回合, moves
         'roles',
         tb,
         {
-          canMove: moves.find((item) => item.i === i && item.j === j),
+          canMove: 可移动位置.find((item) => item.i === i && item.j === j),
           jieCls: !jie,
           selected: 起点位置 === `${i}-${j}`,
           dead: deadIdx !== 0,
+          ...(buff && {
+            我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
+            我吃敌无保护cls: 我吃_敌_无保护.find((item) => item.i === i && item.j === j),
+            敌吃我被保护cls: 敌吃_我_被保护.find((item) => item.i === i && item.j === j),
+            敌吃我无保护cls: 敌吃_我_无保护.find((item) => item.i === i && item.j === j),
+          }),
         },
       ]"
       :i

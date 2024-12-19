@@ -1,4 +1,4 @@
-import { 位置一维, is先手, drTB, type t棋子 } from './data'
+import { 所有位置一维, is先手, drTB, type t棋子 } from './data'
 import {
   get上侧位置,
   get下侧位置,
@@ -24,7 +24,7 @@ export function get棋子_可移动_位置(棋子: t棋子): {
   const item = jie || role
 
   if (item === '马') {
-    return 位置一维
+    return 所有位置一维
       .filter((p) => (距离i(棋子, p) === 1 && 距离j(棋子, p) === 2) || (距离i(棋子, p) === 2 && 距离j(棋子, p) === 1))
       .filter(({ i, j }) => {
         if (i - 棋子.i === 2) {
@@ -43,7 +43,7 @@ export function get棋子_可移动_位置(棋子: t棋子): {
   }
 
   if (item === '象') {
-    return 位置一维
+    return 所有位置一维
       .filter((p) => 距离i(棋子, p) === 2 && 距离j(棋子, p) === 2)
       .filter(({ i, j }) => {
         if (i === 棋子.i + 2 && j === 棋子.j + 2) {
@@ -62,7 +62,7 @@ export function get棋子_可移动_位置(棋子: t棋子): {
   }
 
   if (item === '士') {
-    return 位置一维
+    return 所有位置一维
       .filter((p) => 距离i(棋子, p) === 1 && 距离j(棋子, p) === 1)
       .filter(({ j }) => {
         if (jie) return true
@@ -95,7 +95,7 @@ export function get棋子_可移动_位置(棋子: t棋子): {
   }
 
   if (item === '帅') {
-    const 九宫 = 位置一维
+    const 九宫 = 所有位置一维
       .filter((p) => (距离i(棋子, p) === 1 && 距离j(棋子, p) === 0) || (距离i(棋子, p) === 0 && 距离j(棋子, p) === 1))
       .filter(({ i, j }) => (j === 3 || j === 4 || j === 5) && (i === 0 || i === 1 || i === 2 || i === 7 || i === 8 || i === 9))
 

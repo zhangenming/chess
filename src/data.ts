@@ -21,7 +21,7 @@ export const 起点位置 = ref<string>() // `${i}-${j}`// todo 棋子
 
 export const 走子提示 = ref<[{ i: number; j: number }, { i: number; j: number }]>()
 
-export const moves = computed(() => {
+export const 可移动位置 = computed(() => {
   const S = 起点位置.value
   if (!S) return []
 
@@ -45,13 +45,12 @@ export type t棋子 = {
   idx: string
 }
 
-export const 全部棋子 = [] as t棋子[]
-
-export const 位置 = reactive(
+const _所有棋子 = [] as t棋子[]
+export const 所有位置 = reactive(
   raw.map((line, i) =>
     line.map((role, j) => {
       if (role != '空') {
-        全部棋子.push({
+        _所有棋子.push({
           tb: i < 5 ? 'top' : 'bot',
           role,
           jie: role === '帅' ? '帅' : '', // todo 〇
@@ -59,7 +58,7 @@ export const 位置 = reactive(
 
           i,
           j,
-          idx: `${i}-${j}`,
+          idx: `${i}-${j}`, //todo
         })
       }
       return {
@@ -69,4 +68,51 @@ export const 位置 = reactive(
     })
   )
 )
-export const 位置一维 = 位置.flat()
+export const 所有棋子 = reactive(_所有棋子)
+
+export const 所有位置一维 = 所有位置.flat()
+
+// 我
+export const 我棋子 = computed(() => {
+  return 所有棋子.filter((p) => p.tb === myTB.value)
+})
+export const 我吃_敌我 = computed(() => {
+  return 我棋子.value.map(get棋子_可移动_位置).flat().map(位置2棋子).filter(Boolean) as t棋子[]
+})
+export const 我吃_我 = computed(() => {
+  return 我吃_敌我.value.filter((p) => p.tb === myTB.value)
+})
+export const 我吃_敌 = computed(() => {
+  return 我吃_敌我.value.filter((p) => p.tb !== myTB.value)
+})
+export const 我吃_敌_被保护 = computed(() => {
+  return 我吃_敌.value.filter((p) => 敌吃_敌.value.includes(p))
+})
+export const 我吃_敌_无保护 = computed(() => {
+  return 我吃_敌.value.filter((p) => !敌吃_敌.value.includes(p))
+})
+
+// 敌
+export const 敌棋子 = computed(() => {
+  return 所有棋子.filter((p) => p.tb !== myTB.value)
+})
+export const 敌吃_敌我 = computed(() => {
+  return 敌棋子.value.map(get棋子_可移动_位置).flat().map(位置2棋子).filter(Boolean) as t棋子[]
+})
+export const 敌吃_敌 = computed(() => {
+  return 敌吃_敌我.value.filter((p) => p.tb !== myTB.value)
+})
+export const 敌吃_我 = computed(() => {
+  return 敌吃_敌我.value.filter((p) => p.tb === myTB.value)
+})
+export const 敌吃_我_被保护 = computed(() => {
+  return 敌吃_我.value.filter((p) => 我吃_我.value.includes(p))
+})
+export const 敌吃_我_无保护 = computed(() => {
+  return 敌吃_我.value.filter((p) => !我吃_我.value.includes(p))
+})
+// 不完全 不会提示送子
+
+export const is将军 = computed(() => {
+  return 敌吃_我.value.some((p) => p.role === '帅')
+})

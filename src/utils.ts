@@ -1,4 +1,4 @@
-import { 位置, 棋子, type t棋子 } from './data'
+import { 位置, 暗棋棋子, 棋子, type t棋子 } from './data'
 
 export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
@@ -58,7 +58,8 @@ export function get下侧全部位置({ i, j }: coord) {
 }
 
 // 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)保证悔完棋的时候随机
-export function getItemRandom<T>(arr: T[]) {
+export function get暗棋Random(type: 'top' | 'bot') {
+  const arr = 暗棋棋子[type]
   shuffle(arr)
   return arr.pop()
 
@@ -93,7 +94,7 @@ export function 位置2棋子({ i, j }: coord): t棋子 | undefined {
   return 棋子.find((e) => e.i === i && e.j === j)
 }
 
-export function ij2item(s: string) {
+export function ij2棋子(s: string): t棋子 | undefined {
   const [i, j] = s.split('-').map((e) => Number(e))
   return 棋子.find((e) => e.i === i && e.j === j)
 }

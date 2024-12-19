@@ -1,12 +1,12 @@
-import { 回合, 走子提示, drTB, is我的回合, myTB, offline, roles, 起始棋子, 敌棋子, 我棋子 } from './data'
+import { 回合, 走子提示, drTB, is我的回合, myTB, offline, 起始棋子 } from './data'
 import { SEND } from './online'
-import { getItemRandom, ij2item, test } from './utils'
+import { get暗棋Random, ij2棋子, test } from './utils'
 
 // 这里的逻辑 只有我方阵营会执行
 export function action({ target }) {
   if (!is我的回合.value && !offline) return
 
-  const ol_起始棋子 = 起始棋子.value
+  const ol_起始位置 = 起始棋子.value
   起始棋子.value = undefined
 
   if (!target.parentElement?.classList.contains('位置s') && !target.parentElement?.classList.contains('棋子s')) return
@@ -14,17 +14,17 @@ export function action({ target }) {
   const 目标位置 = `${target.getAttribute('i')}-${target.getAttribute('j')}`
 
   if (target.classList.contains('canMove')) {
-    const qz起始棋子 = ij2item(ol_起始棋子).qz
-    const qz目标位置 = ij2item(目标位置).qz
+    const 起始棋子 = ij2棋子(ol_起始位置)
+    const 目标棋子 = ij2棋子(目标位置)
 
     SEND('走棋', {
-      ol_起始棋子,
+      ol_起始位置,
       ol_目标位置: 目标位置,
-      ...(!qz起始棋子.jie && { ol_揭开暗子: getItemRandom(roles[qz起始棋子.tb]) }),
-      ...(qz目标位置 && !qz目标位置.jie && { ol_吃掉暗子: getItemRandom(roles[qz目标位置.tb]) }),
+      ...(!起始棋子.jie && { ol_揭开暗子: get暗棋Random(起始棋子.tb) }),
+      ...(目标棋子 && !目标棋子.jie && { ol_吃掉暗子: get暗棋Random(目标棋子.tb) }),
     })
 
-    test(qz起始棋子.tb === qz目标位置?.tb, '吃自己')
+    test(起始棋子.tb === 目标棋子?.tb, '吃自己')
   }
 
   // offline的话交替行走俩人的棋子 否则只能走自己的棋子
@@ -49,41 +49,39 @@ export function RECEIVE({ content }) {
     回合.value++
 
     // 起点 -> 终点
-    const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = data
+    const { ol_起始位置, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = data
 
-    const 起点 = ij2item(ol_起始棋子)
-    const 终点 = ij2item(ol_目标位置)
+    const 起点棋子 = ij2棋子(ol_起始位置)
+    const 终点棋子 = ij2棋子(ol_目标位置)
 
     if (ol_揭开暗子) {
-      test(起点.qz.jie, '起点不应该已经揭开')
-      起点.qz.jie = ol_揭开暗子
+      起点棋子.jie = ol_揭开暗子
     }
-    if (终点.qz) {
-      终点.qz.deadIdx = 敌棋子.value.filter((e) => e.qz.deadIdx !== 0).length + 1
-      console.log(终点.qz.deadIdx)
+    if (终点棋子) {
+      // 终点棋子.deadIdx = 敌棋子.value.filter((e) => e.deadIdx !== 0).length + 1
+      console.log(终点棋子.deadIdx)
     }
 
-    // todo
-    终点.qz = 起点.qz
-    delete 起点.qz
+    起点棋子.i = Number(ol_目标位置.split('-')[0])
+    起点棋子.j = Number(ol_目标位置.split('-')[1])
 
-    走子提示.value = [起点, 终点]
+    // 走子提示.value = [起点棋子, 终点棋子]
 
-    悔棋数据.push(data)
+    // 悔棋数据.push(data)
   }
 
   //   if (type === '发起悔棋') {
   //     //  终点 -> 起点
-  //     const { ol_起始棋子, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = 悔棋数据.pop()
+  //     const { ol_起始位置, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = 悔棋数据.pop()
 
   //     const 终点 = ij2item(ol_目标位置)
-  //     const 起点 = ij2item(ol_起始棋子)
+  //     const 起点 = ij2item(ol_起始位置)
 
   //     // 1.走 暗子
   //     // 2.走
   //     // 3.吃
   //     // 4.吃 暗子
-  //     起点.qz = 终点.qz
-  //     delete 终点.qz
+  //     起点 = 终点
+  //     delete 终点
   //   }
 }

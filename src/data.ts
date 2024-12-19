@@ -1,6 +1,6 @@
 import { computed, reactive, ref } from 'vue'
-import { getMyId, ij2item, qzA, qzB, raw } from './utils'
-import { getQzMoves } from './move'
+import { getMyId, ij2棋子, qzA, qzB, raw } from './utils'
+import { get棋子_可移动_位置 } from './move'
 
 export const 回合 = ref(0)
 export const is先手 = ref(true)
@@ -17,7 +17,7 @@ export const isMe = location.search.includes('me')
 export const offline = location.search.includes('offline')
 export const buff = location.search.includes('buff')
 
-export const 起始棋子 = ref('')
+export const 起始棋子 = ref('') // `${i}-${j}`// todo 棋子
 
 export const 走子提示 = ref<[{ i: number; j: number }, { i: number; j: number }]>()
 
@@ -25,103 +25,47 @@ export const moves = computed(() => {
   const S = 起始棋子.value
   if (!S) return []
 
-  return getQzMoves(ij2item(S)).filter((e) => {
-    // 存在棋子 说明是吃 需要判断是敌人棋子
-    if (e.qz) return e.qz.tb === drTB.value
-    // 不存在棋子 说明是走 不需要判断
-    return true
-  })
+  return get棋子_可移动_位置(ij2棋子(S))
 })
 
-type 位置 = {
-  i: number
-  j: number
-}
-type 棋子 = {
-  idx: string
-  role: string
-  jie?: string
-  tb: 'top' | 'bot'
-}
-type 位置with棋子 = 位置 & { qz: 棋子 }
-
-export const roles = {
+export const 暗棋棋子 = {
   top: qzA,
   bot: qzB,
 }
 
-export const positions = reactive(
+export type t棋子 = {
+  tb: 'top' | 'bot'
+  role: string
+  jie: string
+  deadIdx: number
+
+  i: number
+  j: number
+  idx: string
+}
+
+export const 棋子 = [] as t棋子[]
+
+export const 位置 = reactive(
   raw.map((line, i) =>
-    line.map((r, j) => ({
-      i,
-      j,
-      ...(r != '空' && {
-        qz: {
-          idx: `${i}-${j}`,
-          role: r,
-          jie: r === '帅' ? '帅' : '',
-          tb: i < 5 ? ('top' as const) : ('bot' as const),
+    line.map((role, j) => {
+      if (role != '空') {
+        棋子.push({
+          tb: i < 5 ? 'top' : 'bot',
+          role,
+          jie: role === '帅' ? '帅' : '',
           deadIdx: 0, // 死亡顺序 0表示存活
-        },
-      }),
-    }))
+
+          i,
+          j,
+          idx: `${i}-${j}`,
+        })
+      }
+      return {
+        i,
+        j,
+      }
+    })
   )
 )
-;(window as any).positions = positions
-
-export const positionsFlat = positions.flat()
-
-export const 所有棋子 = computed(() => {
-  return positionsFlat.filter((p) => p.qz).sort((a, b) => a.qz.idx.localeCompare(b.qz.idx))
-})
-
-// 我
-export const 我棋子 = computed(() => {
-  return 所有棋子.value.filter((p) => p.qz.tb === myTB.value)
-})
-const 我吃_敌我 = computed(() => {
-  return 我棋子.value
-    .map(getQzMoves)
-    .flat()
-    .filter((p) => p.qz)
-})
-const 我吃_我 = computed(() => {
-  return 我吃_敌我.value.filter((p) => p.qz.tb === myTB.value)
-})
-const 我吃_敌 = computed(() => {
-  return 我吃_敌我.value.filter((p) => p.qz.tb !== myTB.value)
-})
-export const 我吃_敌_被保护 = computed(() => {
-  return 我吃_敌.value.filter((p) => 敌吃_敌.value.includes(p))
-})
-export const 我吃_敌_无保护 = computed(() => {
-  return 我吃_敌.value.filter((p) => !敌吃_敌.value.includes(p))
-})
-
-// 敌
-export const 敌棋子 = computed(() => {
-  return 所有棋子.value.filter((p) => p.qz.tb !== myTB.value)
-})
-const 敌吃_敌我 = computed(() => {
-  return 敌棋子.value
-    .map(getQzMoves)
-    .flat()
-    .filter((p) => p.qz)
-})
-const 敌吃_敌 = computed(() => {
-  return 敌吃_敌我.value.filter((p) => p.qz.tb !== myTB.value)
-})
-const 敌吃_我 = computed(() => {
-  return 敌吃_敌我.value.filter((p) => p.qz.tb === myTB.value)
-})
-export const 敌吃_我_被保护 = computed(() => {
-  return 敌吃_我.value.filter((p) => 我吃_我.value.includes(p))
-})
-export const 敌吃_我_无保护 = computed(() => {
-  return 敌吃_我.value.filter((p) => !我吃_我.value.includes(p))
-})
-// 不完全 不会提示送子
-
-export const is将军 = computed(() => {
-  return 敌吃_我.value.some((p) => p.qz.role === '帅')
-})
+export const 位置一维 = 位置.flat()

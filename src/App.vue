@@ -2,29 +2,7 @@
 import { effect } from 'vue'
 import 棋盘 from './components/棋盘.vue'
 import { action } from './gameTick'
-import {
-  起始棋子,
-  is先手,
-  myTB,
-  我的id,
-  对手id,
-  is我的回合,
-  moves,
-  所有棋子,
-  我吃_敌_被保护,
-  我吃_敌_无保护,
-  敌吃_我_被保护,
-  敌吃_我_无保护,
-  offline,
-  buff,
-  is将军,
-} from './data'
-
-effect(() => {
-  if (is将军.value) {
-    alert('将军')
-  }
-})
+import { 起始棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves, 棋子, offline, buff } from './data'
 </script>
 
 <template>
@@ -54,10 +32,10 @@ effect(() => {
     }"
   >
     <div
-      v-for="{ i, j, qz } in 所有棋子"
-      :key="qz.idx"
+      v-for="{ i, j, idx, tb, deadIdx, jie } in 棋子"
+      :key="idx"
       :style="
-        qz.deadIdx === 0
+        deadIdx === 0
           ? { top: `${i * 50}px`, left: `${j * 50}px` }
           : {
               top: '10px',
@@ -66,25 +44,19 @@ effect(() => {
       "
       :class="[
         'roles',
-        qz.tb,
+        tb,
         {
           canMove: moves.find((item) => item.i === i && item.j === j),
-          jieCls: !qz.jie,
+          jieCls: !jie,
           selected: 起始棋子 === `${i}-${j}`,
-          ...(buff && {
-            我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
-            我吃敌无保护cls: 我吃_敌_无保护.find((item) => item.i === i && item.j === j),
-            敌吃我被保护cls: 敌吃_我_被保护.find((item) => item.i === i && item.j === j),
-            敌吃我无保护cls: 敌吃_我_无保护.find((item) => item.i === i && item.j === j),
-          }),
-          dead: qz.deadIdx !== 0,
+          dead: deadIdx !== 0,
         },
       ]"
       :i
       :j
-      :jie="qz.jie"
+      :jie="jie"
     >
-      {{ qz.jie || '〇' }}
+      {{ jie || '〇' }}
     </div>
   </component>
 </template>

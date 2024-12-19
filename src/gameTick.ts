@@ -70,14 +70,9 @@ export function RECEIVE({ content }: any) {
       }
     }
 
-    const { i, j } = 起点棋子
-    const [终i, 终j] = ol_终点位置.split('-').map(Number)
+    ;[起点棋子.i, 起点棋子.j] = ol_终点位置.split('-').map(Number)
 
-    走子提示.value = [
-      { i, j },
-      { i: 终i, j: 终j },
-    ]
-    ;[起点棋子.i, 起点棋子.j] = [终i, 终j]
+    走子提示.value = [ol_起点位置, ol_终点位置]
 
     // 悔棋数据.push(data)
   }

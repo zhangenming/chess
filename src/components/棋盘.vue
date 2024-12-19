@@ -1,12 +1,15 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { 可移动位置 } from '../data'
 import { 走子提示 } from '../data'
+
+const 走子提示format = computed(() => 走子提示.value!.map((item) => item.split('-').map((n) => Number(n) * 50 + 'px')))
 </script>
 
 <template>
   <div class="qipan">
-    <div class="走子提示" v-if="走子提示" :style="{ left: 走子提示[0].j * 50 + 'px', top: 走子提示[0].i * 50 + 'px' }"></div>
-    <div class="走子提示" v-if="走子提示" :style="{ left: 走子提示[1].j * 50 + 'px', top: 走子提示[1].i * 50 + 'px' }"></div>
+    <div class="走子提示" v-if="走子提示" :style="{ top: 走子提示format[0][0], left: 走子提示format[0][1] }" style="width: 30px"></div>
+    <div class="走子提示" v-if="走子提示" :style="{ top: 走子提示format[1][0], left: 走子提示format[1][1] }"></div>
 
     <!-- 横 -->
     <div>
@@ -192,7 +195,7 @@ import { 走子提示 } from '../data'
   translate: -50% -50%;
 }
 .走子提示 {
-  width: 45px;
+  width: 50px;
   border-radius: 50%;
   aspect-ratio: 1;
   /* 事件穿透 */

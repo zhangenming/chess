@@ -19,7 +19,7 @@ export const buff = location.search.includes('buff')
 
 export const 起点位置 = ref<string>() // `${i}-${j}`// todo 棋子
 
-export const 走子提示 = ref<[{ i: number; j: number }, { i: number; j: number }]>()
+export const 走子提示 = ref<[string, string]>()
 
 export const 可移动位置 = computed(() => {
   const S = 起点位置.value

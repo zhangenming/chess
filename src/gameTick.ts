@@ -1,4 +1,4 @@
-import { 回合, 走子提示, drTB, is我的回合, myTB, offline, 起点棋子, 全部棋子 } from './data'
+import { 回合, 走子提示, drTB, is我的回合, myTB, offline, 起点位置, 全部棋子 } from './data'
 import { SEND } from './online'
 import { get暗棋Random, stringIJ2棋子, test } from './utils'
 
@@ -6,8 +6,8 @@ import { get暗棋Random, stringIJ2棋子, test } from './utils'
 export function action({ target }: { target: HTMLElement }) {
   if (!is我的回合.value && !offline) return
 
-  const ol_起点位置 = 起点棋子.value
-  起点棋子.value = undefined
+  const ol_起点位置 = 起点位置.value
+  起点位置.value = undefined
 
   if (!target.parentElement?.classList.contains('位置s') && !target.parentElement?.classList.contains('棋子s')) return
 
@@ -20,8 +20,8 @@ export function action({ target }: { target: HTMLElement }) {
     SEND('走棋', {
       ol_起点位置,
       ol_终点位置: 终点位置,
-      ...(!起点棋子.jie && { ol_揭开暗子: get暗棋Random(起点棋子.tb) }),
-      ...(终点棋子 && !终点棋子.jie && { ol_吃掉暗子: get暗棋Random(终点棋子.tb) }),
+      ...(!起点棋子.jie && { ol_揭开起点暗子: get暗棋Random(起点棋子.tb) }),
+      ...(终点棋子 && !终点棋子.jie && { ol_揭开被吃暗子: get暗棋Random(终点棋子.tb) }),
     })
 
     test(起点棋子.tb === 终点棋子?.tb, '吃自己')
@@ -29,7 +29,7 @@ export function action({ target }: { target: HTMLElement }) {
 
   // offline的话交替行走俩人的棋子 否则只能走自己的棋子
   if (target.classList.contains(offline ? (is我的回合.value ? myTB.value : drTB.value) : myTB.value)) {
-    起点棋子.value = 终点位置
+    起点位置.value = 终点位置
   }
 }
 
@@ -49,16 +49,25 @@ export function RECEIVE({ content }: any) {
     回合.value++
 
     // 起点 -> 终点
-    const { ol_起点位置, ol_终点位置, ol_揭开暗子, ol_吃掉暗子 } = data
+    const { ol_起点位置, ol_终点位置, ol_揭开起点暗子, ol_揭开被吃暗子 } = data
 
     const 起点棋子 = stringIJ2棋子(ol_起点位置)!
     const 终点棋子 = stringIJ2棋子(ol_终点位置)
 
-    if (ol_揭开暗子) {
-      起点棋子.jie = ol_揭开暗子
+    if (ol_揭开起点暗子) {
+      起点棋子.jie = ol_揭开起点暗子
     }
+
     if (终点棋子) {
       终点棋子.deadIdx = 全部棋子.filter((e) => e.deadIdx !== 0).filter((e) => e.tb === 终点棋子.tb).length + 1
+      终点棋子.i = 0
+      终点棋子.j = 0
+
+      if (ol_揭开被吃暗子) {
+        if (终点棋子.tb !== myTB.value) {
+          终点棋子.jie = ol_揭开被吃暗子
+        }
+      }
     }
 
     ;[起点棋子.i, 起点棋子.j] = ol_终点位置.split('-').map(Number)
@@ -70,7 +79,7 @@ export function RECEIVE({ content }: any) {
 
   //   if (type === '发起悔棋') {
   //     //  终点 -> 起点
-  //     const { ol_起点位置, ol_终点位置, ol_揭开暗子, ol_吃掉暗子 } = 悔棋数据.pop()
+  //     const { ol_起点位置, ol_终点位置, ol_揭开起点暗子, ol_揭开被吃暗子 } = 悔棋数据.pop()
 
   //     const 终点 = ij2item(ol_终点位置)
   //     const 起点 = ij2item(ol_起点位置)

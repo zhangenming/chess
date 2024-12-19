@@ -2,13 +2,13 @@
 import { effect } from 'vue'
 import 棋盘 from './components/棋盘.vue'
 import { action } from './gameTick'
-import { 起点棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves, 全部棋子, offline, buff } from './data'
+import { 起点位置, is先手, myTB, 我的id, 对手id, is我的回合, moves, 全部棋子, offline, buff } from './data'
 </script>
 
 <template>
   <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
 
-  <div>
+  <div style="margin-bottom: 100px">
     <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
     <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
     <div>myBtType: {{ myTB }}</div>
@@ -20,7 +20,6 @@ import { 起点棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves
     :is="棋盘"
     @click="action"
     :style="{
-      marginTop: '50px',
       '--该你走了': is我的回合 ? 'black' : '#999',
       '--先手color': is先手 ? 'black' : 'red',
       '--后手color': is先手 ? 'red' : 'black',
@@ -32,14 +31,22 @@ import { 起点棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves
     }"
   >
     <div
-      v-for="{ i, j, idx, tb, deadIdx, jie } in 全部棋子"
+      v-for="{ i, j, idx, tb, role, jie, deadIdx } in 全部棋子"
       :key="idx"
       :style="
         deadIdx === 0
           ? { top: `${i * 50}px`, left: `${j * 50}px` }
           : {
-              top: '10px',
-              left: '10px',
+              zIndex: deadIdx,
+              ...(tb === 'top'
+                ? {
+                    top: '500px',
+                    left: `${(deadIdx - 1) * 20}px`,
+                  }
+                : {
+                    top: '-50px',
+                    right: `${-50 + (deadIdx - 1) * 20}px`,
+                  }),
             }
       "
       :class="[
@@ -48,13 +55,14 @@ import { 起点棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves
         {
           canMove: moves.find((item) => item.i === i && item.j === j),
           jieCls: !jie,
-          selected: 起点棋子 === `${i}-${j}`,
+          selected: 起点位置 === `${i}-${j}`,
           dead: deadIdx !== 0,
         },
       ]"
       :i
       :j
-      :jie="jie"
+      :role
+      :jie
     >
       {{ jie || '〇' }}
     </div>
@@ -139,5 +147,10 @@ body {
 .敌吃我无保护cls::after {
   background: red;
   width: 15px;
+}
+.dead {
+  top: -50px;
+  border-width: 1px;
+  font-size: 20px;
 }
 </style>

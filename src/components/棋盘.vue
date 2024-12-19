@@ -83,8 +83,7 @@ import { 走子提示 } from '../data'
 
 <style>
 .qipan,
-.qipan .棋子s .roles,
-.qipan .吃子列表top {
+.qipan .棋子s .roles {
   transform: rotate(var(--后手需要反转));
 }
 
@@ -191,28 +190,6 @@ import { 走子提示 } from '../data'
   width: 30px;
   aspect-ratio: 1;
   translate: -50% -50%;
-}
-.吃子列表top {
-  position: relative;
-  display: flex;
-  margin: 0 -35px;
-  top: -40px;
-  color: var(--bot_color);
-}
-.吃子列表bot {
-  top: 40px;
-  color: var(--top_color);
-}
-.吃子列表top span {
-  border: 1px solid currentColor;
-  border-radius: 50%;
-  aspect-ratio: 1;
-  width: 35px;
-  font-size: 25px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 -3px;
 }
 .走子提示 {
   width: 45px;

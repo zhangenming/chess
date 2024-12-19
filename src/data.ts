@@ -1,5 +1,5 @@
 import { computed, reactive, ref } from 'vue'
-import { getMyId, ij2棋子, qzA, qzB, raw } from './utils'
+import { getMyId, stringIJ2棋子, qzA, qzB, raw } from './utils'
 import { get棋子_可移动_位置 } from './move'
 
 export const 回合 = ref(0)
@@ -25,7 +25,7 @@ export const moves = computed(() => {
   const S = 起始棋子.value
   if (!S) return []
 
-  return get棋子_可移动_位置(ij2棋子(S))
+  return get棋子_可移动_位置(stringIJ2棋子(S))
 })
 
 export const 暗棋棋子 = {
@@ -44,13 +44,13 @@ export type t棋子 = {
   idx: string
 }
 
-export const 棋子 = [] as t棋子[]
+export const 全部棋子 = [] as t棋子[]
 
 export const 位置 = reactive(
   raw.map((line, i) =>
     line.map((role, j) => {
       if (role != '空') {
-        棋子.push({
+        全部棋子.push({
           tb: i < 5 ? 'top' : 'bot',
           role,
           jie: role === '帅' ? '帅' : '',

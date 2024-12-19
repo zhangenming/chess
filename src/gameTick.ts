@@ -1,6 +1,6 @@
 import { 回合, 走子提示, drTB, is我的回合, myTB, offline, 起始棋子 } from './data'
 import { SEND } from './online'
-import { get暗棋Random, ij2棋子, test } from './utils'
+import { get暗棋Random, stringIJ2棋子, test } from './utils'
 
 // 这里的逻辑 只有我方阵营会执行
 export function action({ target }) {
@@ -14,8 +14,8 @@ export function action({ target }) {
   const 目标位置 = `${target.getAttribute('i')}-${target.getAttribute('j')}`
 
   if (target.classList.contains('canMove')) {
-    const 起始棋子 = ij2棋子(ol_起始位置)
-    const 目标棋子 = ij2棋子(目标位置)
+    const 起始棋子 = stringIJ2棋子(ol_起始位置)
+    const 目标棋子 = stringIJ2棋子(目标位置)
 
     SEND('走棋', {
       ol_起始位置,
@@ -51,8 +51,8 @@ export function RECEIVE({ content }) {
     // 起点 -> 终点
     const { ol_起始位置, ol_目标位置, ol_揭开暗子, ol_吃掉暗子 } = data
 
-    const 起点棋子 = ij2棋子(ol_起始位置)
-    const 终点棋子 = ij2棋子(ol_目标位置)
+    const 起点棋子 = stringIJ2棋子(ol_起始位置)
+    const 终点棋子 = stringIJ2棋子(ol_目标位置)
 
     if (ol_揭开暗子) {
       起点棋子.jie = ol_揭开暗子

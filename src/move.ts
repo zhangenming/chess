@@ -50,10 +50,10 @@ export function get棋子_可移动_位置(棋子: t棋子) {
           return 位置2棋子({ i: 棋子.i - 1, j: 棋子.j - 1 }) === undefined
         }
         if (i === 棋子.i + 2 && j === 棋子.j - 2) {
-          return 位置2棋子({ i: 棋子.i - 1, j: 棋子.j - 1 }) === undefined
+          return 位置2棋子({ i: 棋子.i + 1, j: 棋子.j - 1 }) === undefined
         }
         if (i === 棋子.i - 2 && j === 棋子.j + 2) {
-          return 位置2棋子({ i: 棋子.i - 1, j: 棋子.j - 1 }) === undefined
+          return 位置2棋子({ i: 棋子.i - 1, j: 棋子.j + 1 }) === undefined
         }
       })
   }

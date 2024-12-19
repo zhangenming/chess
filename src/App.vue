@@ -2,7 +2,7 @@
 import { effect } from 'vue'
 import 棋盘 from './components/棋盘.vue'
 import { action } from './gameTick'
-import { 起始棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves, 棋子, offline, buff } from './data'
+import { 起始棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves, 全部棋子, offline, buff } from './data'
 </script>
 
 <template>
@@ -12,7 +12,7 @@ import { 起始棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves
     <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
     <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
     <div>myBtType: {{ myTB }}</div>
-    <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到敌...') : '等待对手加入...' }}</div>
+    <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
   </div>
 
   <component
@@ -32,7 +32,7 @@ import { 起始棋子, is先手, myTB, 我的id, 对手id, is我的回合, moves
     }"
   >
     <div
-      v-for="{ i, j, idx, tb, deadIdx, jie } in 棋子"
+      v-for="{ i, j, idx, tb, deadIdx, jie } in 全部棋子"
       :key="idx"
       :style="
         deadIdx === 0

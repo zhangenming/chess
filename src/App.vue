@@ -38,6 +38,7 @@ import { 起点位置, is先手, myTB, 我的id, 对手id, is我的回合, moves
           ? { top: `${i * 50}px`, left: `${j * 50}px` }
           : {
               zIndex: deadIdx,
+              // transition: 'none',
               ...(tb === 'top'
                 ? {
                     top: '500px',

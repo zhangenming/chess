@@ -202,5 +202,6 @@ import { 走子提示 } from '../data'
   z-index: 1;
   background: #1500fb;
   opacity: 0.5;
+  transition: all 0.1s;
 }
 </style>

@@ -5,7 +5,6 @@ import { action } from './gameTick'
 import {
   起点位置,
   is先手,
-  myTB,
   我的id,
   对手id,
   is我的回合,
@@ -17,16 +16,16 @@ import {
   我吃_敌_无保护,
   敌吃_我_被保护,
   敌吃_我_无保护,
+  is将军,
 } from './data'
 </script>
 
 <template>
   <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
 
-  <div style="margin-bottom: 100px">
+  <div>
+    <div :style="{ fontSize: '70px', opacity: is将军 ? 1 : 0 }">将军</div>
     <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
-    <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
-    <div>myBtType: {{ myTB }}</div>
     <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
   </div>
 
@@ -35,6 +34,7 @@ import {
     :is="棋盘"
     @click="action"
     :style="{
+      margin: '50px',
       '--该你走了': is我的回合 ? 'black' : '#999',
       '--后手需要反转': is先手 ? '0deg' : '180deg',
       '--top_weight': is先手 ? 100 : 900,
@@ -44,23 +44,15 @@ import {
     }"
   >
     <div
-      v-for="{ i, j, idx, tb, role, jie, deadIdx } in 所有棋子"
-      :key="idx"
+      v-for="{ i, j, tb, role, jie, deadIdx } in 所有棋子"
       :style="
         deadIdx === 0
           ? { top: `${i * 50}px`, left: `${j * 50}px` }
           : {
               zIndex: deadIdx,
               // transition: 'none',
-              ...(tb === 'top'
-                ? {
-                    top: '500px',
-                    left: `${(deadIdx - 1) * 20}px`,
-                  }
-                : {
-                    top: '-50px',
-                    right: `${-50 + (deadIdx - 1) * 20}px`,
-                  }),
+              top: tb === 'top' ? '500px' : '-50px',
+              [tb === 'top' ? 'left' : 'right']: tb === 'top' ? `${(deadIdx - 1) * 20}px` : `${-25 + (deadIdx - 1) * 20}px`,
             }
       "
       :class="[

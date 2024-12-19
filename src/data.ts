@@ -39,7 +39,6 @@ export type t棋子 = {
 
   i: number
   j: number
-  idx: string
 }
 
 const _所有棋子 = [] as t棋子[]
@@ -55,7 +54,6 @@ export const 所有位置 = reactive(
 
           i,
           j,
-          idx: `${i}-${j}`, //todo
         })
       }
       return {

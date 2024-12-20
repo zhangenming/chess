@@ -1,4 +1,4 @@
-import { positions } from './data'
+import { 所有位置, 所有棋子, type t棋子 } from './data'
 
 export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
@@ -13,42 +13,58 @@ export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
 ]
 
-export const qzA = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
-export const qzB = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
+const qzA = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
+const qzB = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
 
-export type coord = { i: number; j: number }
+const 暗子牌库 = {
+  top: qzA,
+  bot: qzB,
+}
 
-export function 距离(a: coord, b: coord) {
+export type 位置or棋子 = { i: number; j: number }
+
+export function 距离(a: 位置or棋子, b: 位置or棋子) {
   return Math.abs(a.i - b.i) + Math.abs(a.j - b.j)
 }
-export function 距离i(a: coord, b: coord) {
+export function 距离i(a: 位置or棋子, b: 位置or棋子) {
   return Math.abs(a.i - b.i)
 }
-export function 距离j(a: coord, b: coord) {
+export function 距离j(a: 位置or棋子, b: 位置or棋子) {
   return Math.abs(a.j - b.j)
 }
 
-export function get左侧全部位置({ i, j }: coord) {
-  return positions[i].slice(0, j).reverse()
+export function get左侧位置({ i, j }: 位置or棋子): 位置or棋子 | undefined {
+  return 所有位置[i]?.[j - 1]
+}
+export function get右侧位置({ i, j }: 位置or棋子): 位置or棋子 | undefined {
+  return 所有位置[i]?.[j + 1]
+}
+export function get上侧位置({ i, j }: 位置or棋子): 位置or棋子 | undefined {
+  return 所有位置[i - 1]?.[j]
+}
+export function get下侧位置({ i, j }: 位置or棋子): 位置or棋子 | undefined {
+  return 所有位置[i + 1]?.[j]
 }
 
-export function get右侧全部位置({ i, j }: coord) {
-  return positions[i].slice(j + 1)
+export function get左侧全部位置({ i, j }: 位置or棋子) {
+  return 所有位置[i].slice(0, j).reverse()
 }
-
-export function get上侧全部位置({ i, j }: coord) {
-  return positions
+export function get右侧全部位置({ i, j }: 位置or棋子) {
+  return 所有位置[i].slice(j + 1)
+}
+export function get上侧全部位置({ i, j }: 位置or棋子) {
+  return 所有位置
     .slice(0, i)
     .map((line) => line[j])
     .reverse()
 }
-
-export function get下侧全部位置({ i, j }: coord) {
-  return positions.slice(i + 1).map((line) => line[j])
+export function get下侧全部位置({ i, j }: 位置or棋子) {
+  return 所有位置.slice(i + 1).map((line) => line[j])
 }
 
 // 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)保证悔完棋的时候随机
-export function getItemRandom<T>(arr: T[]) {
+export function get暗棋Random(type: 'top' | 'bot') {
+  const arr = 暗子牌库[type]
   shuffle(arr)
   return arr.pop()
 
@@ -79,9 +95,13 @@ export function test(bool: any, text: any) {
   }
 }
 
-export function ij2item(s: string) {
-  const [i, j] = s.split('-')
-  return positions[Number(i)][Number(j)]
+export function 位置2棋子(位置or棋子: 位置or棋子 | undefined): t棋子 | undefined {
+  return 位置or棋子 && 所有棋子.find((e) => e.i === 位置or棋子.i && e.j === 位置or棋子.j)
+}
+
+export function stringIJ2棋子(s: string): t棋子 | undefined {
+  const [i, j] = s.split('-').map((e) => Number(e))
+  return 所有棋子.find((e) => e.i === i && e.j === j)
 }
 
 export function 取反(tb: 'top' | 'bot') {

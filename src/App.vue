@@ -3,66 +3,66 @@ import { effect } from 'vue'
 import 棋盘 from './components/棋盘.vue'
 import { action } from './gameTick'
 import {
-  起始棋子,
+  起点位置,
   is先手,
-  myTB,
   我的id,
   对手id,
   is我的回合,
-  moves,
+  可移动位置,
   所有棋子,
+  offline,
+  buff,
   我吃_敌_被保护,
   我吃_敌_无保护,
   敌吃_我_被保护,
   敌吃_我_无保护,
-  offline,
-  buff,
   is将军,
 } from './data'
-
-effect(() => {
-  if (is将军.value) {
-    alert('将军')
-  }
-})
 </script>
 
 <template>
   <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
 
-  <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
-  <div>先手: {{ is先手 ? '先手' : '后手' }}</div>
-  <div>myBtType: {{ myTB }}</div>
-
-  <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到敌...') : '等待对手加入...' }}</div>
+  <div>
+    <div :style="{ fontSize: '70px', opacity: is将军 ? 1 : 0 }">将军</div>
+    <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
+    <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
+  </div>
 
   <component
     v-if="对手id || offline"
     :is="棋盘"
     @click="action"
     :style="{
-      marginTop: '50px',
+      margin: '50px',
       '--该你走了': is我的回合 ? 'black' : '#999',
-      '--先手color': is先手 ? 'black' : 'red',
-      '--后手color': is先手 ? 'red' : 'black',
-      '--先手weight': is先手 ? 900 : 100,
-      '--后手weight': is先手 ? 100 : 900,
+      '--后手需要反转': is先手 ? '0deg' : '180deg',
+      '--top_weight': is先手 ? 100 : 900,
+      '--bot_weight': is先手 ? 900 : 100,
       '--top_color': is先手 ? 'red' : 'black',
       '--bot_color': is先手 ? 'black' : 'red',
-      '--后手需要反转': is先手 ? '0deg' : '180deg',
     }"
   >
     <div
-      v-for="{ i, j, qz } in 所有棋子"
-      :key="qz.idx"
-      :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
+      v-for="{ i, j, tb, role, jie, deadIdx } in 所有棋子"
+      :style="
+        deadIdx === 0
+          ? { top: `${i * 50}px`, left: `${j * 50}px` }
+          : {
+              zIndex: deadIdx,
+              // transition: 'none',
+              top: tb === 'top' ? '500px' : '-50px',
+              [tb === 'top' ? 'left' : 'right']: tb === 'top' ? `${(deadIdx - 1) * 20}px` : `${-25 + (deadIdx - 1) * 20}px`,
+            }
+      "
       :class="[
         'roles',
-        qz.tb,
+        tb,
         {
-          canMove: moves.find((item) => item.i === i && item.j === j),
-          jieCls: !qz.jie,
-          selected: 起始棋子 === `${i}-${j}`,
+          canMove: 可移动位置.find((item) => item.i === i && item.j === j),
+          jieCls: !jie,
+          selected: 起点位置 === `${i}-${j}`,
+          dead: deadIdx !== 0,
           ...(buff && {
             我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
             我吃敌无保护cls: 我吃_敌_无保护.find((item) => item.i === i && item.j === j),
@@ -73,9 +73,10 @@ effect(() => {
       ]"
       :i
       :j
-      :jie="qz.jie"
+      :role
+      :jie
     >
-      {{ qz.jie || '〇' }}
+      {{ jie || '〇' }}
     </div>
   </component>
 </template>
@@ -103,14 +104,14 @@ body {
   border-radius: 50%;
   border-width: 2px;
   border-style: solid;
-  border-color: var(--后手color);
-  color: var(--后手color);
-  font-weight: var(--后手weight);
+  border-color: var(--top_color);
+  color: var(--top_color);
+  font-weight: var(--top_weight);
 }
 .bot {
-  border-color: var(--先手color);
-  color: var(--先手color);
-  font-weight: var(--先手weight);
+  border-color: var(--bot_color);
+  color: var(--bot_color);
+  font-weight: var(--bot_weight);
 }
 .jieCls {
   color: #aaa;
@@ -158,5 +159,10 @@ body {
 .敌吃我无保护cls::after {
   background: red;
   width: 15px;
+}
+.dead {
+  top: -50px;
+  border-width: 1px;
+  font-size: 20px;
 }
 </style>

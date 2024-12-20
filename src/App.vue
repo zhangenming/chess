@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { effect } from 'vue'
 import 棋盘 from './components/棋盘.vue'
 import { action } from './gameTick'
 import {
@@ -9,7 +8,7 @@ import {
   对手id,
   is我的回合,
   可移动位置,
-  所有棋子,
+  所有棋子_生死,
   offline,
   buff,
   我吃_敌_被保护,
@@ -44,7 +43,7 @@ import {
     }"
   >
     <dom棋子
-      v-for="{ i, j, tb, role, jie, deadIdx } of 所有棋子"
+      v-for="{ i, j, tb, role, jie, deadIdx } of 所有棋子_生死"
       :style="
         deadIdx === 0
           ? { top: `${i * 50}px`, left: `${j * 50}px` }

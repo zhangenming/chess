@@ -63,13 +63,14 @@ export const 所有位置 = reactive(
     })
   )
 )
-export const 所有棋子 = reactive(_所有棋子)
+export const 所有棋子_生死 = reactive(_所有棋子)
+export const 所有棋子_生 = computed(() => 所有棋子_生死.filter((p) => p.deadIdx === 0))
 
 export const 所有位置一维 = 所有位置.flat()
 
 // 我
 export const 我棋子 = computed(() => {
-  return 所有棋子.filter((p) => p.tb === myTB.value)
+  return 所有棋子_生.value.filter((p) => p.tb === myTB.value)
 })
 export const 我吃_敌我 = computed(() => {
   return 我棋子.value
@@ -93,7 +94,7 @@ export const 我吃_敌_无保护 = computed(() => {
 
 // 敌
 export const 敌棋子 = computed(() => {
-  return 所有棋子.filter((p) => p.tb !== myTB.value)
+  return 所有棋子_生.value.filter((p) => p.tb !== myTB.value)
 })
 export const 敌吃_敌我 = computed(() => {
   return 敌棋子.value

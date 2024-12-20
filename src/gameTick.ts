@@ -1,4 +1,4 @@
-import { 回合, 走子提示, drTB, is我的回合, myTB, offline, 起点位置, 所有棋子 } from './data'
+import { 回合, 走子提示, drTB, is我的回合, myTB, offline, 起点位置, 所有棋子_生 } from './data'
 import { SEND } from './online'
 import { get暗棋Random, stringIJ2棋子, test } from './utils'
 
@@ -59,7 +59,7 @@ export function RECEIVE({ content }: any) {
     }
 
     if (终点棋子) {
-      终点棋子.deadIdx = 所有棋子.filter((e) => e.deadIdx !== 0).filter((e) => e.tb === 终点棋子.tb).length + 1
+      终点棋子.deadIdx = 所有棋子_生.filter((e) => e.deadIdx !== 0).filter((e) => e.tb === 终点棋子.tb).length + 1
       终点棋子.i = 0
       终点棋子.j = 0
 

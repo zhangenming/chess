@@ -21,7 +21,7 @@ export function action({ target }: { target: HTMLElement }) {
       ol_起点位置,
       ol_终点位置: 终点位置,
       ...(!起点棋子.jie && { ol_揭开起点暗子: get暗棋Random(起点棋子.tb) }),
-      ...(终点棋子 && !终点棋子.jie && { ol_揭开被吃暗子: get暗棋Random(终点棋子.tb) }),
+      ...(终点棋子 && !终点棋子.jie && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子.tb) }),
     })
 
     test(起点棋子.tb === 终点棋子?.tb, '吃自己')
@@ -49,7 +49,7 @@ export function RECEIVE({ content }: any) {
     回合.value++
 
     // 起点 -> 终点
-    const { ol_起点位置, ol_终点位置, ol_揭开起点暗子, ol_揭开被吃暗子 } = data
+    const { ol_起点位置, ol_终点位置, ol_揭开起点暗子, ol_揭开终点被吃暗子 } = data
 
     const 起点棋子 = stringIJ2棋子(ol_起点位置)!
     const 终点棋子 = stringIJ2棋子(ol_终点位置)
@@ -60,12 +60,10 @@ export function RECEIVE({ content }: any) {
 
     if (终点棋子) {
       终点棋子.deadIdx = 所有棋子_死().filter((e) => e.tb === 终点棋子.tb).length + 1
-      终点棋子.i = 0
-      终点棋子.j = 0
 
-      if (ol_揭开被吃暗子) {
+      if (ol_揭开终点被吃暗子) {
         if (终点棋子.tb !== myTB.value) {
-          终点棋子.jie = ol_揭开被吃暗子
+          终点棋子.jie = ol_揭开终点被吃暗子
         }
       }
     }
@@ -79,7 +77,7 @@ export function RECEIVE({ content }: any) {
 
   //   if (type === '发起悔棋') {
   //     //  终点 -> 起点
-  //     const { ol_起点位置, ol_终点位置, ol_揭开起点暗子, ol_揭开被吃暗子 } = 悔棋数据.pop()
+  //     const { ol_起点位置, ol_终点位置, ol_揭开起点暗子, ol_揭开终点被吃暗子 } = 悔棋数据.pop()
 
   //     const 终点 = ij2item(ol_终点位置)
   //     const 起点 = ij2item(ol_起点位置)

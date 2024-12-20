@@ -41,12 +41,12 @@ export type t棋子 = {
   j: number
 }
 
-const _所有棋子 = [] as t棋子[]
+const _所有棋子_生死 = [] as t棋子[]
 export const 所有位置 = reactive(
   raw.map((line, i) =>
     line.map((role, j) => {
       if (role != '空') {
-        _所有棋子.push({
+        _所有棋子_生死.push({
           tb: i < 5 ? 'top' : 'bot',
           role,
           jie: role === '帅' ? '帅' : '', // todo 〇
@@ -65,7 +65,7 @@ export const 所有位置 = reactive(
 )
 export const 所有位置一维 = 所有位置.flat()
 
-export const 所有棋子_生死 = reactive(_所有棋子)
+export const 所有棋子_生死 = reactive(_所有棋子_生死)
 export const 所有棋子_生 = () => 所有棋子_生死.filter((p) => p.deadIdx === 0)
 export const 所有棋子_死 = () => 所有棋子_生死.filter((p) => p.deadIdx !== 0)
 

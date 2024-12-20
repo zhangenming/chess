@@ -43,8 +43,8 @@ import {
       '--bot_color': is先手 ? 'black' : 'red',
     }"
   >
-    <div
-      v-for="{ i, j, tb, role, jie, deadIdx } in 所有棋子"
+    <dom棋子
+      v-for="{ i, j, tb, role, jie, deadIdx } of 所有棋子"
       :style="
         deadIdx === 0
           ? { top: `${i * 50}px`, left: `${j * 50}px` }
@@ -56,7 +56,6 @@ import {
             }
       "
       :class="[
-        'roles',
         tb,
         {
           canMove: 可移动位置.find((item) => item.i === i && item.j === j),
@@ -77,7 +76,7 @@ import {
       :jie
     >
       {{ jie || '〇' }}
-    </div>
+    </dom棋子>
   </component>
 </template>
 
@@ -88,7 +87,7 @@ body {
   transform: scale(0.83);
 }
 
-.roles {
+dom棋子 {
   font-family: fangsong;
   display: flex;
   padding: 5px;
@@ -104,6 +103,7 @@ body {
   border-radius: 50%;
   border-width: 2px;
   border-style: solid;
+  transform: rotate(var(--后手需要反转));
   border-color: var(--top_color);
   color: var(--top_color);
   font-weight: var(--top_weight);

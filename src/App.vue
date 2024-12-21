@@ -45,30 +45,30 @@ import {
     <dom棋子
       v-for="{ i, j, tb, role, jie, deadIdx } of 所有棋子_生死"
       :style="
-        deadIdx === 0
-          ? { top: `${i * 50}px`, left: `${j * 50}px` }
-          : {
+        deadIdx
+          ? {
               zIndex: deadIdx,
               // transition: 'none',
               top: tb === 'top' ? '500px' : '-50px',
-              [tb === 'top' ? 'left' : 'right']: tb === 'top' ? `${(deadIdx - 1) * 20}px` : `${-25 + (deadIdx - 1) * 20}px`,
+              left: `${(deadIdx - 1) * 24}px`,
             }
+          : { top: `${i * 50}px`, left: `${j * 50}px` }
       "
       :class="[
         tb,
-        {
-          canMove: 可移动位置.find((item) => item.i === i && item.j === j),
-          jieCls: !jie,
-          selected: 起点位置 === `${i}-${j}`,
-          dead: deadIdx !== 0,
-          ...(buff &&
-            deadIdx === 0 && {
-              我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
-              我吃敌无保护cls: 我吃_敌_无保护.find((item) => item.i === i && item.j === j),
-              敌吃我被保护cls: 敌吃_我_被保护.find((item) => item.i === i && item.j === j),
-              敌吃我无保护cls: 敌吃_我_无保护.find((item) => item.i === i && item.j === j),
-            }),
-        },
+        deadIdx
+          ? 'dead'
+          : {
+              canMove: 可移动位置.find((item) => item.i === i && item.j === j),
+              jieCls: !jie,
+              selected: 起点位置 === `${i}-${j}`,
+              ...(buff && {
+                我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
+                我吃敌无保护cls: 我吃_敌_无保护.find((item) => item.i === i && item.j === j),
+                敌吃我被保护cls: 敌吃_我_被保护.find((item) => item.i === i && item.j === j),
+                敌吃我无保护cls: 敌吃_我_无保护.find((item) => item.i === i && item.j === j),
+              }),
+            },
       ]"
       :i
       :j
@@ -127,7 +127,7 @@ dom棋子 {
 }
 .selected {
   border-radius: 0;
-  z-index: 1;
+  z-index: 10;
 }
 .canMove {
   cursor: pointer;
@@ -143,22 +143,27 @@ dom棋子 {
   aspect-ratio: 1;
   width: 10px;
   background: black;
+  z-index: 5;
 }
 .我吃敌被保护cls::after {
   background: green;
   width: 7px;
+  z-index: 15;
 }
 .敌吃我被保护cls::after {
   background: green;
   width: 7px;
+  z-index: 15;
 }
 .我吃敌无保护cls::after {
   background: red;
   width: 15px;
+  z-index: 2;
 }
 .敌吃我无保护cls::after {
   background: red;
   width: 15px;
+  z-index: 2;
 }
 .dead {
   top: -50px;

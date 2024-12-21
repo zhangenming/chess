@@ -63,8 +63,9 @@ export function get下侧全部位置({ i, j }: 位置or棋子) {
 }
 
 // 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)保证悔完棋的时候随机
-export function get暗棋Random(type: 'top' | 'bot') {
-  const arr = 暗子牌库[type]
+export function get暗棋Random(棋子: t棋子) {
+  // return 棋子.role
+  const arr = 暗子牌库[棋子.tb]
   shuffle(arr)
   return arr.pop()
 

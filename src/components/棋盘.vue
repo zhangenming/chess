@@ -184,8 +184,8 @@ dom位置 {
 }
 .走子提示 {
   width: 50px;
-  border-radius: 50%;
   aspect-ratio: 1;
+  border-radius: 50%;
   /* 事件穿透 */
   pointer-events: none;
   translate: -50% -50%;
@@ -193,6 +193,6 @@ dom位置 {
   z-index: 1;
   background: #1500fb;
   opacity: 0.5;
-  transition: all 0.1s;
+  /* transition: all 0.5s; */
 }
 </style>

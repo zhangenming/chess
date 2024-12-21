@@ -14,10 +14,7 @@ import {
 } from './utils'
 
 // 得到所有符合规则的移动位置 包括空位/敌我吃棋
-export function get棋子_可移动_位置(棋子: t棋子): {
-  i: number
-  j: number
-}[] {
+export function get棋子_可移动_位置(棋子: t棋子) {
   const is敌人棋子 = 棋子?.tb === drTB.value
 
   const { jie, role } = 棋子
@@ -28,16 +25,16 @@ export function get棋子_可移动_位置(棋子: t棋子): {
       .filter((p) => (距离i(棋子, p) === 1 && 距离j(棋子, p) === 2) || (距离i(棋子, p) === 2 && 距离j(棋子, p) === 1))
       .filter(({ i, j }) => {
         if (i - 棋子.i === 2) {
-          return 位置2棋子(get下侧位置(棋子)) === undefined
+          return !位置2棋子(get下侧位置(棋子))
         }
         if (i - 棋子.i === -2) {
-          return 位置2棋子(get上侧位置(棋子)) === undefined
+          return !位置2棋子(get上侧位置(棋子))
         }
         if (j - 棋子.j === 2) {
-          return 位置2棋子(get右侧位置(棋子)) === undefined
+          return !位置2棋子(get右侧位置(棋子))
         }
         if (j - 棋子.j === -2) {
-          return 位置2棋子(get左侧位置(棋子)) === undefined
+          return !位置2棋子(get左侧位置(棋子))
         }
       })
   }
@@ -47,16 +44,16 @@ export function get棋子_可移动_位置(棋子: t棋子): {
       .filter((p) => 距离i(棋子, p) === 2 && 距离j(棋子, p) === 2)
       .filter(({ i, j }) => {
         if (i === 棋子.i + 2 && j === 棋子.j + 2) {
-          return 位置2棋子({ i: 棋子.i + 1, j: 棋子.j + 1 }) === undefined
+          return !位置2棋子({ i: 棋子.i + 1, j: 棋子.j + 1 })
         }
         if (i === 棋子.i - 2 && j === 棋子.j - 2) {
-          return 位置2棋子({ i: 棋子.i - 1, j: 棋子.j - 1 }) === undefined
+          return !位置2棋子({ i: 棋子.i - 1, j: 棋子.j - 1 })
         }
         if (i === 棋子.i + 2 && j === 棋子.j - 2) {
-          return 位置2棋子({ i: 棋子.i + 1, j: 棋子.j - 1 }) === undefined
+          return !位置2棋子({ i: 棋子.i + 1, j: 棋子.j - 1 })
         }
         if (i === 棋子.i - 2 && j === 棋子.j + 2) {
-          return 位置2棋子({ i: 棋子.i - 1, j: 棋子.j + 1 }) === undefined
+          return !位置2棋子({ i: 棋子.i - 1, j: 棋子.j + 1 })
         }
       })
   }

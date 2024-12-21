@@ -20,7 +20,7 @@ export function action({ target }: { target: HTMLElement }) {
     SEND('走棋', {
       ol_起点位置,
       ol_终点位置: 终点位置,
-      ...(!起点棋子.jie && { ol_揭开起点暗子: get暗棋Random(起点棋子) }),
+      ol_揭开起点暗子: 起点棋子.jie || get暗棋Random(起点棋子),
       ...(终点棋子 && !终点棋子.jie && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子) }),
     })
 
@@ -54,9 +54,7 @@ export function RECEIVE({ content }: any) {
     const 起点棋子 = stringIJ2棋子(ol_起点位置)!
     const 终点棋子 = stringIJ2棋子(ol_终点位置)
 
-    if (ol_揭开起点暗子) {
-      起点棋子.jie = ol_揭开起点暗子
-    }
+    起点棋子.jie = ol_揭开起点暗子
 
     if (终点棋子) {
       终点棋子.deadIdx = 所有棋子_死.value.filter((e) => e.tb === 终点棋子.tb).length + 1

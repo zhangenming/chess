@@ -28,7 +28,15 @@ export const 可移动位置 = computed(() => {
   if (!S) return []
 
   const 棋子 = stringIJ2棋子(S)!
-  return get棋子_可移动_位置(棋子).filter((位置) => 位置2棋子(位置)?.tb != 棋子.tb)
+  return get棋子_可移动_位置(棋子).filter((位置) => 位置2棋子(位置)?.tb !== 棋子.tb)
+})
+
+export const 可移动位置2 = computed(() => {
+  const S = 起点位置.value
+  if (!S) return []
+
+  const 棋子 = stringIJ2棋子(S)!
+  return get棋子_可移动_位置(棋子).filter((位置) => 位置2棋子(位置)?.tb === 棋子.tb)
 })
 
 export type t棋子 = {

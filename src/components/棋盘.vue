@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { 可移动位置, 走子提示, isTop回合, isBot回合 } from '../data'
+import { 可移动位置, 可移动位置2, 走子提示, isTop回合, isBot回合, buff } from '../data'
 
 const 走子提示format = computed(() => 走子提示.value!.map((item) => item.split('-').map((n) => Number(n) * 50 + 'px')))
 </script>
@@ -61,6 +61,7 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
         <dom位置
           :class="{
             canMove: 可移动位置.find((item) => item.i === i && item.j === j),
+            canMove2: buff && 可移动位置2.find((item) => item.i === i && item.j === j),
           }"
           v-for="j of [0, 1, 2, 3, 4, 5, 6, 7, 8]"
           :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
@@ -175,6 +176,16 @@ dom棋盘 {
   left: -16px;
   top: -16px;
 }
+div.炮 > div:nth-child(2) > div:nth-child(7) > div:nth-child(1),
+div.炮 > div:nth-child(2) > div:nth-child(7) > div:nth-child(3),
+div.炮 > div:nth-child(1) > div:nth-child(7) > div:nth-child(3),
+div.炮 > div:nth-child(1) > div:nth-child(7) > div:nth-child(1),
+div.炮 > div:nth-child(1) > div:nth-child(3) > div:nth-child(4),
+div.炮 > div:nth-child(1) > div:nth-child(3) > div:nth-child(2),
+div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(4),
+div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
+  display: none;
+}
 
 dom位置 {
   position: absolute;
@@ -190,7 +201,7 @@ dom位置 {
   pointer-events: none;
   translate: -50% -50%;
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   background: #1500fb;
   opacity: 0.5;
   /* transition: all 0.5s; */

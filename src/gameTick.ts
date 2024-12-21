@@ -59,7 +59,7 @@ export function RECEIVE({ content }: any) {
     }
 
     if (终点棋子) {
-      终点棋子.deadIdx = 所有棋子_死().filter((e) => e.tb === 终点棋子.tb).length + 1
+      终点棋子.deadIdx = 所有棋子_死.value.filter((e) => e.tb === 终点棋子.tb).length + 1
 
       if (ol_揭开终点被吃暗子) {
         if (终点棋子.tb !== myTB.value) {

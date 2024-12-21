@@ -16,21 +16,14 @@ import {
   敌吃_我_被保护,
   敌吃_我_无保护,
   is将军,
-  回合,
 } from './data'
-import { computed } from 'vue'
-
-const CPTD = computed(() => {
-  回合.value
-  return [我吃_敌_被保护(), 我吃_敌_无保护(), 敌吃_我_被保护(), 敌吃_我_无保护()]
-})
 </script>
 
 <template>
   <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
 
   <div>
-    <div :style="{ fontSize: '70px', opacity: is将军() ? 1 : 0 }">将军</div>
+    <div :style="{ fontSize: '70px', opacity: is将军 ? 1 : 0 }">将军</div>
     <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
     <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
   </div>
@@ -70,10 +63,10 @@ const CPTD = computed(() => {
           dead: deadIdx !== 0,
           ...(buff &&
             deadIdx === 0 && {
-              我吃敌被保护cls: CPTD[0].find((item) => item.i === i && item.j === j),
-              我吃敌无保护cls: CPTD[1].find((item) => item.i === i && item.j === j),
-              敌吃我被保护cls: CPTD[2].find((item) => item.i === i && item.j === j),
-              敌吃我无保护cls: CPTD[3].find((item) => item.i === i && item.j === j),
+              我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
+              我吃敌无保护cls: 我吃_敌_无保护.find((item) => item.i === i && item.j === j),
+              敌吃我被保护cls: 敌吃_我_被保护.find((item) => item.i === i && item.j === j),
+              敌吃我无保护cls: 敌吃_我_无保护.find((item) => item.i === i && item.j === j),
             }),
         },
       ]"

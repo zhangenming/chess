@@ -66,34 +66,58 @@ export const 所有位置 = reactive(
 export const 所有位置一维 = 所有位置.flat()
 
 export const 所有棋子_生死 = reactive(_所有棋子_生死)
-export const 所有棋子_生 = () => 所有棋子_生死.filter((p) => p.deadIdx === 0)
-export const 所有棋子_死 = () => 所有棋子_生死.filter((p) => p.deadIdx !== 0)
+export const 所有棋子_生 = computed(() => 所有棋子_生死.filter((p) => p.deadIdx === 0))
+export const 所有棋子_死 = computed(() => 所有棋子_生死.filter((p) => p.deadIdx !== 0))
 
 // 我
-export const 我棋子 = () => 所有棋子_生().filter((p) => p.tb === myTB.value)
-export const 我吃_敌我 = () =>
-  我棋子()
+export const 我棋子 = computed(() => {
+  return 所有棋子_生.value.filter((p) => p.tb === myTB.value)
+})
+export const 我吃_敌我 = computed(() => {
+  return 我棋子.value
     .map(get棋子_可移动_位置)
     .flat()
     .map(位置2棋子)
     .filter((e) => e !== undefined)
-export const 我吃_我 = () => 我吃_敌我().filter((p) => p.tb === myTB.value)
-export const 我吃_敌 = () => 我吃_敌我().filter((p) => p.tb !== myTB.value)
-export const 我吃_敌_被保护 = () => 我吃_敌().filter((p) => 敌吃_敌().includes(p))
-export const 我吃_敌_无保护 = () => 我吃_敌().filter((p) => !敌吃_敌().includes(p))
+})
+export const 我吃_我 = computed(() => {
+  return 我吃_敌我.value.filter((p) => p.tb === myTB.value)
+})
+export const 我吃_敌 = computed(() => {
+  return 我吃_敌我.value.filter((p) => p.tb !== myTB.value)
+})
+export const 我吃_敌_被保护 = computed(() => {
+  return 我吃_敌.value.filter((p) => 敌吃_敌.value.includes(p))
+})
+export const 我吃_敌_无保护 = computed(() => {
+  return 我吃_敌.value.filter((p) => !敌吃_敌.value.includes(p))
+})
 
 // 敌
-export const 敌棋子 = () => 所有棋子_生().filter((p) => p.tb !== myTB.value)
-export const 敌吃_敌我 = () =>
-  敌棋子()
+export const 敌棋子 = computed(() => {
+  return 所有棋子_生.value.filter((p) => p.tb !== myTB.value)
+})
+export const 敌吃_敌我 = computed(() => {
+  return 敌棋子.value
     .map(get棋子_可移动_位置)
     .flat()
     .map(位置2棋子)
     .filter((e) => e !== undefined)
-export const 敌吃_敌 = () => 敌吃_敌我().filter((p) => p.tb !== myTB.value)
-export const 敌吃_我 = () => 敌吃_敌我().filter((p) => p.tb === myTB.value)
-export const 敌吃_我_被保护 = () => 敌吃_我().filter((p) => 我吃_我().includes(p))
-export const 敌吃_我_无保护 = () => 敌吃_我().filter((p) => !我吃_我().includes(p))
-
+})
+export const 敌吃_敌 = computed(() => {
+  return 敌吃_敌我.value.filter((p) => p.tb !== myTB.value)
+})
+export const 敌吃_我 = computed(() => {
+  return 敌吃_敌我.value.filter((p) => p.tb === myTB.value)
+})
+export const 敌吃_我_被保护 = computed(() => {
+  return 敌吃_我.value.filter((p) => 我吃_我.value.includes(p))
+})
+export const 敌吃_我_无保护 = computed(() => {
+  return 敌吃_我.value.filter((p) => !我吃_我.value.includes(p))
+})
 // 不完全 不会提示送子
-export const is将军 = () => 敌吃_我().some((p) => p.role === '帅')
+
+export const is将军 = computed(() => {
+  return 敌吃_我.value.some((p) => p.role === '帅')
+})

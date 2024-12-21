@@ -94,14 +94,13 @@ export function test(bool: any, text: any) {
     console.error(text)
   }
 }
-
 export function 位置2棋子(位置or棋子: 位置or棋子 | undefined): t棋子 | undefined {
-  return 位置or棋子 && 所有棋子_生().find((e) => e.i === 位置or棋子.i && e.j === 位置or棋子.j)
+  return 位置or棋子 && 所有棋子_生.value.find((e) => e.i === 位置or棋子.i && e.j === 位置or棋子.j)
 }
 
 export function stringIJ2棋子(s: string): t棋子 | undefined {
   const [i, j] = s.split('-').map((e) => Number(e))
-  return 所有棋子_生().find((e) => e.i === i && e.j === j)
+  return 所有棋子_生.value.find((e) => e.i === i && e.j === j)
 }
 
 export function 取反(tb: 'top' | 'bot') {

@@ -58,7 +58,7 @@ import {
         deadIdx
           ? 'dead'
           : {
-              jieCls: !jie,
+              jieCls: jie === '〇',
               selected: 起点位置 === `${i}-${j}`,
               ...(buff && {
                 // 我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
@@ -73,7 +73,7 @@ import {
       :role
       :jie
     >
-      {{ jie || '〇' }}
+      {{ jie }}
     </dom棋子>
   </component>
 </template>

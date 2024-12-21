@@ -18,7 +18,7 @@ export function get棋子_可移动_位置(棋子: t棋子) {
   const is敌人棋子 = 棋子?.tb === drTB.value
 
   const { jie, role } = 棋子
-  const item = jie || role
+  const item = jie === '〇' ? role : jie
 
   if (item === '马') {
     return 所有位置一维
@@ -62,7 +62,7 @@ export function get棋子_可移动_位置(棋子: t棋子) {
     return 所有位置一维
       .filter((p) => 距离i(棋子, p) === 1 && 距离j(棋子, p) === 1)
       .filter(({ j }) => {
-        if (jie) return true
+        if (jie !== '〇') return true
         return j === 3 || j === 4 || j === 5
       })
   }

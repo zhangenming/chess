@@ -10,7 +10,7 @@ export const 我的id = getMyId() // 非响应式
 export const is我的回合 = computed(() => 回合.value % 2 === (is先手.value ? 0 : 1))
 export const isTop回合 = computed(() => 回合.value % 2 === 1)
 export const isBot回合 = computed(() => 回合.value % 2 === 0)
-export const myTB = computed(() => (is先手.value ? 'bot' : 'top')) //还能变?
+export const myTB = computed(() => (is先手.value ? 'bot' : 'top'))
 export const drTB = computed(() => (is先手.value ? 'top' : 'bot'))
 
 export const isMaster = location.search.includes('master')
@@ -57,7 +57,7 @@ export const 所有位置 = reactive(
         _所有棋子_生死.push({
           tb: i < 5 ? 'top' : 'bot',
           role,
-          jie: role === '帅' ? '帅' : '', // todo 〇
+          jie: role === '帅' ? '帅' : '〇',
           deadIdx: 0, // 死亡顺序 0表示存活
 
           i,

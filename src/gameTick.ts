@@ -20,8 +20,8 @@ export function action({ target }: { target: HTMLElement }) {
     SEND('走棋', {
       ol_起点位置,
       ol_终点位置: 终点位置,
-      ol_揭开起点暗子: 起点棋子.jie || get暗棋Random(起点棋子),
-      ...(终点棋子 && !终点棋子.jie && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子) }),
+      ol_揭开起点暗子: 起点棋子.jie === '〇' ? get暗棋Random(起点棋子) : 起点棋子.jie,
+      ...(终点棋子 && 终点棋子.jie === '〇' && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子) }),
     })
 
     test(起点棋子.tb === 终点棋子?.tb, '吃自己')

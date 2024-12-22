@@ -7,15 +7,36 @@ import {
   我的id,
   对手id,
   is我的回合,
-  所有棋子_生死,
+  base棋子,
   offline,
   buff,
-  我吃_敌_被保护,
-  我吃_敌_无保护,
-  敌吃_我_被保护,
-  敌吃_我_无保护,
+  filt棋子_生,
+  filt棋子_死,
+  filt棋子_我,
+  filt棋子_我_死,
+  filt棋子_我_生,
+  filt棋子_我_生_吃,
+  filt棋子_我_生_吃_我,
+  filt棋子_我_生_吃_敌,
+  filt棋子_我_生_吃_敌_有保护,
+  filt棋子_我_生_吃_敌_无保护,
+  filt棋子_敌,
+  filt棋子_敌_生,
+  filt棋子_敌_死,
+  filt棋子_敌_生_吃,
+  filt棋子_敌_生_吃_敌,
+  filt棋子_敌_生_吃_我,
+  filt棋子_敌_生_吃_我_有保护,
+  filt棋子_敌_生_吃_我_无保护,
   is将军,
+  type t棋子,
 } from './data'
+
+function diff_jie(arr: t棋子[]) {
+  const l = arr.filter((item) => item.jie === '〇')
+  const r = arr.filter((item) => item.jie !== '〇')
+  return `${l.length}/${r.length}`
+}
 </script>
 
 <template>
@@ -42,7 +63,7 @@ import {
     }"
   >
     <dom棋子
-      v-for="{ i, j, tb, role, jie, deadIdx } of 所有棋子_生死"
+      v-for="{ i, j, tb, role, jie, deadIdx } of base棋子"
       :style="
         deadIdx
           ? {
@@ -62,9 +83,9 @@ import {
               selected: 起点位置 === `${i}-${j}`,
               ...(buff && {
                 // 我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
-                我吃敌无保护cls: 我吃_敌_无保护.find((item) => item.i === i && item.j === j),
+                我吃敌无保护cls: filt棋子_我_生_吃_敌_无保护.find((item) => item.i === i && item.j === j),
                 // // 敌吃我被保护cls: 敌吃_我_被保护.find((item) => item.i === i && item.j === j),
-                敌吃我无保护cls: 敌吃_我_无保护.find((item) => item.i === i && item.j === j),
+                敌吃我无保护cls: filt棋子_敌_生_吃_我_无保护.find((item) => item.i === i && item.j === j),
               }),
             },
       ]"
@@ -76,9 +97,37 @@ import {
       {{ jie }}
     </dom棋子>
   </component>
+
+  <div v-if="buff" class="dbg">
+    <div>
+      <div></div>
+      <div>我{{ diff_jie(filt棋子_我) }}</div>
+      <div>敌{{ diff_jie(filt棋子_敌) }}</div>
+    </div>
+    <div>
+      <div>生{{ diff_jie(filt棋子_生) }}</div>
+      <div>我生{{ diff_jie(filt棋子_我_生) }}</div>
+      <div>敌生{{ diff_jie(filt棋子_敌_生) }}</div>
+    </div>
+    <div>
+      <div>死{{ diff_jie(filt棋子_死) }}</div>
+      <div>我死{{ diff_jie(filt棋子_我_死) }}</div>
+      <div>敌死{{ diff_jie(filt棋子_敌_死) }}</div>
+    </div>
+  </div>
 </template>
 
 <style>
+.dbg {
+  margin-top: 80px;
+}
+.dbg > div {
+  display: flex;
+  gap: 10px;
+}
+.dbg > div > div {
+  width: 100px;
+}
 body {
   display: flex;
   justify-content: center;

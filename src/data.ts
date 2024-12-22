@@ -49,12 +49,12 @@ export type t棋子 = {
   j: number
 }
 
-const _所有棋子_生死 = [] as t棋子[]
+const _base棋子 = [] as t棋子[]
 export const 所有位置 = reactive(
   raw.map((line, i) =>
     line.map((role, j) => {
       if (role != '空') {
-        _所有棋子_生死.push({
+        _base棋子.push({
           tb: i < 5 ? 'top' : 'bot',
           role,
           jie: role === '帅' ? '帅' : '〇',
@@ -73,59 +73,53 @@ export const 所有位置 = reactive(
 )
 export const 所有位置一维 = 所有位置.flat()
 
-export const 所有棋子_生死 = reactive(_所有棋子_生死)
-export const 所有棋子_生 = computed(() => 所有棋子_生死.filter((p) => p.deadIdx === 0))
-export const 所有棋子_死 = computed(() => 所有棋子_生死.filter((p) => p.deadIdx !== 0))
+function is我棋子(棋子: t棋子) {
+  return 棋子.tb === myTB.value
+}
+function is敌棋子(棋子: t棋子) {
+  return !is我棋子(棋子)
+}
+function is生棋子(棋子: t棋子) {
+  return 棋子.deadIdx === 0
+}
+function is死棋子(棋子: t棋子) {
+  return !is生棋子(棋子)
+}
 
-// 我
-export const 我棋子 = computed(() => {
-  return 所有棋子_生.value.filter((p) => p.tb === myTB.value)
-})
-export const 我吃_敌我 = computed(() => {
-  return 我棋子.value
+export const base棋子 = reactive(_base棋子)
+export const filt棋子_生 = computed(() => base棋子.filter(is生棋子))
+export const filt棋子_死 = computed(() => base棋子.filter(is死棋子))
+
+export const filt棋子_我 = computed(() => base棋子.filter(is我棋子))
+export const filt棋子_我_死 = computed(() => filt棋子_我.value.filter(is死棋子))
+export const filt棋子_我_生 = computed(() => filt棋子_我.value.filter(is生棋子))
+export const filt棋子_我_生_吃 = computed(() =>
+  filt棋子_我_生.value
     .map(get棋子_可移动_位置)
     .flat()
     .map(位置2棋子)
     .filter((e) => e !== undefined)
-})
-export const 我吃_我 = computed(() => {
-  return 我吃_敌我.value.filter((p) => p.tb === myTB.value)
-})
-export const 我吃_敌 = computed(() => {
-  return 我吃_敌我.value.filter((p) => p.tb !== myTB.value)
-})
-export const 我吃_敌_被保护 = computed(() => {
-  return 我吃_敌.value.filter((p) => 敌吃_敌.value.includes(p))
-})
-export const 我吃_敌_无保护 = computed(() => {
-  return 我吃_敌.value.filter((p) => !敌吃_敌.value.includes(p))
-})
+)
+export const filt棋子_我_生_吃_我 = computed(() => filt棋子_我_生_吃.value.filter(is我棋子))
+export const filt棋子_我_生_吃_敌 = computed(() => filt棋子_我_生_吃.value.filter(is敌棋子))
+export const filt棋子_我_生_吃_敌_有保护 = computed(() => filt棋子_我_生_吃_敌.value.filter((p) => filt棋子_敌_生_吃.value.includes(p)))
+export const filt棋子_我_生_吃_敌_无保护 = computed(() => filt棋子_我_生_吃_敌.value.filter((p) => !filt棋子_敌_生_吃.value.includes(p)))
 
 // 敌
-export const 敌棋子 = computed(() => {
-  return 所有棋子_生.value.filter((p) => p.tb !== myTB.value)
-})
-export const 敌吃_敌我 = computed(() => {
-  return 敌棋子.value
+export const filt棋子_敌 = computed(() => base棋子.filter(is敌棋子))
+export const filt棋子_敌_生 = computed(() => filt棋子_敌.value.filter(is生棋子))
+export const filt棋子_敌_死 = computed(() => filt棋子_敌.value.filter(is死棋子))
+export const filt棋子_敌_生_吃 = computed(() => {
+  return filt棋子_敌_生.value
     .map(get棋子_可移动_位置)
     .flat()
     .map(位置2棋子)
     .filter((e) => e !== undefined)
 })
-export const 敌吃_敌 = computed(() => {
-  return 敌吃_敌我.value.filter((p) => p.tb !== myTB.value)
-})
-export const 敌吃_我 = computed(() => {
-  return 敌吃_敌我.value.filter((p) => p.tb === myTB.value)
-})
-export const 敌吃_我_被保护 = computed(() => {
-  return 敌吃_我.value.filter((p) => 我吃_我.value.includes(p))
-})
-export const 敌吃_我_无保护 = computed(() => {
-  return 敌吃_我.value.filter((p) => !我吃_我.value.includes(p))
-})
+export const filt棋子_敌_生_吃_敌 = computed(() => filt棋子_敌_生_吃.value.filter(is敌棋子))
+export const filt棋子_敌_生_吃_我 = computed(() => filt棋子_敌_生_吃.value.filter(is我棋子))
+export const filt棋子_敌_生_吃_我_有保护 = computed(() => filt棋子_敌_生_吃_我.value.filter((p) => filt棋子_我_生_吃_我.value.includes(p)))
+export const filt棋子_敌_生_吃_我_无保护 = computed(() => filt棋子_敌_生_吃_我.value.filter((p) => !filt棋子_我_生_吃_我.value.includes(p)))
 // 不完全 不会提示送子
 
-export const is将军 = computed(() => {
-  return 敌吃_我.value.some((p) => p.role === '帅')
-})
+export const is将军 = computed(() => filt棋子_敌_生_吃_我.value.some((p) => p.role === '帅'))

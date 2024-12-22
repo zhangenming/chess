@@ -32,6 +32,7 @@ import {
   filt棋子_敌_生_吃_我_无保护,
   正在被吃,
   走棋信息,
+  暗子牌库,
 } from './data'
 
 function diff_jie(arr: t棋子[]) {
@@ -103,6 +104,8 @@ function diff_jie(arr: t棋子[]) {
   </component>
 
   <div v-if="buff" class="dbg">
+    <div>{{ 暗子牌库.top }}</div>
+    <div>{{ 暗子牌库.bot }}</div>
     <div>
       <div></div>
       <div>我{{ diff_jie(filt棋子_我) }}</div>
@@ -135,7 +138,7 @@ function diff_jie(arr: t棋子[]) {
 body {
   display: flex;
   justify-content: center;
-  transform: scale(0.83);
+  /* transform: scale(0.83); */
 }
 
 dom棋子 {

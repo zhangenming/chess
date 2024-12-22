@@ -74,10 +74,10 @@ export const 所有位置 = reactive(
 )
 export const 所有位置一维 = 所有位置.flat()
 
-export const 暗子牌库 = {
+export const 暗子牌库 = reactive({
   top: qzA,
   bot: qzB,
-}
+})
 
 function is我棋子(棋子: t棋子) {
   return 棋子.tb === myTB.value

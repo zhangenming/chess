@@ -62,7 +62,7 @@ export function get暗棋Random(棋子: t棋子) {
   // return 棋子.role
   const arr = 暗子牌库[棋子.tb]
   shuffle(arr)
-  return arr.pop()
+  return arr[0] // 这个是单人逻辑 为了保持数据一致性 在双人逻辑处做数据删除处理
 
   // 洗牌算法 原地修改
   function shuffle<T>(arr: T[]) {

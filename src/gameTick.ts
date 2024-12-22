@@ -51,8 +51,6 @@ export function RECEIVE({ content }: any) {
     // 起点 -> 终点
     const { ol_起点位置, ol_终点位置, ol_揭开起点暗子, ol_揭开终点被吃暗子 } = data
 
-    走棋信息.value = JSON.stringify(data, null, 4)
-
     const 起点棋子 = stringIJ2棋子(ol_起点位置)!
     const 终点棋子 = stringIJ2棋子(ol_终点位置)
 
@@ -66,9 +64,9 @@ export function RECEIVE({ content }: any) {
       终点棋子.deadIdx = filt棋子_死.value.filter((e) => e.tb === 终点棋子.tb).length + 1
 
       if (ol_揭开终点被吃暗子) {
-        if (终点棋子.tb !== myTB.value) {
         终点棋子.jie = ol_揭开终点被吃暗子
-        }
+        // if (终点棋子.tb !== myTB.value) {
+        // }
         deleteItem(暗子牌库[终点棋子.tb], ol_揭开终点被吃暗子)
       }
     }
@@ -78,6 +76,19 @@ export function RECEIVE({ content }: any) {
     走子提示.value = [ol_起点位置, ol_终点位置]
 
     // 悔棋数据.push(data)
+
+    走棋信息.value = (() => {
+      if (ol_揭开起点暗子 && ol_揭开终点被吃暗子) {
+        return '走暗子: ' + ol_揭开起点暗子 + '; 吃暗子: ' + ol_揭开终点被吃暗子
+      }
+      if (ol_揭开终点被吃暗子) {
+        return '吃暗子: ' + ol_揭开终点被吃暗子
+      }
+      if (ol_揭开起点暗子) {
+        return '走暗子: ' + ol_揭开起点暗子
+      }
+      return 终点棋子 ? '吃: ' + 终点棋子.role : '走'
+    })()
   }
 
   //   if (type === '发起悔棋') {

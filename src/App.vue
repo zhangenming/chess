@@ -48,7 +48,7 @@ function diff_jie(arr: t棋子[]) {
     <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
     <div>is先手: {{ is先手 }}</div>
     <div>回合数: {{ 回合数 }}</div>
-    <div style="font-size: 30px">{{ 对手id || '等待对手加入...' }}</div>
+    <div style="font-size: 30px">{{ 对手id ? 走棋信息 : '等待对手加入...' }}</div>
   </div>
 
   <component
@@ -87,9 +87,9 @@ function diff_jie(arr: t棋子[]) {
               ...(buff && {
                 // 我吃敌有保护cls: 我吃_敌_有保护.find((item) => item.i === i && item.j === j),
                 我吃敌无保护cls: filt棋子_我_生_吃_敌_无保护.find((item) => item.i === i && item.j === j),
-                // // 敌吃我有保护cls: 敌吃_我_有保护.find((item) => item.i === i && item.j === j),
+                // 敌吃我有保护cls: 敌吃_我_有保护.find((item) => item.i === i && item.j === j),
                 敌吃我无保护cls: filt棋子_敌_生_吃_我_无保护.find((item) => item.i === i && item.j === j),
-                正在被吃cls: 正在被吃.find((item) => item.i === i && item.j === j),
+                // 正在被吃cls: 正在被吃.find((item) => item.i === i && item.j === j),
               }),
             },
       ]"
@@ -118,8 +118,6 @@ function diff_jie(arr: t棋子[]) {
       <div>我死{{ diff_jie(filt棋子_我_死) }}</div>
       <div>敌死{{ diff_jie(filt棋子_敌_死) }}</div>
     </div>
-
-    <div>info:{{ 走棋信息 }}</div>
   </div>
 </template>
 
@@ -223,8 +221,8 @@ dom棋子 {
   border-width: 1px;
   font-size: 20px;
 }
-/* .正在被吃cls::after {
+.正在被吃cls::after {
   background: yellow;
   width: 15px;
-} */
+}
 </style>

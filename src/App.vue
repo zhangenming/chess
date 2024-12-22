@@ -2,10 +2,12 @@
 import 棋盘 from './components/棋盘.vue'
 import { action } from './gameTick'
 import {
+  type t棋子,
   起点位置,
   is先手,
   我的id,
   对手id,
+  回合数,
   is我的回合,
   base棋子,
   offline,
@@ -28,8 +30,8 @@ import {
   filt棋子_敌_生_吃_我,
   filt棋子_敌_生_吃_我_有保护,
   filt棋子_敌_生_吃_我_无保护,
-  is将军,
-  type t棋子,
+  正在被吃,
+  走棋信息,
 } from './data'
 
 function diff_jie(arr: t棋子[]) {
@@ -43,9 +45,10 @@ function diff_jie(arr: t棋子[]) {
   <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
 
   <div>
-    <div :style="{ fontSize: '70px', opacity: is将军 ? 1 : 0 }">将军</div>
     <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
-    <div style="font-size: 30px">{{ 对手id ? (is我的回合 ? '该你走了~~~' : '轮到对方...') : '等待对手加入...' }}</div>
+    <div>is先手: {{ is先手 }}</div>
+    <div>回合数: {{ 回合数 }}</div>
+    <div style="font-size: 30px">{{ 对手id || '等待对手加入...' }}</div>
   </div>
 
   <component
@@ -82,10 +85,11 @@ function diff_jie(arr: t棋子[]) {
               jieCls: jie === '〇',
               selected: 起点位置 === `${i}-${j}`,
               ...(buff && {
-                // 我吃敌被保护cls: 我吃_敌_被保护.find((item) => item.i === i && item.j === j),
+                // 我吃敌有保护cls: 我吃_敌_有保护.find((item) => item.i === i && item.j === j),
                 我吃敌无保护cls: filt棋子_我_生_吃_敌_无保护.find((item) => item.i === i && item.j === j),
-                // // 敌吃我被保护cls: 敌吃_我_被保护.find((item) => item.i === i && item.j === j),
+                // // 敌吃我有保护cls: 敌吃_我_有保护.find((item) => item.i === i && item.j === j),
                 敌吃我无保护cls: filt棋子_敌_生_吃_我_无保护.find((item) => item.i === i && item.j === j),
+                正在被吃cls: 正在被吃.find((item) => item.i === i && item.j === j),
               }),
             },
       ]"
@@ -114,6 +118,8 @@ function diff_jie(arr: t棋子[]) {
       <div>我死{{ diff_jie(filt棋子_我_死) }}</div>
       <div>敌死{{ diff_jie(filt棋子_敌_死) }}</div>
     </div>
+
+    <div>info:{{ 走棋信息 }}</div>
   </div>
 </template>
 
@@ -182,7 +188,7 @@ dom棋子 {
 }
 .canMove::before,
 .canMove2::before,
-:is(.我吃敌被保护cls, .我吃敌无保护cls, .敌吃我被保护cls, .敌吃我无保护cls)::after {
+:is(.我吃敌有保护cls, .我吃敌无保护cls, .敌吃我有保护cls, .敌吃我无保护cls, .正在被吃cls)::after {
   content: '';
   position: absolute;
   left: 50%;
@@ -196,11 +202,11 @@ dom棋子 {
 .canMove2::before {
   background: blue;
 }
-.我吃敌被保护cls::after {
+.我吃敌有保护cls::after {
   background: green;
   width: 7px;
 }
-.敌吃我被保护cls::after {
+.敌吃我有保护cls::after {
   background: green;
   width: 7px;
 }
@@ -217,4 +223,8 @@ dom棋子 {
   border-width: 1px;
   font-size: 20px;
 }
+/* .正在被吃cls::after {
+  background: yellow;
+  width: 15px;
+} */
 </style>

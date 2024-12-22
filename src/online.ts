@@ -1,5 +1,5 @@
 import GoEasy from 'goeasy'
-import { isMaster, isMe, is先手, 回合, 我的id, 对手id, isBoss, offline } from './data'
+import { isMaster, isMe, is先手, 回合数, 我的id, 对手id, isBoss, offline } from './data'
 import { RECEIVE } from './gameTick'
 
 let channel = '大厅'
@@ -104,7 +104,7 @@ if (isMaster) {
 export async function SEND(type: string, data = {}) {
   console.log('1 SEND', type, data)
 
-  await new Promise((resolve) => setTimeout(resolve, 回合.value / 2))
+  await new Promise((resolve) => setTimeout(resolve, 回合数.value / 2))
 
   pubsub.publish({
     channel,

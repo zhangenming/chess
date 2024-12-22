@@ -1,17 +1,18 @@
-import { computed, reactive, ref } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { getMyId, stringIJ2棋子, raw, 位置2棋子 } from './utils'
 import { get棋子_可移动_位置 } from './move'
 
-export const 回合 = ref(0)
+export const 回合数 = ref(0)
 export const is先手 = ref(true)
 export const 对手id = ref()
 export const 我的id = getMyId() // 非响应式
 
-export const is我的回合 = computed(() => 回合.value % 2 === (is先手.value ? 0 : 1))
-export const isTop回合 = computed(() => 回合.value % 2 === 1)
-export const isBot回合 = computed(() => 回合.value % 2 === 0)
+export const is我的回合 = computed(() => 回合数.value % 2 === (is先手.value ? 0 : 1))
+export const isTop回合 = computed(() => 回合数.value % 2 === 1)
+export const isBot回合 = computed(() => 回合数.value % 2 === 0)
 export const myTB = computed(() => (is先手.value ? 'bot' : 'top'))
 export const drTB = computed(() => (is先手.value ? 'top' : 'bot'))
+export const myIsTop = computed(() => myTB.value === 'top')
 
 export const isMaster = location.search.includes('master')
 export const isBoss = location.search.includes('boss')
@@ -102,24 +103,32 @@ export const filt棋子_我_生_吃 = computed(() =>
 )
 export const filt棋子_我_生_吃_我 = computed(() => filt棋子_我_生_吃.value.filter(is我棋子))
 export const filt棋子_我_生_吃_敌 = computed(() => filt棋子_我_生_吃.value.filter(is敌棋子))
-export const filt棋子_我_生_吃_敌_有保护 = computed(() => filt棋子_我_生_吃_敌.value.filter((p) => filt棋子_敌_生_吃.value.includes(p)))
-export const filt棋子_我_生_吃_敌_无保护 = computed(() => filt棋子_我_生_吃_敌.value.filter((p) => !filt棋子_敌_生_吃.value.includes(p)))
+export const filt棋子_我_生_吃_敌_有保护 = computed(() => filt棋子_我_生_吃_敌.value.filter((p) => filt棋子_敌_生_吃_敌.value.includes(p)))
+export const filt棋子_我_生_吃_敌_无保护 = computed(() => filt棋子_我_生_吃_敌.value.filter((p) => !filt棋子_敌_生_吃_敌.value.includes(p)))
 
 // 敌
 export const filt棋子_敌 = computed(() => base棋子.filter(is敌棋子))
-export const filt棋子_敌_生 = computed(() => filt棋子_敌.value.filter(is生棋子))
 export const filt棋子_敌_死 = computed(() => filt棋子_敌.value.filter(is死棋子))
-export const filt棋子_敌_生_吃 = computed(() => {
-  return filt棋子_敌_生.value
+export const filt棋子_敌_生 = computed(() => filt棋子_敌.value.filter(is生棋子))
+export const filt棋子_敌_生_吃 = computed(() =>
+  filt棋子_敌_生.value
     .map(get棋子_可移动_位置)
     .flat()
     .map(位置2棋子)
     .filter((e) => e !== undefined)
-})
+)
 export const filt棋子_敌_生_吃_敌 = computed(() => filt棋子_敌_生_吃.value.filter(is敌棋子))
 export const filt棋子_敌_生_吃_我 = computed(() => filt棋子_敌_生_吃.value.filter(is我棋子))
 export const filt棋子_敌_生_吃_我_有保护 = computed(() => filt棋子_敌_生_吃_我.value.filter((p) => filt棋子_我_生_吃_我.value.includes(p)))
 export const filt棋子_敌_生_吃_我_无保护 = computed(() => filt棋子_敌_生_吃_我.value.filter((p) => !filt棋子_我_生_吃_我.value.includes(p)))
 // 不完全 不会提示送子
 
-export const is将军 = computed(() => filt棋子_敌_生_吃_我.value.some((p) => p.role === '帅'))
+export const 我被将军 = computed(() => filt棋子_敌_生_吃_我.value.some((p) => p.role === '帅'))
+export const 敌被将军 = computed(() => filt棋子_我_生_吃_敌.value.some((p) => p.role === '帅'))
+
+export const 正在被吃 = computed(() => [...filt棋子_我_生_吃_敌.value, ...filt棋子_敌_生_吃_我.value])
+
+export const top被将 = computed(() => 正在被吃.value.find((e) => e.role === '帅' && e.tb === 'top'))
+export const bot被将 = computed(() => 正在被吃.value.find((e) => e.role === '帅' && e.tb === 'bot'))
+
+export const 走棋信息 = ref('')

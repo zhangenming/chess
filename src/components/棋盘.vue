@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { 可移动位置, 可移动位置2, 走子提示, isTop回合, isBot回合, buff } from '../data'
+import { 可移动位置, 可移动位置2, 走子提示, isTop回合, isBot回合, buff, 我被将军, 敌被将军, myIsTop, top被将, bot被将 } from '../data'
 
 const 走子提示format = computed(() => 走子提示.value!.map((item) => item.split('-').map((n) => Number(n) * 50 + 'px')))
 </script>
@@ -21,11 +21,29 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
     <div class="河"></div>
 
     <div class="士">
-      <div class="士-1" :style="isTop回合 && 'background:color-mix(in oklab, var(--top_color), white 50%)'">
+      <div
+        class="士-1"
+        :class="{
+          被将军: top被将,
+        }"
+        :style="{
+          '--将军颜色': 'var(--top_color)',
+          ...(isTop回合 && { background: 'color-mix(in oklab, var(--top_color), white 50%)' }),
+        }"
+      >
         <div class="士-h"></div>
         <div class="士-s"></div>
       </div>
-      <div class="士-2" :style="isBot回合 && 'background:color-mix(in oklab, var(--bot_color), white 50%)'">
+      <div
+        class="士-2"
+        :class="{
+          被将军: bot被将,
+        }"
+        :style="{
+          '--将军颜色': 'var(--bot_color)',
+          ...(isBot回合 && { background: 'color-mix(in oklab, var(--bot_color), white 50%)' }),
+        }"
+      >
         <div class="士-h"></div>
         <div class="士-s"></div>
       </div>
@@ -205,5 +223,8 @@ dom位置 {
   background: #1500fb;
   opacity: 0.5;
   /* transition: all 0.5s; */
+}
+.被将军 {
+  outline: 25px solid var(--将军颜色);
 }
 </style>

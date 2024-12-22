@@ -1,4 +1,4 @@
-import { 回合, 走子提示, drTB, is我的回合, myTB, offline, 起点位置, filt棋子_死 } from './data'
+import { 回合数, 走子提示, drTB, is我的回合, myTB, offline, 起点位置, filt棋子_死, 走棋信息 } from './data'
 import { SEND } from './online'
 import { get暗棋Random, stringIJ2棋子, test } from './utils'
 
@@ -20,7 +20,7 @@ export function action({ target }: { target: HTMLElement }) {
     SEND('走棋', {
       ol_起点位置,
       ol_终点位置: 终点位置,
-      ol_揭开起点暗子: 起点棋子.jie === '〇' ? get暗棋Random(起点棋子) : 起点棋子.jie,
+      ...(起点棋子.jie === '〇' && { ol_揭开起点暗子: get暗棋Random(起点棋子) }),
       ...(终点棋子 && 终点棋子.jie === '〇' && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子) }),
     })
 
@@ -46,15 +46,19 @@ export function RECEIVE({ content }: any) {
   console.log('\n')
 
   if (type === '走棋') {
-    回合.value++
+    回合数.value++
 
     // 起点 -> 终点
     const { ol_起点位置, ol_终点位置, ol_揭开起点暗子, ol_揭开终点被吃暗子 } = data
 
+    走棋信息.value = JSON.stringify(data, null, 4)
+
     const 起点棋子 = stringIJ2棋子(ol_起点位置)!
     const 终点棋子 = stringIJ2棋子(ol_终点位置)
 
-    起点棋子.jie = ol_揭开起点暗子
+    if (ol_揭开起点暗子) {
+      起点棋子.jie = ol_揭开起点暗子
+    }
 
     if (终点棋子) {
       终点棋子.deadIdx = filt棋子_死.value.filter((e) => e.tb === 终点棋子.tb).length + 1

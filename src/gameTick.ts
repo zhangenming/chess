@@ -1,6 +1,6 @@
-import { 回合数, 走子提示, drTB, is我的回合, myTB, offline, 起点位置, filt棋子_死, 走棋信息 } from './data'
+import { 回合数, 走子提示, drTB, is我的回合, myTB, offline, 起点位置, filt棋子_死, 走棋信息, 暗子牌库 } from './data'
 import { SEND } from './online'
-import { get暗棋Random, stringIJ2棋子, test } from './utils'
+import { deleteItem, get暗棋Random, stringIJ2棋子, test } from './utils'
 
 // 这里的逻辑 只有我方阵营会执行
 export function action({ target }: { target: HTMLElement }) {
@@ -58,15 +58,18 @@ export function RECEIVE({ content }: any) {
 
     if (ol_揭开起点暗子) {
       起点棋子.jie = ol_揭开起点暗子
+
+      deleteItem(暗子牌库[起点棋子.tb], ol_揭开起点暗子)
     }
 
     if (终点棋子) {
       终点棋子.deadIdx = filt棋子_死.value.filter((e) => e.tb === 终点棋子.tb).length + 1
 
       if (ol_揭开终点被吃暗子) {
+        if (终点棋子.tb !== myTB.value) {
         终点棋子.jie = ol_揭开终点被吃暗子
-        // if (终点棋子.tb !== myTB.value) {
-        // }
+        }
+        deleteItem(暗子牌库[终点棋子.tb], ol_揭开终点被吃暗子)
       }
     }
 

@@ -1,5 +1,5 @@
 import { computed, reactive, ref, watch } from 'vue'
-import { getMyId, stringIJ2棋子, raw, 位置2棋子 } from './utils'
+import { getMyId, stringIJ2棋子, raw, 位置2棋子, qzA, qzB } from './utils'
 import { get棋子_可移动_位置 } from './move'
 
 export const 回合数 = ref(0)
@@ -73,6 +73,11 @@ export const 所有位置 = reactive(
   )
 )
 export const 所有位置一维 = 所有位置.flat()
+
+export const 暗子牌库 = {
+  top: qzA,
+  bot: qzB,
+}
 
 function is我棋子(棋子: t棋子) {
   return 棋子.tb === myTB.value

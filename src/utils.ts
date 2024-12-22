@@ -1,4 +1,4 @@
-import { 所有位置, filt棋子_生, type t棋子 } from './data'
+import { type t棋子, 所有位置, filt棋子_生, 暗子牌库 } from './data'
 
 export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
@@ -13,13 +13,8 @@ export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],
 ]
 
-const qzA = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
-const qzB = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
-
-const 暗子牌库 = {
-  top: qzA,
-  bot: qzB,
-}
+export const qzA = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
+export const qzB = ['车', '车', '马', '马', '象', '象', '士', '士', '炮', '炮', '卒', '卒', '卒', '卒', '卒']
 
 export type 位置or棋子 = { i: number; j: number }
 
@@ -108,4 +103,9 @@ export function 取反(tb: 'top' | 'bot') {
   if (tb === 'top') return 'bot'
   if (tb === 'bot') return 'top'
   throw new Error('取反失败')
+}
+
+export function deleteItem<T>(arr: T[], item: T) {
+  const index = arr.indexOf(item)
+  if (index > -1) arr.splice(index, 1)
 }

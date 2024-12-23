@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { 可移动位置, 可移动位置2, 走子提示, isTop回合, isBot回合, buff, 我被将军, 敌被将军, myIsTop, top被将, bot被将 } from '../data'
 
-const 走子提示format = computed(() => 走子提示.value!.map((item) => item.split('-').map((n) => Number(n) * 50 + 'px')))
+const 走子提示format = computed(() => 走子提示.value!.map((item) => item.split('-').map((n) => Number(n) * 50 + 25 + 'px')))
 </script>
 
 <template>
@@ -11,11 +11,11 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
     <div class="走子提示" v-if="走子提示" :style="{ top: 走子提示format[1][0], left: 走子提示format[1][1] }"></div>
 
     <div class="横">
-      <div class="h" v-for="i in 10" :style="{ top: `${(i - 1) * 50}px` }"></div>
+      <div class="h" v-for="i in 10" :style="{ left: '25px', top: `${(i - 1) * 50 + 25}px` }"></div>
     </div>
 
     <div class="竖">
-      <div class="s" v-for="i in 9" :style="{ left: `${(i - 1) * 50}px` }"></div>
+      <div class="s" v-for="i in 9" :style="{ left: `${(i - 1) * 50 + 25}px`, top: '25px' }"></div>
     </div>
 
     <div class="河"></div>
@@ -51,24 +51,24 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
 
     <div class="炮">
       <div>
-        <div style="top: 100px; left: 50px">
+        <div style="top: 125px; left: 75px">
           <div v-for="i in 4"></div>
         </div>
-        <div style="top: 100px; left: 350px">
+        <div style="top: 125px; left: 375px">
           <div v-for="i in 4"></div>
         </div>
-        <div :style="{ top: '150px', left: `${(i - 1) * 100}px` }" v-for="i in 5">
+        <div :style="{ top: '175px', left: `${(i - 1) * 100 + 25}px` }" v-for="i in 5">
           <div v-for="i in 4"></div>
         </div>
       </div>
       <div>
-        <div style="top: 350px; left: 50px">
+        <div style="top: 375px; left: 75px">
           <div v-for="i in 4"></div>
         </div>
-        <div style="top: 350px; left: 350px">
+        <div style="top: 375px; left: 375px">
           <div v-for="i in 4"></div>
         </div>
-        <div :style="{ top: '300px', left: `${(i - 1) * 100}px` }" v-for="i in 5">
+        <div :style="{ top: '325px', left: `${(i - 1) * 100 + 25}px` }" v-for="i in 5">
           <div v-for="i in 4"></div>
         </div>
       </div>
@@ -98,10 +98,10 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
 <style>
 dom棋盘 {
   display: block;
-  width: 400px;
-  height: 450px;
-  outline: 26px solid beige;
-  box-shadow: 0px 0px 0px 35px var(--该你走了);
+  width: 450px;
+  height: 500px;
+  /* outline: 26px solid beige;
+  box-shadow: 0px 0px 0px 35px var(--该你走了); */
   transform: rotate(var(--后手需要反转));
   user-select: none;
   position: relative;
@@ -120,7 +120,7 @@ dom棋盘 {
   background-color: #666;
 }
 .h:nth-child(6) {
-  top: 248px !important;
+  top: calc(275px - 2px) !important;
 }
 .s {
   width: 1px;
@@ -135,7 +135,7 @@ dom棋盘 {
   background-color: white;
   position: absolute;
   left: 50px;
-  top: 203px;
+  top: calc(225px + 3px);
 }
 .士-1,
 .士-2 {
@@ -143,10 +143,12 @@ dom棋盘 {
   position: absolute;
   width: 100px;
   aspect-ratio: 1;
-  left: 151px;
+  top: 25px;
+  left: 175px;
 }
 .士-2 {
-  top: 351px;
+  top: auto;
+  bottom: 25px;
 }
 .士-h,
 .士-s {
@@ -207,9 +209,8 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
 
 dom位置 {
   position: absolute;
-  width: 30px;
+  width: 50px;
   aspect-ratio: 1;
-  translate: -50% -50%;
 }
 .走子提示 {
   width: 50px;

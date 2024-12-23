@@ -57,7 +57,6 @@ function diff_jie(arr: t棋子[]) {
     :is="棋盘"
     @click="action"
     :style="{
-      margin: '50px',
       '--该你走了': is我的回合 ? 'black' : '#999',
       '--后手需要反转': is先手 ? '0deg' : '180deg',
       '--top_weight': is先手 ? 100 : 900,
@@ -83,7 +82,6 @@ function diff_jie(arr: t棋子[]) {
         deadIdx
           ? 'dead'
           : {
-              jieCls: jie === '〇',
               selected: 起点位置 === `${i}-${j}`,
               ...(buff && {
                 // 我吃敌有保护cls: 我吃_敌_有保护.find((item) => item.i === i && item.j === j),
@@ -142,13 +140,14 @@ body {
 dom棋子 {
   font-family: fangsong;
   display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 5px;
   font-size: 35px;
   line-height: 1em;
   text-align: center;
   aspect-ratio: 1;
   position: absolute;
-  translate: -50% -50%;
   transition-property: all;
   transition-duration: 0.3s;
   background: color-mix(in oklab, currentColor, white 90%);
@@ -165,17 +164,20 @@ dom棋子 {
   color: var(--bot_color);
   font-weight: var(--bot_weight);
 }
-.jieCls {
+[jie='〇'] {
   color: #aaa;
 }
 [jie='车'] {
   border-width: 7px;
+  font-weight: 900;
 }
 [jie='马'] {
   border-width: 5px;
+  font-weight: 900;
 }
 [jie='炮'] {
   border-width: 5px;
+  font-weight: 900;
 }
 .selected {
   border-radius: 0;
@@ -184,18 +186,18 @@ dom棋子 {
 .canMove2 {
   cursor: pointer;
   z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .canMove::before,
 .canMove2::before,
 :is(.我吃敌有保护cls, .我吃敌无保护cls, .敌吃我有保护cls, .敌吃我无保护cls, .正在被吃cls)::after {
   content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  border-radius: 1%;
-  aspect-ratio: 1;
   width: 10px;
+  aspect-ratio: 1;
+  border-radius: 1%;
+  position: absolute;
   background: black;
 }
 .canMove2::before {

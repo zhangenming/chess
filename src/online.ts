@@ -8,7 +8,7 @@ const who = isMaster ? '主机' : `${我的id}[${Math.random().toFixed(2).slice(
 
 const { connect, pubsub } = GoEasy.getInstance({
   host: 'hangzhou.goeasy.io',
-  appkey: isBoss ? 'BC-c12db807824d4c98923bc16c498935bf' : 'BC-db04ee8988eb4f18b6b64f18afd33c40', // online2 : home
+  appkey: isBoss ? 'BC-0a3b4d5d90b6483d8ce63922db9671c7' : 'BC-719aadae85b7430c9e1d79edd47d2c10', // online2 : home
   modules: ['pubsub'],
 })
 
@@ -80,7 +80,7 @@ if (isMaster) {
             if (action === 'timeout') {
               console.log('对方退出')
               if (!isMe) {
-                alert('对方退出')
+                // alert('对方退出')
                 // location.reload() //todo
               }
             }

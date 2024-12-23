@@ -60,12 +60,12 @@ export function get下侧全部位置({ i, j }: 位置or棋子) {
 // 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)保证悔完棋的时候随机
 export function get暗棋Random(棋子: t棋子) {
   // return 棋子.role
-  const arr = 暗子牌库[棋子.tb]
-  shuffle(arr)
-  return arr[0] // 这个是单人逻辑 为了保持数据一致性 在双人逻辑处做数据删除处理
+
+  return shuffle(暗子牌库[棋子.tb])[0] // 这个是单人逻辑 为了保持数据一致性 在双人逻辑处做数据删除处理
 
   // 洗牌算法 原地修改
   function shuffle<T>(arr: T[]) {
+    arr = [...arr]
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
       ;[arr[i], arr[j]] = [arr[j], arr[i]]

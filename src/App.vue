@@ -136,8 +136,6 @@ function diff_jie(arr: t棋子[]) {
   width: 100px;
 }
 body {
-  display: flex;
-  justify-content: center;
   /* transform: scale(0.83); */
 }
 

@@ -1,10 +1,10 @@
-import { 回合数, 走子提示, drTB, is我的回合, myTB, offline, 起点位置, filt棋子_死, 走棋信息, 暗子牌库 } from './data'
+import { 回合数, 走子提示, drTB, is我的回合, myTB, one, 起点位置, filt棋子_死, 走棋信息, 暗子牌库 } from './data'
 import { SEND } from './online'
 import { deleteItem, get暗棋Random, stringIJ2棋子, test } from './utils'
 
 // 这里的逻辑 只有我方阵营会执行
 export function action({ target }: { target: HTMLElement }) {
-  if (!is我的回合.value && !offline) return
+  if (!is我的回合.value && !one) return
 
   const ol_起点位置 = 起点位置.value
   起点位置.value = undefined
@@ -27,8 +27,8 @@ export function action({ target }: { target: HTMLElement }) {
     test(起点棋子.tb === 终点棋子?.tb, '吃自己')
   }
 
-  // offline的话交替行走俩人的棋子 否则只能走自己的棋子
-  if (target.classList.contains(offline ? (is我的回合.value ? myTB.value : drTB.value) : myTB.value)) {
+  // one的话交替行走俩人的棋子 否则只能走自己的棋子
+  if (target.classList.contains(one ? (is我的回合.value ? myTB.value : drTB.value) : myTB.value)) {
     起点位置.value = 终点位置
   }
 }

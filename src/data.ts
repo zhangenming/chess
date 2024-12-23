@@ -17,7 +17,7 @@ export const myIsTop = computed(() => myTB.value === 'top')
 export const isMaster = location.search.includes('master')
 export const isBoss = location.search.includes('boss')
 export const isMe = location.search.includes('me')
-export const offline = location.search.includes('offline')
+export const one = location.search.includes('one')
 export const buff = location.search.includes('buff')
 
 export const 起点位置 = ref<string>()

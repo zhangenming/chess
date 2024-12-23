@@ -10,7 +10,7 @@ import {
   回合数,
   is我的回合,
   base棋子,
-  offline,
+  one,
   buff,
   filt棋子_生,
   filt棋子_死,
@@ -53,7 +53,7 @@ function diff_jie(arr: t棋子[]) {
   </div>
 
   <component
-    v-if="对手id || offline"
+    v-if="对手id || one"
     :is="棋盘"
     @click="action"
     :style="{

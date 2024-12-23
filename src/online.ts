@@ -1,5 +1,5 @@
 import GoEasy from 'goeasy'
-import { isMaster, isMe, is先手, 回合数, 我的id, 对手id, isBoss, offline } from './data'
+import { isMaster, isMe, is先手, 回合数, 我的id, 对手id, isBoss, one } from './data'
 import { RECEIVE } from './gameTick'
 
 let channel = '大厅'
@@ -37,8 +37,8 @@ if (isMaster) {
       }
     },
   })
-} else if (offline) {
-  channel = 'offline_channel'
+} else if (one) {
+  channel = 'one_channel'
   pubsub.subscribe({
     channel,
     onMessage: RECEIVE,

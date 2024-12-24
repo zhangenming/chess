@@ -1,6 +1,21 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { 可移动位置, 可移动位置2, 走子提示, isTop回合, isBot回合, buff, 我被将军, 敌被将军, myIsTop, top被将, bot被将 } from '../data'
+import {
+  可移动位置,
+  可移动位置2,
+  走子提示,
+  isTop回合,
+  isBot回合,
+  buff,
+  我被将军,
+  敌被将军,
+  myIsTop,
+  top被将,
+  bot被将,
+  危险位置,
+  安全位置,
+} from '../data'
+import { findItem } from '@/utils'
 
 const 走子提示format = computed(() =>
   走子提示.value!.map((item) => ({
@@ -87,8 +102,10 @@ const 走子提示format = computed(() =>
       <template v-for="i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
         <dom位置
           :class="{
-            canMove: 可移动位置.find((item) => item.i === i && item.j === j),
-            canMove2: buff && 可移动位置2.find((item) => item.i === i && item.j === j),
+            canMove: findItem(可移动位置, { i, j }),
+            canMove2: buff && findItem(可移动位置2, { i, j }),
+            危险位置cls: findItem(危险位置, { i, j }),
+            安全位置cls: findItem(安全位置, { i, j }),
           }"
           v-for="j of [0, 1, 2, 3, 4, 5, 6, 7, 8]"
           :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
@@ -221,5 +238,14 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
 }
 .被将军 {
   outline: 25px solid var(--将军颜色);
+}
+.危险位置cls:not(.安全位置cls) {
+  background: radial-gradient(circle at center, red 5px, transparent 5px), transparent;
+}
+.安全位置cls:not(.危险位置cls) {
+  background: radial-gradient(circle at center, black 5px, transparent 5px), transparent;
+}
+.危险位置cls.安全位置cls {
+  background: radial-gradient(circle at center, yellow 5px, transparent 5px), transparent;
 }
 </style>

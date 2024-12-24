@@ -82,13 +82,14 @@ function diff_jie(arr: t棋子[]) {
           ? 'dead'
           : {
               selected: 上次点击位置?.i === i && 上次点击位置?.j === j,
-              ...(buff && {
-                // 我吃敌有保护cls: 我吃_敌_有保护.find((item) => item.i === i && item.j === j),
-                我吃敌无保护cls: findItem(filt棋子_我_生_吃_敌_无保护, { i, j }),
-                // 敌吃我有保护cls: 敌吃_我_有保护.find((item) => item.i === i && item.j === j),
-                敌吃我无保护cls: findItem(filt棋子_敌_生_吃_我_无保护, { i, j }),
-                // 正在被吃cls: 正在被吃.find((item) => item.i === i && item.j === j),
-              }),
+              ...(buff &&
+                {
+                  // // 我吃敌有保护cls: 我吃_敌_有保护.find((item) => item.i === i && item.j === j),
+                  // 我吃敌无保护cls: findItem(filt棋子_我_生_吃_敌_无保护, { i, j }),
+                  // // 敌吃我有保护cls: 敌吃_我_有保护.find((item) => item.i === i && item.j === j),
+                  // 敌吃我无保护cls: findItem(filt棋子_敌_生_吃_我_无保护, { i, j }),
+                  // // 正在被吃cls: 正在被吃.find((item) => item.i === i && item.j === j),
+                }),
             },
       ]"
       :i

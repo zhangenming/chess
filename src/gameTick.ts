@@ -1,10 +1,10 @@
-import { 回合数, 走子提示, drTB, is我的回合, myTB, one, 上次点击位置, filt棋子_死, 走棋信息, 暗子牌库, 可移动位置 } from './data'
+import { 回合数, 走子提示, drTB, is我的回合, myTB, one, 上次点击位置, filt棋子_死, 走棋信息, 暗子牌库, 可移动位置, type 位置 } from './data'
 import { SEND } from './online'
-import { deleteItem, findItem, get暗棋Random, test, 位置2棋子, type 位置or棋子 } from './utils'
+import { deleteItem, findItem, get暗棋Random, test, 位置2棋子 } from './utils'
 
 type ol = {
-  ol_起点位置: 位置or棋子
-  ol_终点位置: 位置or棋子
+  ol_起点位置: 位置
+  ol_终点位置: 位置
   ol_揭开终点被吃暗子?: string | undefined
   ol_揭开起点暗子?: string | undefined
 }

@@ -1,4 +1,4 @@
-import { 所有位置一维, is先手, drTB, type t棋子 } from './data'
+import { 所有位置一维, is先手, drTB, type t棋子, type 位置 } from './data'
 import {
   get上侧位置,
   get下侧位置,
@@ -14,7 +14,7 @@ import {
 } from './utils'
 
 // 得到所有符合规则的移动位置 包括空位/敌我吃棋
-export function get棋子_可移动_位置(棋子: t棋子) {
+function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走'): 位置[] {
   const is敌人棋子 = 棋子?.tb === drTB.value
 
   const { jie, role } = 棋子
@@ -125,11 +125,11 @@ export function get棋子_可移动_位置(棋子: t棋子) {
   }
   function filter炮可移动位置(位置s: { i: number; j: number }[]) {
     let 炮架 = false
-    let 找到终点 = false
+    let 找到吃子 = false
     return 位置s.filter((位置) => {
-      if (!炮架 && !位置2棋子(位置)) return true
-      if (炮架 && 位置2棋子(位置) && !找到终点) {
-        找到终点 = true
+      if (!炮架 && !位置2棋子(位置)) return 行动 === '走'
+      if (炮架 && 位置2棋子(位置) && !找到吃子) {
+        找到吃子 = true
         return true
       }
       if (位置2棋子(位置)) {
@@ -137,4 +137,12 @@ export function get棋子_可移动_位置(棋子: t棋子) {
       }
     })
   }
+}
+
+// 对炮来说 可走位置和可吃位置 不一致
+export function get棋子_可走_位置(棋子: t棋子) {
+  return 行动_位置(棋子, '走')
+}
+export function get棋子_可吃_位置(棋子: t棋子) {
+  return 行动_位置(棋子, '吃')
 }

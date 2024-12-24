@@ -1,21 +1,29 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { 可移动位置, 可移动位置2, 走子提示, isTop回合, isBot回合, buff, 我被将军, 敌被将军, myIsTop, top被将, bot被将 } from '../data'
-
-const 走子提示format = computed(() => 走子提示.value!.map((item) => item.split('-').map((n) => Number(n) * 50 + 'px')))
+import {
+  可移动位置,
+  isTop回合,
+  isBot回合,
+  buff,
+  top被将,
+  bot被将,
+  危险位置,
+  安全位置,
+  filt棋子_生_我敌,
+  filt棋子_生_我,
+  filt棋子_生_敌,
+} from '../data'
+import { findItem } from '@/utils'
+import { 走子提示 } from '../gameTick'
 </script>
 
 <template>
   <dom棋盘>
-    <div class="走子提示" v-if="走子提示" :style="{ top: 走子提示format[0][0], left: 走子提示format[0][1] }" style="width: 30px"></div>
-    <div class="走子提示" v-if="走子提示" :style="{ top: 走子提示format[1][0], left: 走子提示format[1][1] }"></div>
-
     <div class="横">
-      <div class="h" v-for="i in 10" :style="{ top: `${(i - 1) * 50}px` }"></div>
+      <div class="h" v-for="i in 10" :style="{ left: '25px', top: `${(i - 1) * 50 + 25}px` }"></div>
     </div>
 
     <div class="竖">
-      <div class="s" v-for="i in 9" :style="{ left: `${(i - 1) * 50}px` }"></div>
+      <div class="s" v-for="i in 9" :style="{ left: `${(i - 1) * 50 + 25}px`, top: '25px' }"></div>
     </div>
 
     <div class="河"></div>
@@ -23,9 +31,7 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
     <div class="士">
       <div
         class="士-1"
-        :class="{
-          被将军: top被将,
-        }"
+        :class="{ 被将军: top被将 }"
         :style="{
           '--将军颜色': 'var(--top_color)',
           ...(isTop回合 && { background: 'color-mix(in oklab, var(--top_color), white 50%)' }),
@@ -36,9 +42,7 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
       </div>
       <div
         class="士-2"
-        :class="{
-          被将军: bot被将,
-        }"
+        :class="{ 被将军: bot被将 }"
         :style="{
           '--将军颜色': 'var(--bot_color)',
           ...(isBot回合 && { background: 'color-mix(in oklab, var(--bot_color), white 50%)' }),
@@ -51,46 +55,69 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
 
     <div class="炮">
       <div>
-        <div style="top: 100px; left: 50px">
+        <div style="top: 125px; left: 75px">
           <div v-for="i in 4"></div>
         </div>
-        <div style="top: 100px; left: 350px">
+        <div style="top: 125px; left: 375px">
           <div v-for="i in 4"></div>
         </div>
-        <div :style="{ top: '150px', left: `${(i - 1) * 100}px` }" v-for="i in 5">
+        <div :style="{ top: '175px', left: `${(i - 1) * 100 + 25}px` }" v-for="i in 5">
           <div v-for="i in 4"></div>
         </div>
       </div>
       <div>
-        <div style="top: 350px; left: 50px">
+        <div style="top: 375px; left: 75px">
           <div v-for="i in 4"></div>
         </div>
-        <div style="top: 350px; left: 350px">
+        <div style="top: 375px; left: 375px">
           <div v-for="i in 4"></div>
         </div>
-        <div :style="{ top: '300px', left: `${(i - 1) * 100}px` }" v-for="i in 5">
+        <div :style="{ top: '325px', left: `${(i - 1) * 100 + 25}px` }" v-for="i in 5">
           <div v-for="i in 4"></div>
         </div>
       </div>
+    </div>
+
+    <div class="棋子s">
+      <slot></slot>
     </div>
 
     <div class="位置s">
       <template v-for="i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
         <dom位置
-          :class="{
-            canMove: 可移动位置.find((item) => item.i === i && item.j === j),
-            canMove2: buff && 可移动位置2.find((item) => item.i === i && item.j === j),
-          }"
           v-for="j of [0, 1, 2, 3, 4, 5, 6, 7, 8]"
           :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
           :i="i"
           :j="j"
-        ></dom位置>
+          :class="[
+            {
+              走子提示1: 走子提示?.[0].i === i && 走子提示?.[0].j === j,
+              走子提示2: 走子提示?.[1].i === i && 走子提示?.[1].j === j,
+              canMove位置: findItem(可移动位置, { i, j }),
+              ...(buff && {
+                // canMove位置2: findItem(可移动位置2, { i, j }),
+                存在我方棋子: findItem(filt棋子_生_我, { i, j }),
+                存在敌方棋子: findItem(filt棋子_生_敌, { i, j }),
+              }),
+            },
+            (() => {
+              const 危险位置cls = findItem(危险位置, { i, j })
+              const 安全位置cls = findItem(安全位置, { i, j })
+              if (安全位置cls && 危险位置cls) {
+                return '混乱位置cls'
+              }
+              if (危险位置cls) {
+                return '危险位置cls'
+              }
+              if (安全位置cls) {
+                return '安全位置cls'
+              }
+              return '中立位置cls'
+            })(),
+          ]"
+          :安全位置cls="findItem(安全位置, { i, j })?.被吃"
+        />
       </template>
-    </div>
-
-    <div class="棋子s">
-      <slot></slot>
     </div>
   </dom棋盘>
 </template>
@@ -98,21 +125,25 @@ const 走子提示format = computed(() => 走子提示.value!.map((item) => item
 <style>
 dom棋盘 {
   display: block;
-  width: 400px;
-  height: 450px;
-  outline: 26px solid beige;
-  box-shadow: 0px 0px 0px 35px var(--该你走了);
+  width: 450px;
+  height: 500px;
+  /* outline: 26px solid beige;
+  box-shadow: 0px 0px 0px 35px var(--该你走了); */
   transform: rotate(var(--后手需要反转));
   user-select: none;
   position: relative;
 }
 
-.h {
-  width: 400px;
-  height: 1px;
+.h,
+.s {
   background-color: #999;
   position: absolute;
-  left: 0;
+  width: 400px;
+  height: 1px;
+}
+.s {
+  width: 1px;
+  height: 450px;
 }
 .h:nth-child(5),
 .h:nth-child(6) {
@@ -120,33 +151,30 @@ dom棋盘 {
   background-color: #666;
 }
 .h:nth-child(6) {
-  top: 248px !important;
+  top: calc(275px - 2px) !important;
 }
-.s {
-  width: 1px;
-  height: 450px;
-  background-color: #999;
-  position: absolute;
-  top: 0;
-}
+
 .河 {
   width: 302px;
   height: 45px;
   background-color: white;
   position: absolute;
-  left: 50px;
-  top: 203px;
+  left: 75px;
+  top: calc(225px + 3px);
 }
+
 .士-1,
 .士-2 {
   opacity: 0.3;
   position: absolute;
   width: 100px;
   aspect-ratio: 1;
-  left: 151px;
+  top: 25px;
+  left: 175px;
 }
 .士-2 {
-  top: 351px;
+  top: auto;
+  bottom: 25px;
 }
 .士-h,
 .士-s {
@@ -205,26 +233,44 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   display: none;
 }
 
-dom位置 {
-  position: absolute;
-  width: 30px;
-  aspect-ratio: 1;
-  translate: -50% -50%;
+.走子提示1 {
+  border: 2px solid #1500fb;
 }
-.走子提示 {
-  width: 50px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  /* 事件穿透 */
-  pointer-events: none;
-  translate: -50% -50%;
-  position: absolute;
-  z-index: 2;
-  background: #1500fb;
-  opacity: 0.5;
-  /* transition: all 0.5s; */
+.走子提示2 {
+  border: 4px solid #1500fb;
 }
 .被将军 {
   outline: 25px solid var(--将军颜色);
+}
+
+.混乱位置cls {
+  background: color-mix(in oklab, yellow, transparent 50%);
+}
+.危险位置cls {
+  background: color-mix(in oklab, red, transparent 80%);
+}
+.安全位置cls {
+  background: color-mix(in oklab, black, transparent 80%);
+}
+.危险位置cls.存在我方棋子 {
+  background: color-mix(in oklab, red, transparent 20%);
+}
+.安全位置cls.存在敌方棋子 {
+  background: color-mix(in oklab, black, transparent 20%);
+}
+
+.canMove位置 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.canMove位置::before {
+  content: '';
+  width: 15px;
+  aspect-ratio: 1;
+  border-radius: 1%;
+  position: absolute;
+  background: #1500fb;
 }
 </style>

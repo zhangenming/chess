@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import 棋盘 from './components/棋盘.vue'
+import { findItem } from './utils'
 import { action } from './gameTick'
 import {
   type t棋子,
-  起点位置,
+  上次点击位置,
   is先手,
   我的id,
   对手id,
@@ -40,11 +41,11 @@ function diff_jie(arr: t棋子[]) {
   const r = arr.filter((item) => item.jie !== '〇')
   return `${l.length}/${r.length}`
 }
+
+// console.log(LeaderLine)
 </script>
 
 <template>
-  <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
-
   <div>
     <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
     <div>is先手: {{ is先手 }}</div>
@@ -57,7 +58,6 @@ function diff_jie(arr: t棋子[]) {
     :is="棋盘"
     @click="action"
     :style="{
-      margin: '50px',
       '--该你走了': is我的回合 ? 'black' : '#999',
       '--后手需要反转': is先手 ? '0deg' : '180deg',
       '--top_weight': is先手 ? 100 : 900,
@@ -83,72 +83,54 @@ function diff_jie(arr: t棋子[]) {
         deadIdx
           ? 'dead'
           : {
-              jieCls: jie === '〇',
-              selected: 起点位置 === `${i}-${j}`,
-              ...(buff && {
-                // 我吃敌有保护cls: 我吃_敌_有保护.find((item) => item.i === i && item.j === j),
-                我吃敌无保护cls: filt棋子_我_生_吃_敌_无保护.find((item) => item.i === i && item.j === j),
-                // 敌吃我有保护cls: 敌吃_我_有保护.find((item) => item.i === i && item.j === j),
-                敌吃我无保护cls: filt棋子_敌_生_吃_我_无保护.find((item) => item.i === i && item.j === j),
-                // 正在被吃cls: 正在被吃.find((item) => item.i === i && item.j === j),
-              }),
+              selected: 上次点击位置?.i === i && 上次点击位置?.j === j,
+              ...(buff &&
+                {
+                  // // 我吃敌有保护cls: 我吃_敌_有保护.find((item) => item.i === i && item.j === j),
+                  // 我吃敌无保护cls: findItem(filt棋子_我_生_吃_敌_无保护, { i, j }),
+                  // // 敌吃我有保护cls: 敌吃_我_有保护.find((item) => item.i === i && item.j === j),
+                  // 敌吃我无保护cls: findItem(filt棋子_敌_生_吃_我_无保护, { i, j }),
+                  // // 正在被吃cls: 正在被吃.find((item) => item.i === i && item.j === j),
+                }),
             },
       ]"
-      :i
-      :j
-      :role
       :jie
     >
       {{ jie }}
     </dom棋子>
   </component>
 
-  <div v-if="buff" class="dbg">
-    <div>{{ 暗子牌库.top }}</div>
-    <div>{{ 暗子牌库.bot }}</div>
-    <div>
-      <div></div>
-      <div>我{{ diff_jie(filt棋子_我) }}</div>
-      <div>敌{{ diff_jie(filt棋子_敌) }}</div>
-    </div>
-    <div>
-      <div>生{{ diff_jie(filt棋子_生) }}</div>
-      <div>我生{{ diff_jie(filt棋子_我_生) }}</div>
-      <div>敌生{{ diff_jie(filt棋子_敌_生) }}</div>
-    </div>
-    <div>
-      <div>死{{ diff_jie(filt棋子_死) }}</div>
-      <div>我死{{ diff_jie(filt棋子_我_死) }}</div>
-      <div>敌死{{ diff_jie(filt棋子_敌_死) }}</div>
-    </div>
-  </div>
+  <div popover id="popover" style="position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 50px">对方退出</div>
 </template>
 
 <style>
-.dbg {
-  margin-top: 80px;
-}
-.dbg > div {
-  display: flex;
-  gap: 10px;
-}
-.dbg > div > div {
-  width: 100px;
-}
 body {
   /* transform: scale(0.83); */
+}
+
+*:not(dom位置) {
+  /* 事件穿透 */
+  pointer-events: none;
+}
+dom位置 {
+  /* 反转继承 */
+  pointer-events: auto;
+  position: absolute;
+  width: 50px;
+  aspect-ratio: 1;
 }
 
 dom棋子 {
   font-family: fangsong;
   display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 5px;
   font-size: 35px;
   line-height: 1em;
   text-align: center;
   aspect-ratio: 1;
   position: absolute;
-  translate: -50% -50%;
   transition-property: all;
   transition-duration: 0.3s;
   background: color-mix(in oklab, currentColor, white 90%);
@@ -165,65 +147,67 @@ dom棋子 {
   color: var(--bot_color);
   font-weight: var(--bot_weight);
 }
-.jieCls {
+[jie='〇'] {
   color: #aaa;
 }
 [jie='车'] {
   border-width: 7px;
+  font-weight: 900;
 }
 [jie='马'] {
   border-width: 5px;
+  font-weight: 900;
 }
 [jie='炮'] {
   border-width: 5px;
+  font-weight: 900;
 }
 .selected {
   border-radius: 0;
-}
-.canMove,
-.canMove2 {
-  cursor: pointer;
-  z-index: 1;
-}
-.canMove::before,
-.canMove2::before,
-:is(.我吃敌有保护cls, .我吃敌无保护cls, .敌吃我有保护cls, .敌吃我无保护cls, .正在被吃cls)::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  translate: -50% -50%;
-  border-radius: 1%;
-  aspect-ratio: 1;
-  width: 10px;
-  background: black;
-}
-.canMove2::before {
-  background: blue;
-}
-.我吃敌有保护cls::after {
-  background: green;
-  width: 7px;
-}
-.敌吃我有保护cls::after {
-  background: green;
-  width: 7px;
-}
-.我吃敌无保护cls::after {
-  background: red;
-  width: 15px;
-}
-.敌吃我无保护cls::after {
-  background: red;
-  width: 15px;
 }
 .dead {
   top: -50px;
   border-width: 1px;
   font-size: 20px;
 }
-.正在被吃cls::after {
-  background: yellow;
+/* dom位置.canMove位置,
+dom位置.canMove位置2 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+dom位置.canMove位置::before,
+dom位置.canMove位置2::before,
+:is(dom棋子.我吃敌有保护cls, dom棋子.我吃敌无保护cls, dom棋子.敌吃我有保护cls, dom棋子.敌吃我无保护cls, dom棋子.正在被吃cls)::before {
+  content: '';
+  width: 15px;
+  aspect-ratio: 1;
+  border-radius: 1%;
+  position: absolute;
+  background: #1500fb;
+}
+dom位置.canMove位置2::before {
+  background: blue;
+}
+dom棋子.我吃敌有保护cls::before {
+  background: green;
+  width: 7px;
+}
+dom棋子.敌吃我有保护cls::before {
+  background: green;
+  width: 7px;
+}
+dom棋子.我吃敌无保护cls::before {
+  background: red;
   width: 15px;
 }
+dom棋子.敌吃我无保护cls::before {
+  background: red;
+  width: 15px;
+}
+dom棋子.正在被吃cls::before {
+  background: yellow;
+  width: 15px;
+} */
 </style>

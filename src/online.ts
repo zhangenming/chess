@@ -21,11 +21,12 @@ if (isMaster) {
     channel,
     onSuccess() {},
     onPresence({ action, member: memberB, members }) {
-      console.log(action, memberB.id)
+      console.log(action, memberB, memberB.id)
       if (action === 'join') {
         if (
           memberA &&
-          members.find((e) => e.id === memberA.id) // 此时a可能已经离开
+          members.find((e) => e.id === memberA.id) && // 此时a可能已经离开
+          memberA.data.username != memberB.data.username
         ) {
           SEND('匹配成功', {
             ol_房间号: `${memberA.id}--VS--${memberB.id}`,
@@ -78,11 +79,7 @@ if (isMaster) {
           onSuccess() {},
           onPresence({ action }) {
             if (action === 'timeout') {
-              console.log('对方退出')
-              if (!isMe) {
-                // alert('对方退出')
-                // location.reload() //todo
-              }
+              document.querySelector<HTMLElement>('#popover')!.showPopover()
             }
           },
         })

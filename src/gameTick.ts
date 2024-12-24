@@ -12,13 +12,11 @@ type ol = {
 
 // 这里的逻辑 只有我方阵营会执行
 export function action({ target }: { target: HTMLElement }) {
-  if (!is我的回合.value && !one) return
-
   if (target.tagName !== 'DOM位置') return
 
   const 本次点击位置 = { i: Number(target.getAttribute('i')), j: Number(target.getAttribute('j')) }
 
-  if (findItem(可移动位置.value, 本次点击位置)) {
+  if ((is我的回合.value || one) && findItem(可移动位置.value, 本次点击位置)) {
     const 起点棋子 = 位置2棋子(上次点击位置.value)!
     const 终点棋子 = 位置2棋子(本次点击位置)
 

@@ -133,7 +133,7 @@ export const 正在被吃 = computed(() => [...filt棋子_我_生_吃_敌.value,
 export const top被将 = computed(() => 正在被吃.value.find((e) => e.role === '帅' && e.tb === 'top'))
 export const bot被将 = computed(() => 正在被吃.value.find((e) => e.role === '帅' && e.tb === 'bot'))
 
-export const 走棋信息 = ref('')
+export const 走棋信息 = ref('...')
 
 export const 危险位置 = computed(() => filt棋子_敌_生.value.map(get棋子_可吃_位置).flat())
 export const 安全位置 = computed(() =>

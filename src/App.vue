@@ -97,6 +97,8 @@ function diff_jie(arr: t棋子[]) {
       {{ jie }}
     </dom棋子>
   </component>
+
+  <div popover id="popover" style="position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 50px">对方退出</div>
 </template>
 
 <style>

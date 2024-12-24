@@ -142,3 +142,7 @@ export const 安全位置 = computed(() =>
     .map(get棋子_可吃_位置)
     .flat()
 )
+
+export const filt棋子_生_我敌 = computed(() => base棋子.filter(is生棋子))
+export const filt棋子_生_我 = computed(() => filt棋子_生_我敌.value.filter(is我棋子))
+export const filt棋子_生_敌 = computed(() => filt棋子_生_我敌.value.filter(is敌棋子))

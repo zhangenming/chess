@@ -92,9 +92,6 @@ function diff_jie(arr: t棋子[]) {
                 }),
             },
       ]"
-      :i
-      :j
-      :role
       :jie
     >
       {{ jie }}

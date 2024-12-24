@@ -1,5 +1,17 @@
 <script setup lang="ts">
-import { 可移动位置, isTop回合, isBot回合, buff, top被将, bot被将, 危险位置, 安全位置 } from '../data'
+import {
+  可移动位置,
+  isTop回合,
+  isBot回合,
+  buff,
+  top被将,
+  bot被将,
+  危险位置,
+  安全位置,
+  filt棋子_生_我敌,
+  filt棋子_生_我,
+  filt棋子_生_敌,
+} from '../data'
 import { findItem } from '@/utils'
 import { 走子提示 } from '../gameTick'
 </script>
@@ -77,16 +89,32 @@ import { 走子提示 } from '../gameTick'
           :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
           :i="i"
           :j="j"
-          :class="{
-            走子提示1: 走子提示?.[0].i === i && 走子提示?.[0].j === j,
-            走子提示2: 走子提示?.[1].i === i && 走子提示?.[1].j === j,
-            canMove位置: findItem(可移动位置, { i, j }),
-            ...(buff && {
-              // canMove位置2: findItem(可移动位置2, { i, j }),
-              危险位置cls: findItem(危险位置, { i, j }),
-              安全位置cls: findItem(安全位置, { i, j }),
-            }),
-          }"
+          :class="[
+            {
+              走子提示1: 走子提示?.[0].i === i && 走子提示?.[0].j === j,
+              走子提示2: 走子提示?.[1].i === i && 走子提示?.[1].j === j,
+              canMove位置: findItem(可移动位置, { i, j }),
+              ...(buff && {
+                // canMove位置2: findItem(可移动位置2, { i, j }),
+                存在我方棋子: findItem(filt棋子_生_我, { i, j }),
+                存在敌方棋子: findItem(filt棋子_生_敌, { i, j }),
+              }),
+            },
+            (() => {
+              const 危险位置cls = findItem(危险位置, { i, j })
+              const 安全位置cls = findItem(安全位置, { i, j })
+              if (安全位置cls && 危险位置cls) {
+                return '混乱位置cls'
+              }
+              if (危险位置cls) {
+                return '危险位置cls'
+              }
+              if (安全位置cls) {
+                return '安全位置cls'
+              }
+              return '中立位置cls'
+            })(),
+          ]"
           :安全位置cls="findItem(安全位置, { i, j })?.被吃"
         />
       </template>
@@ -113,6 +141,10 @@ dom棋盘 {
   width: 400px;
   height: 1px;
 }
+.s {
+  width: 1px;
+  height: 450px;
+}
 .h:nth-child(5),
 .h:nth-child(6) {
   height: 3px;
@@ -121,10 +153,7 @@ dom棋盘 {
 .h:nth-child(6) {
   top: calc(275px - 2px) !important;
 }
-.s {
-  width: 1px;
-  height: 450px;
-}
+
 .河 {
   width: 302px;
   height: 45px;
@@ -133,6 +162,7 @@ dom棋盘 {
   left: 75px;
   top: calc(225px + 3px);
 }
+
 .士-1,
 .士-2 {
   opacity: 0.3;
@@ -212,14 +242,21 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
 .被将军 {
   outline: 25px solid var(--将军颜色);
 }
-.危险位置cls:not(.安全位置cls) {
-  background: color-mix(in oklab, red, transparent 30%);
+
+.混乱位置cls {
+  background: color-mix(in oklab, yellow, transparent 50%);
 }
-.安全位置cls:not(.危险位置cls) {
-  background: color-mix(in oklab, black, transparent 30%);
+.危险位置cls {
+  background: color-mix(in oklab, red, transparent 80%);
 }
-.危险位置cls.安全位置cls {
-  background: color-mix(in oklab, yellow, transparent 30%);
+.安全位置cls {
+  background: color-mix(in oklab, black, transparent 80%);
+}
+.危险位置cls.存在我方棋子 {
+  background: color-mix(in oklab, red, transparent 20%);
+}
+.安全位置cls.存在敌方棋子 {
+  background: color-mix(in oklab, black, transparent 20%);
 }
 
 .canMove位置 {

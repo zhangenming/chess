@@ -41,6 +41,8 @@ function diff_jie(arr: t棋子[]) {
   const r = arr.filter((item) => item.jie !== '〇')
   return `${l.length}/${r.length}`
 }
+
+// console.log(LeaderLine)
 </script>
 
 <template>

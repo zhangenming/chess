@@ -98,20 +98,21 @@ import { 走子提示 } from '../gameTick'
                 存在敌方棋子: findItem(filt棋子_生_敌, { i, j }),
               }),
             },
-            (() => {
-              const 危险位置cls = findItem(危险位置, { i, j })
-              const 安全位置cls = findItem(安全位置, { i, j })
-              if (安全位置cls && 危险位置cls) {
-                return '混乱位置cls'
-              }
-              if (危险位置cls) {
-                return '危险位置cls'
-              }
-              if (安全位置cls) {
-                return '安全位置cls'
-              }
-              return '中立位置cls'
-            })(),
+            buff &&
+              (() => {
+                const 危险位置cls = findItem(危险位置, { i, j })
+                const 安全位置cls = findItem(安全位置, { i, j })
+                if (安全位置cls && 危险位置cls) {
+                  return '混乱位置cls'
+                }
+                if (危险位置cls) {
+                  return '危险位置cls'
+                }
+                if (安全位置cls) {
+                  return '安全位置cls'
+                }
+                return '中立位置cls'
+              })(),
           ]"
           :安全位置cls="findItem(安全位置, { i, j })?.被吃"
         />

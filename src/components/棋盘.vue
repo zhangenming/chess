@@ -86,9 +86,7 @@ import { 走子提示 } from '../gameTick'
       <template v-for="i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
         <dom位置
           v-for="j of [0, 1, 2, 3, 4, 5, 6, 7, 8]"
-          :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
-          :i="i"
-          :j="j"
+          :style="{ '--i': i, '--j': j }"
           :class="[
             {
               走子提示1: 走子提示?.[0].i === i && 走子提示?.[0].j === j,

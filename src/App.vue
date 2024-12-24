@@ -118,6 +118,8 @@ dom位置 {
   position: absolute;
   width: 50px;
   aspect-ratio: 1;
+  top: calc(var(--i) * 50px);
+  left: calc(var(--j) * 50px);
 }
 
 dom棋子 {

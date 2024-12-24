@@ -14,7 +14,7 @@ type ol = {
 export function action({ target }: { target: HTMLElement }) {
   if (target.tagName !== 'DOM位置') return
 
-  const 本次点击位置 = { i: Number(target.getAttribute('i')), j: Number(target.getAttribute('j')) }
+  const 本次点击位置 = { i: Number(target.style.getPropertyValue('--i')), j: Number(target.style.getPropertyValue('--j')) }
 
   if ((is我的回合.value || one) && findItem(可移动位置.value, 本次点击位置)) {
     const 起点棋子 = 位置2棋子(上次点击位置.value)!

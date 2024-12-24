@@ -1,5 +1,5 @@
 import { computed, reactive, ref, watch } from 'vue'
-import { getMyId, stringIJ2棋子, raw, 位置2棋子, qzA, qzB } from './utils'
+import { getMyId, raw, 位置2棋子, qzA, qzB, type 位置or棋子 } from './utils'
 import { get棋子_可移动_位置 } from './move'
 
 export const 回合数 = ref(0)
@@ -20,23 +20,20 @@ export const isMe = location.search.includes('me')
 export const one = location.search.includes('one')
 export const buff = location.search.includes('buff')
 
-export const 起点位置 = ref<string>()
+export const 上次点击位置 = ref<位置or棋子>()
 
-export const 走子提示 = ref<[string, string]>()
+export const 走子提示 = ref<[位置or棋子, 位置or棋子]>()
 
 export const 可移动位置 = computed(() => {
-  const S = 起点位置.value
-  if (!S) return []
-
-  const 棋子 = stringIJ2棋子(S)!
+  const 棋子 = 位置2棋子(上次点击位置.value)
+  if (!棋子) return []
   return get棋子_可移动_位置(棋子).filter((位置) => 位置2棋子(位置)?.tb !== 棋子.tb)
 })
 
 export const 可移动位置2 = computed(() => {
-  const S = 起点位置.value
-  if (!S) return []
+  return []
 
-  const 棋子 = stringIJ2棋子(S)!
+  const 棋子 = 位置2棋子(上次点击位置.value)!
   return get棋子_可移动_位置(棋子).filter((位置) => 位置2棋子(位置)?.tb === 棋子.tb)
 })
 

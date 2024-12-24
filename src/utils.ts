@@ -109,3 +109,7 @@ export function deleteItem<T>(arr: T[], item: T) {
   const index = arr.indexOf(item)
   if (index > -1) arr.splice(index, 1)
 }
+
+export function findItem(arr: 位置or棋子[], item: 位置or棋子) {
+  return arr.find((e) => e.i === item.i && e.j === item.j)
+}

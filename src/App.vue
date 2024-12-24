@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import 棋盘 from './components/棋盘.vue'
+import { findItem } from './utils'
 import { action } from './gameTick'
 import {
   type t棋子,
-  起点位置,
+  上次点击位置,
   is先手,
   我的id,
   对手id,
@@ -82,12 +83,12 @@ function diff_jie(arr: t棋子[]) {
         deadIdx
           ? 'dead'
           : {
-              selected: 起点位置 === `${i}-${j}`,
+              selected: 上次点击位置?.i === i && 上次点击位置?.j === j,
               ...(buff && {
                 // 我吃敌有保护cls: 我吃_敌_有保护.find((item) => item.i === i && item.j === j),
-                我吃敌无保护cls: filt棋子_我_生_吃_敌_无保护.find((item) => item.i === i && item.j === j),
+                我吃敌无保护cls: findItem(filt棋子_我_生_吃_敌_无保护, { i, j }),
                 // 敌吃我有保护cls: 敌吃_我_有保护.find((item) => item.i === i && item.j === j),
-                敌吃我无保护cls: filt棋子_敌_生_吃_我_无保护.find((item) => item.i === i && item.j === j),
+                敌吃我无保护cls: findItem(filt棋子_敌_生_吃_我_无保护, { i, j }),
                 // 正在被吃cls: 正在被吃.find((item) => item.i === i && item.j === j),
               }),
             },
@@ -138,6 +139,7 @@ body {
 }
 
 dom棋子 {
+  z-index: 0;
   font-family: fangsong;
   display: flex;
   align-items: center;
@@ -185,7 +187,6 @@ dom棋子 {
 .canMove,
 .canMove2 {
   cursor: pointer;
-  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;

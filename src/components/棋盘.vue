@@ -2,13 +2,18 @@
 import { computed } from 'vue'
 import { 可移动位置, 可移动位置2, 走子提示, isTop回合, isBot回合, buff, 我被将军, 敌被将军, myIsTop, top被将, bot被将 } from '../data'
 
-const 走子提示format = computed(() => 走子提示.value!.map((item) => item.split('-').map((n) => Number(n) * 50 + 25 + 'px')))
+const 走子提示format = computed(() =>
+  走子提示.value!.map((item) => ({
+    top: item.i * 50 + 25 + 'px',
+    left: item.j * 50 + 25 + 'px',
+  }))
+)
 </script>
 
 <template>
   <dom棋盘>
-    <div class="走子提示" v-if="走子提示" :style="{ top: 走子提示format[0][0], left: 走子提示format[0][1] }" style="width: 30px"></div>
-    <div class="走子提示" v-if="走子提示" :style="{ top: 走子提示format[1][0], left: 走子提示format[1][1] }"></div>
+    <div class="走子提示" v-if="走子提示" :style="走子提示format[0]" style="width: 30px"></div>
+    <div class="走子提示" v-if="走子提示" :style="走子提示format[1]"></div>
 
     <div class="横">
       <div class="h" v-for="i in 10" :style="{ left: '25px', top: `${(i - 1) * 50 + 25}px` }"></div>
@@ -211,6 +216,8 @@ dom位置 {
   position: absolute;
   width: 50px;
   aspect-ratio: 1;
+
+  z-index: 10;
 }
 .走子提示 {
   width: 50px;
@@ -220,7 +227,6 @@ dom位置 {
   pointer-events: none;
   translate: -50% -50%;
   position: absolute;
-  z-index: 2;
   background: #1500fb;
   opacity: 0.5;
   /* transition: all 0.5s; */

@@ -216,15 +216,11 @@ dom位置 {
   position: absolute;
   width: 50px;
   aspect-ratio: 1;
-
-  z-index: 10;
 }
 .走子提示 {
   width: 50px;
   aspect-ratio: 1;
   border-radius: 50%;
-  /* 事件穿透 */
-  pointer-events: none;
   translate: -50% -50%;
   position: absolute;
   background: #1500fb;

@@ -46,13 +46,6 @@ function diff_jie(arr: t棋子[]) {
 <template>
   <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
 
-  <div>
-    <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
-    <div>is先手: {{ is先手 }}</div>
-    <div>回合数: {{ 回合数 }}</div>
-    <div style="font-size: 30px">{{ 对手id ? 走棋信息 : '等待对手加入...' }}</div>
-  </div>
-
   <component
     v-if="对手id || one"
     :is="棋盘"
@@ -101,26 +94,6 @@ function diff_jie(arr: t棋子[]) {
       {{ jie }}
     </dom棋子>
   </component>
-
-  <div v-if="buff" class="dbg">
-    <div>{{ 暗子牌库.top }}</div>
-    <div>{{ 暗子牌库.bot }}</div>
-    <div>
-      <div></div>
-      <div>我{{ diff_jie(filt棋子_我) }}</div>
-      <div>敌{{ diff_jie(filt棋子_敌) }}</div>
-    </div>
-    <div>
-      <div>生{{ diff_jie(filt棋子_生) }}</div>
-      <div>我生{{ diff_jie(filt棋子_我_生) }}</div>
-      <div>敌生{{ diff_jie(filt棋子_敌_生) }}</div>
-    </div>
-    <div>
-      <div>死{{ diff_jie(filt棋子_死) }}</div>
-      <div>我死{{ diff_jie(filt棋子_我_死) }}</div>
-      <div>敌死{{ diff_jie(filt棋子_敌_死) }}</div>
-    </div>
-  </div>
 </template>
 
 <style>
@@ -138,8 +111,16 @@ body {
   /* transform: scale(0.83); */
 }
 
+*:not(dom位置) {
+  /* 事件穿透 */
+  pointer-events: none;
+}
+dom位置 {
+  /* 反转继承 */
+  pointer-events: auto;
+}
+
 dom棋子 {
-  z-index: 0;
   font-family: fangsong;
   display: flex;
   align-items: center;

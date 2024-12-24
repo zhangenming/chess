@@ -19,9 +19,7 @@ import { 走子提示 } from '../gameTick'
     <div class="士">
       <div
         class="士-1"
-        :class="{
-          被将军: top被将,
-        }"
+        :class="{ 被将军: top被将 }"
         :style="{
           '--将军颜色': 'var(--top_color)',
           ...(isTop回合 && { background: 'color-mix(in oklab, var(--top_color), white 50%)' }),
@@ -32,9 +30,7 @@ import { 走子提示 } from '../gameTick'
       </div>
       <div
         class="士-2"
-        :class="{
-          被将军: bot被将,
-        }"
+        :class="{ 被将军: bot被将 }"
         :style="{
           '--将军颜色': 'var(--bot_color)',
           ...(isBot回合 && { background: 'color-mix(in oklab, var(--bot_color), white 50%)' }),
@@ -84,13 +80,14 @@ import { 走子提示 } from '../gameTick'
           :class="{
             走子提示1: 走子提示?.[0].i === i && 走子提示?.[0].j === j,
             走子提示2: 走子提示?.[1].i === i && 走子提示?.[1].j === j,
-            canMove: findItem(可移动位置, { i, j }),
+            canMove位置: findItem(可移动位置, { i, j }),
             ...(buff && {
-              // canMove2: findItem(可移动位置2, { i, j }),
+              // canMove位置2: findItem(可移动位置2, { i, j }),
               危险位置cls: findItem(危险位置, { i, j }),
               安全位置cls: findItem(安全位置, { i, j }),
             }),
           }"
+          :安全位置cls="findItem(安全位置, { i, j })?.被吃"
         />
       </template>
     </div>
@@ -133,7 +130,7 @@ dom棋盘 {
   height: 45px;
   background-color: white;
   position: absolute;
-  left: 50px;
+  left: 75px;
   top: calc(225px + 3px);
 }
 .士-1,
@@ -206,9 +203,6 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   display: none;
 }
 
-.canMove {
-  /* background: linear-gradient(#1500fb, #1500fb) no-repeat; */
-}
 .走子提示1 {
   border: 2px solid #1500fb;
 }
@@ -219,18 +213,27 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   outline: 25px solid var(--将军颜色);
 }
 .危险位置cls:not(.安全位置cls) {
-  background: red;
-  opacity: 0.3;
-  /* background: radial-gradient(circle at center, red 3px, transparent 0px), transparent; */
+  background: color-mix(in oklab, red, transparent 30%);
 }
 .安全位置cls:not(.危险位置cls) {
-  background: black;
-  opacity: 0.3;
-  /* background: radial-gradient(circle at center, black 3px, transparent 0px), transparent; */
+  background: color-mix(in oklab, black, transparent 30%);
 }
 .危险位置cls.安全位置cls {
-  background: yellow;
-  opacity: 0.3;
-  /* background: radial-gradient(circle at center, yellow 3px, transparent 0px), transparent; */
+  background: color-mix(in oklab, yellow, transparent 30%);
+}
+
+.canMove位置 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.canMove位置::before {
+  content: '';
+  width: 15px;
+  aspect-ratio: 1;
+  border-radius: 1%;
+  position: absolute;
+  background: #1500fb;
 }
 </style>

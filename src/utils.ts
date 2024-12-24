@@ -92,11 +92,6 @@ export function 位置2棋子(位置or棋子: 位置 | undefined): t棋子 | und
   return 位置or棋子 && filt棋子_生.value.find((e) => e.i === 位置or棋子.i && e.j === 位置or棋子.j)
 }
 
-export function stringIJ2棋子(s: string): t棋子 | undefined {
-  const [i, j] = s.split('-').map((e) => Number(e))
-  return filt棋子_生.value.find((e) => e.i === i && e.j === j)
-}
-
 export function 取反(tb: 'top' | 'bot') {
   if (tb === 'top') return 'bot'
   if (tb === 'bot') return 'top'

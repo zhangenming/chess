@@ -169,15 +169,15 @@ dom棋子 {
   border-width: 1px;
   font-size: 20px;
 }
-/* dom位置.canMove,
-dom位置.canMove2 {
+/* dom位置.canMove位置,
+dom位置.canMove位置2 {
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-dom位置.canMove::before,
-dom位置.canMove2::before,
+dom位置.canMove位置::before,
+dom位置.canMove位置2::before,
 :is(dom棋子.我吃敌有保护cls, dom棋子.我吃敌无保护cls, dom棋子.敌吃我有保护cls, dom棋子.敌吃我无保护cls, dom棋子.正在被吃cls)::before {
   content: '';
   width: 15px;
@@ -186,7 +186,7 @@ dom位置.canMove2::before,
   position: absolute;
   background: #1500fb;
 }
-dom位置.canMove2::before {
+dom位置.canMove位置2::before {
   background: blue;
 }
 dom棋子.我吃敌有保护cls::before {

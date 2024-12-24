@@ -13,7 +13,6 @@ import {
   位置2棋子,
 } from './utils'
 
-// 得到所有符合规则的移动位置 包括空位/敌我吃棋
 function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走'): 位置[] {
   const is敌人棋子 = 棋子?.tb === drTB.value
 
@@ -78,10 +77,10 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走'): 位置[]
 
   if (item === '炮') {
     return [
-      ...filter炮可移动位置(get下侧全部位置(棋子)),
-      ...filter炮可移动位置(get上侧全部位置(棋子)),
-      ...filter炮可移动位置(get右侧全部位置(棋子)),
-      ...filter炮可移动位置(get左侧全部位置(棋子)),
+      ...filter炮可移动位置(get下侧全部位置(棋子), 行动),
+      ...filter炮可移动位置(get上侧全部位置(棋子), 行动),
+      ...filter炮可移动位置(get右侧全部位置(棋子), 行动),
+      ...filter炮可移动位置(get左侧全部位置(棋子), 行动),
     ]
   }
 
@@ -113,32 +112,54 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走'): 位置[]
   return []
 
   function filter军可移动位置(位置s: { i: number; j: number }[]) {
-    let meetQz = false
+    let 已经遇到棋子 = false
     return 位置s.filter((位置) => {
-      if (meetQz) return false // 这个判断必须首先判断 遇到敌人之后 无论是空地还是棋子 都要返回false
-      if (!位置2棋子(位置)) return true
-      if (!meetQz && 位置2棋子(位置)) {
-        meetQz = true
-        return true
+      if (已经遇到棋子) return false // 这个判断必须首先判断 遇到敌人之后 无论是空地还是棋子 都要返回false
+      if (位置2棋子(位置)) {
+        已经遇到棋子 = true
+        return true //可吃/保
+      } else {
+        return true //可走
       }
     })
   }
-  function filter炮可移动位置(位置s: { i: number; j: number }[]) {
-    let 炮架 = false
-    let 找到吃子 = false
-    return 位置s.filter((位置) => {
-      if (!炮架 && !位置2棋子(位置)) return 行动 === '走'
-      if (炮架 && 位置2棋子(位置) && !找到吃子) {
-        找到吃子 = true
-        return true
-      }
-      if (位置2棋子(位置)) {
-        炮架 = true
-      }
-    })
+  function filter炮可移动位置(位置s: { i: number; j: number }[], 行动: '走' | '吃') {
+    if (行动 === '走') {
+      // 可走和可吃
+      let 炮架 = false
+      let 找到吃子 = false
+      return 位置s.filter((位置) => {
+        if (!炮架 && !位置2棋子(位置)) return true
+        if (炮架 && 位置2棋子(位置) && !找到吃子) {
+          找到吃子 = true
+          return true
+        }
+        if (位置2棋子(位置)) {
+          炮架 = true
+        }
+      })
+    } else {
+      // 只有可吃
+      let 炮架 = false
+      let 炮架2 = false
+      return 位置s.filter((位置) => {
+        if (位置2棋子(位置)) {
+          if (炮架) {
+            炮架2 = true
+            return true
+          } else {
+            炮架 = true
+            return false
+          }
+        }
+
+        return 炮架 && !炮架2
+      })
+    }
   }
 }
 
+// 得到所有符合规则的移动位置 包括 [空位(走) / 敌(吃) / 我(保)]
 // 对炮来说 可走位置和可吃位置 不一致
 export function get棋子_可走_位置(棋子: t棋子) {
   return 行动_位置(棋子, '走')
@@ -146,3 +167,8 @@ export function get棋子_可走_位置(棋子: t棋子) {
 export function get棋子_可吃_位置(棋子: t棋子) {
   return 行动_位置(棋子, '吃')
 }
+
+// setTimeout(() => {
+//   console.log(get棋子_可走_位置({ i: 2, j: 1, tb: 'top', role: '炮', jie: '〇', deadIdx: 0 }))
+//   console.log(get棋子_可吃_位置({ i: 2, j: 1, tb: 'top', role: '炮', jie: '〇', deadIdx: 0 }))
+// }, 11)

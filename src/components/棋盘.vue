@@ -101,17 +101,19 @@ const 走子提示format = computed(() =>
     <div class="位置s">
       <template v-for="i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
         <dom位置
-          :class="{
-            canMove: findItem(可移动位置, { i, j }),
-            canMove2: buff && findItem(可移动位置2, { i, j }),
-            危险位置cls: findItem(危险位置, { i, j }),
-            安全位置cls: findItem(安全位置, { i, j }),
-          }"
           v-for="j of [0, 1, 2, 3, 4, 5, 6, 7, 8]"
           :style="{ top: `${i * 50}px`, left: `${j * 50}px` }"
           :i="i"
           :j="j"
-        ></dom位置>
+          :class="{
+            canMove: findItem(可移动位置, { i, j }),
+            ...(buff && {
+              // canMove2: findItem(可移动位置2, { i, j }),
+              危险位置cls: findItem(危险位置, { i, j }),
+              安全位置cls: findItem(安全位置, { i, j }),
+            }),
+          }"
+        />
       </template>
     </div>
   </dom棋盘>
@@ -240,12 +242,12 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   outline: 25px solid var(--将军颜色);
 }
 .危险位置cls:not(.安全位置cls) {
-  background: radial-gradient(circle at center, red 5px, transparent 5px), transparent;
+  background: radial-gradient(circle at center, red 0px, transparent 20px), transparent;
 }
 .安全位置cls:not(.危险位置cls) {
-  background: radial-gradient(circle at center, black 5px, transparent 5px), transparent;
+  background: radial-gradient(circle at center, black 0px, transparent 20px), transparent;
 }
 .危险位置cls.安全位置cls {
-  background: radial-gradient(circle at center, yellow 5px, transparent 5px), transparent;
+  background: radial-gradient(circle at center, yellow 0px, transparent 20px), transparent;
 }
 </style>

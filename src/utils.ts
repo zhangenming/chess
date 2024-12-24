@@ -63,7 +63,7 @@ export function get暗棋Random(tb: 'top' | 'bot') {
 
   return shuffle(暗子牌库[tb])[0] // 这个是单人逻辑 为了保持数据一致性 在双人逻辑处做数据删除处理
 
-  // 洗牌算法 原地修改
+  // 洗牌算法
   function shuffle<T>(arr: T[]) {
     arr = [...arr]
     for (let i = arr.length - 1; i > 0; i--) {

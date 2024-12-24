@@ -112,12 +112,12 @@ dom棋盘 {
   position: relative;
 }
 
-.h {
-  width: 400px;
-  height: 1px;
+.h,
+.s {
   background-color: #999;
   position: absolute;
-  left: 0;
+  width: 400px;
+  height: 1px;
 }
 .h:nth-child(5),
 .h:nth-child(6) {
@@ -130,9 +130,6 @@ dom棋盘 {
 .s {
   width: 1px;
   height: 450px;
-  background-color: #999;
-  position: absolute;
-  top: 0;
 }
 .河 {
   width: 302px;
@@ -212,11 +209,6 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   display: none;
 }
 
-dom位置 {
-  position: absolute;
-  width: 50px;
-  aspect-ratio: 1;
-}
 .走子提示 {
   width: 50px;
   aspect-ratio: 1;

@@ -44,7 +44,12 @@ function diff_jie(arr: t棋子[]) {
 </script>
 
 <template>
-  <!-- <button style="margin: 10px; padding: 10px" @click="() => SEND('发起悔棋')">悔棋</button> -->
+  <div>
+    <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
+    <div>is先手: {{ is先手 }}</div>
+    <div>回合数: {{ 回合数 }}</div>
+    <div style="font-size: 30px">{{ 对手id ? 走棋信息 : '等待对手加入...' }}</div>
+  </div>
 
   <component
     v-if="对手id || one"
@@ -97,16 +102,6 @@ function diff_jie(arr: t棋子[]) {
 </template>
 
 <style>
-.dbg {
-  margin-top: 80px;
-}
-.dbg > div {
-  display: flex;
-  gap: 10px;
-}
-.dbg > div > div {
-  width: 100px;
-}
 body {
   /* transform: scale(0.83); */
 }
@@ -118,6 +113,9 @@ body {
 dom位置 {
   /* 反转继承 */
   pointer-events: auto;
+  position: absolute;
+  width: 50px;
+  aspect-ratio: 1;
 }
 
 dom棋子 {

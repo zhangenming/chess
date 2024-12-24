@@ -1,4 +1,5 @@
-import { 回合数, 走子提示, drTB, is我的回合, myTB, one, 上次点击位置, filt棋子_死, 走棋信息, 暗子牌库, 可移动位置, type 位置 } from './data'
+import { ref } from 'vue'
+import { 回合数, drTB, is我的回合, myTB, one, 上次点击位置, filt棋子_死, 走棋信息, 暗子牌库, 可移动位置, type 位置 } from './data'
 import { SEND } from './online'
 import { deleteItem, findItem, get暗棋Random, test, 位置2棋子 } from './utils'
 
@@ -34,6 +35,9 @@ export function action({ target }: { target: HTMLElement }) {
 
 //todo 多步悔棋
 const 悔棋数据 = []
+
+export const 走子提示 = ref<[位置, 位置]>()
+
 // 两种思路
 // 1. 可变数据 记录走棋数据，然后悔棋的时候，根据走棋数据，反向走棋
 // 2. 不可变数据 时间旅行

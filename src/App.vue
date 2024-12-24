@@ -164,7 +164,12 @@ dom棋子 {
 .selected {
   border-radius: 0;
 }
-dom位置.canMove,
+.dead {
+  top: -50px;
+  border-width: 1px;
+  font-size: 20px;
+}
+/* dom位置.canMove,
 dom位置.canMove2 {
   cursor: pointer;
   display: flex;
@@ -175,11 +180,11 @@ dom位置.canMove::before,
 dom位置.canMove2::before,
 :is(dom棋子.我吃敌有保护cls, dom棋子.我吃敌无保护cls, dom棋子.敌吃我有保护cls, dom棋子.敌吃我无保护cls, dom棋子.正在被吃cls)::before {
   content: '';
-  width: 10px;
+  width: 15px;
   aspect-ratio: 1;
   border-radius: 1%;
   position: absolute;
-  background: black;
+  background: #1500fb;
 }
 dom位置.canMove2::before {
   background: blue;
@@ -200,13 +205,8 @@ dom棋子.敌吃我无保护cls::before {
   background: red;
   width: 15px;
 }
-.dead {
-  top: -50px;
-  border-width: 1px;
-  font-size: 20px;
-}
 dom棋子.正在被吃cls::before {
   background: yellow;
   width: 15px;
-}
+} */
 </style>

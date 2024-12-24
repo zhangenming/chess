@@ -22,8 +22,6 @@ export const buff = location.search.includes('buff')
 
 export const 上次点击位置 = ref<位置>()
 
-export const 走子提示 = ref<[位置, 位置]>()
-
 export const 可移动位置 = computed(() => {
   const 棋子 = 位置2棋子(上次点击位置.value)
   if (!棋子) return []

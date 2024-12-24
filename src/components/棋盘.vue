@@ -1,35 +1,11 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import {
-  可移动位置,
-  可移动位置2,
-  走子提示,
-  isTop回合,
-  isBot回合,
-  buff,
-  我被将军,
-  敌被将军,
-  myIsTop,
-  top被将,
-  bot被将,
-  危险位置,
-  安全位置,
-} from '../data'
+import { 可移动位置, isTop回合, isBot回合, buff, top被将, bot被将, 危险位置, 安全位置 } from '../data'
 import { findItem } from '@/utils'
-
-const 走子提示format = computed(() =>
-  走子提示.value!.map((item) => ({
-    top: item.i * 50 + 25 + 'px',
-    left: item.j * 50 + 25 + 'px',
-  }))
-)
+import { 走子提示 } from '../gameTick'
 </script>
 
 <template>
   <dom棋盘>
-    <div class="走子提示" v-if="走子提示" :style="走子提示format[0]" style="width: 30px"></div>
-    <div class="走子提示" v-if="走子提示" :style="走子提示format[1]"></div>
-
     <div class="横">
       <div class="h" v-for="i in 10" :style="{ left: '25px', top: `${(i - 1) * 50 + 25}px` }"></div>
     </div>
@@ -106,6 +82,8 @@ const 走子提示format = computed(() =>
           :i="i"
           :j="j"
           :class="{
+            走子提示1: 走子提示?.[0].i === i && 走子提示?.[0].j === j,
+            走子提示2: 走子提示?.[1].i === i && 走子提示?.[1].j === j,
             canMove: findItem(可移动位置, { i, j }),
             ...(buff && {
               // canMove2: findItem(可移动位置2, { i, j }),
@@ -228,26 +206,31 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   display: none;
 }
 
-.走子提示 {
-  width: 50px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  translate: -50% -50%;
-  position: absolute;
-  background: #1500fb;
-  opacity: 0.5;
-  /* transition: all 0.5s; */
+.canMove {
+  /* background: linear-gradient(#1500fb, #1500fb) no-repeat; */
+}
+.走子提示1 {
+  border: 2px solid #1500fb;
+}
+.走子提示2 {
+  border: 4px solid #1500fb;
 }
 .被将军 {
   outline: 25px solid var(--将军颜色);
 }
 .危险位置cls:not(.安全位置cls) {
-  background: radial-gradient(circle at center, red 0px, transparent 20px), transparent;
+  background: red;
+  opacity: 0.3;
+  /* background: radial-gradient(circle at center, red 3px, transparent 0px), transparent; */
 }
 .安全位置cls:not(.危险位置cls) {
-  background: radial-gradient(circle at center, black 0px, transparent 20px), transparent;
+  background: black;
+  opacity: 0.3;
+  /* background: radial-gradient(circle at center, black 3px, transparent 0px), transparent; */
 }
 .危险位置cls.安全位置cls {
-  background: radial-gradient(circle at center, yellow 0px, transparent 20px), transparent;
+  background: yellow;
+  opacity: 0.3;
+  /* background: radial-gradient(circle at center, yellow 3px, transparent 0px), transparent; */
 }
 </style>

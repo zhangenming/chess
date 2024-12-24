@@ -79,6 +79,10 @@ const 走子提示format = computed(() =>
       </div>
     </div>
 
+    <div class="棋子s">
+      <slot></slot>
+    </div>
+
     <div class="位置s">
       <template v-for="i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
         <dom位置
@@ -92,10 +96,6 @@ const 走子提示format = computed(() =>
           :j="j"
         ></dom位置>
       </template>
-    </div>
-
-    <div class="棋子s">
-      <slot></slot>
     </div>
   </dom棋盘>
 </template>

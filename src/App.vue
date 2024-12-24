@@ -165,16 +165,16 @@ dom棋子 {
 .selected {
   border-radius: 0;
 }
-.canMove,
-.canMove2 {
+dom位置.canMove,
+dom位置.canMove2 {
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.canMove::before,
-.canMove2::before,
-:is(.我吃敌有保护cls, .我吃敌无保护cls, .敌吃我有保护cls, .敌吃我无保护cls, .正在被吃cls)::after {
+dom位置.canMove::before,
+dom位置.canMove2::before,
+:is(dom棋子.我吃敌有保护cls, dom棋子.我吃敌无保护cls, dom棋子.敌吃我有保护cls, dom棋子.敌吃我无保护cls, dom棋子.正在被吃cls)::before {
   content: '';
   width: 10px;
   aspect-ratio: 1;
@@ -182,22 +182,22 @@ dom棋子 {
   position: absolute;
   background: black;
 }
-.canMove2::before {
+dom位置.canMove2::before {
   background: blue;
 }
-.我吃敌有保护cls::after {
+dom棋子.我吃敌有保护cls::before {
   background: green;
   width: 7px;
 }
-.敌吃我有保护cls::after {
+dom棋子.敌吃我有保护cls::before {
   background: green;
   width: 7px;
 }
-.我吃敌无保护cls::after {
+dom棋子.我吃敌无保护cls::before {
   background: red;
   width: 15px;
 }
-.敌吃我无保护cls::after {
+dom棋子.敌吃我无保护cls::before {
   background: red;
   width: 15px;
 }
@@ -206,7 +206,7 @@ dom棋子 {
   border-width: 1px;
   font-size: 20px;
 }
-.正在被吃cls::after {
+dom棋子.正在被吃cls::before {
   background: yellow;
   width: 15px;
 }

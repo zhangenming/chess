@@ -124,6 +124,8 @@ dom位置 {
 
 dom棋子 {
   font-family: fangsong;
+  width: 50px;
+  aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,21 +133,20 @@ dom棋子 {
   font-size: 35px;
   line-height: 1em;
   text-align: center;
-  aspect-ratio: 1;
   position: absolute;
   transition-property: all;
   transition-duration: 0.3s;
   background: color-mix(in oklab, currentColor, white 90%);
   border-radius: 50%;
-  border-width: 2px;
-  border-style: solid;
+  outline-width: 2px;
+  outline-style: solid;
   transform: rotate(var(--后手需要反转));
-  border-color: var(--top_color);
+  outline-color: var(--top_color);
   color: var(--top_color);
   font-weight: var(--top_weight);
 }
 .bot {
-  border-color: var(--bot_color);
+  outline-color: var(--bot_color);
   color: var(--bot_color);
   font-weight: var(--bot_weight);
 }
@@ -153,15 +154,15 @@ dom棋子 {
   color: #aaa;
 }
 [jie='车'] {
-  border-width: 7px;
+  outline-width: 7px;
   font-weight: 900;
 }
 [jie='马'] {
-  border-width: 5px;
+  outline-width: 5px;
   font-weight: 900;
 }
 [jie='炮'] {
-  border-width: 5px;
+  outline-width: 5px;
   font-weight: 900;
 }
 .selected {

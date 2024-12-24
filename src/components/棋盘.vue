@@ -243,7 +243,7 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
 }
 
 .混乱位置cls {
-  background: color-mix(in oklab, yellow, transparent 50%);
+  background: color-mix(in oklab, yellow, transparent 60%);
 }
 .危险位置cls {
   background: color-mix(in oklab, red, transparent 80%);
@@ -252,10 +252,10 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   background: color-mix(in oklab, black, transparent 80%);
 }
 .危险位置cls.存在我方棋子 {
-  background: color-mix(in oklab, red, transparent 20%);
+  background: color-mix(in oklab, red, transparent 40%);
 }
 .安全位置cls.存在敌方棋子 {
-  background: color-mix(in oklab, black, transparent 20%);
+  background: color-mix(in oklab, black, transparent 40%);
 }
 
 .canMove位置 {

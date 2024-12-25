@@ -1,4 +1,5 @@
-import { type t棋子, 所有位置, filt棋子_生, 暗子牌库, type 位置 } from './data'
+import type { t棋子, 位置 } from './type'
+import { 所有位置, filt棋子_生, 暗子牌库 } from './data'
 
 export const raw = [
   ['车', '马', '象', '士', '帅', '士', '象', '马', '车'],

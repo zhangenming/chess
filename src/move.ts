@@ -1,4 +1,4 @@
-import { 所有位置一维, is先手, drTB, type t棋子, type 位置 } from './data'
+import type { t棋子, 位置 } from './type'
 import {
   get上侧位置,
   get下侧位置,
@@ -10,12 +10,11 @@ import {
   get左侧全部位置,
   距离i,
   距离j,
+  距离,
   位置2棋子,
 } from './utils'
 
-function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走'): 位置[] {
-  const is敌人棋子 = 棋子?.tb === drTB.value
-
+function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走', 所有位置一维: 位置[]): 位置[] {
   const { jie, role } = 棋子
   const item = jie === '〇' ? role : jie
 
@@ -85,9 +84,17 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走'): 位置[]
   }
 
   if (item === '卒') {
-    return (is敌人棋子 ? !is先手.value : is先手.value)
-      ? [get上侧位置(棋子), ...(棋子.i < 5 ? [get右侧位置(棋子), get左侧位置(棋子)] : [])].filter((e) => e !== undefined)
-      : [get下侧位置(棋子), ...(棋子.i > 4 ? [get右侧位置(棋子), get左侧位置(棋子)] : [])].filter((e) => e !== undefined)
+    return 所有位置一维
+      .filter((p) => 距离(棋子, p) === 1)
+      .filter(({ i, j }) => (棋子.tb === 'top' ? 棋子.i <= i : 棋子.i >= i))
+      .filter(({ i, j }) => {
+        const 已经过河 = 棋子.tb === 'top' ? i > 4 : i < 5
+        if (已经过河) {
+          return true
+        } else {
+          return 棋子.j === j
+        }
+      })
   }
 
   if (item === '帅') {
@@ -96,8 +103,7 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走'): 位置[]
       .filter(({ i, j }) => (j === 3 || j === 4 || j === 5) && (i === 0 || i === 1 || i === 2 || i === 7 || i === 8 || i === 9))
 
     const 敌方帅 = (() => {
-      //is先手 ???
-      const 到敌方帅的位置 = is先手.value ? get上侧全部位置(棋子) : get下侧全部位置(棋子)
+      const 到敌方帅的位置 = 棋子.tb === 'bot' ? get上侧全部位置(棋子) : get下侧全部位置(棋子)
       for (const 位置 of 到敌方帅的位置) {
         const 棋子 = 位置2棋子(位置)
         if (!棋子) continue
@@ -161,11 +167,11 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走'): 位置[]
 
 // 得到所有符合规则的移动位置 包括 [空位(走) / 敌(吃) / 我(保)]
 // 对炮来说 可走位置和可吃位置 不一致
-export function get棋子_可走_位置(棋子: t棋子) {
-  return 行动_位置(棋子, '走')
+export function get棋子_可走_位置(棋子: t棋子, 所有位置一维: 位置[]) {
+  return 行动_位置(棋子, '走', 所有位置一维)
 }
-export function get棋子_可吃_位置(棋子: t棋子) {
-  const x = 行动_位置(棋子, '吃')
+export function get棋子_可吃_位置(棋子: t棋子, 所有位置一维: 位置[]) {
+  const x = 行动_位置(棋子, '吃', 所有位置一维)
   x.forEach((位置) => {
     // @ts-expect-error
     位置.被吃 = `${棋子.i}-${棋子.j}`

@@ -1,40 +1,8 @@
 <script setup lang="ts">
 import 棋盘 from './components/棋盘.vue'
-import { findItem } from './utils'
+import type { t棋子 } from './type'
 import { action } from './gameTick'
-import {
-  type t棋子,
-  上次点击位置,
-  is先手,
-  我的id,
-  对手id,
-  回合数,
-  is我的回合,
-  base棋子,
-  one,
-  buff,
-  filt棋子_生,
-  filt棋子_死,
-  filt棋子_我,
-  filt棋子_我_死,
-  filt棋子_我_生,
-  filt棋子_我_生_吃,
-  filt棋子_我_生_吃_我,
-  filt棋子_我_生_吃_敌,
-  filt棋子_我_生_吃_敌_有保护,
-  filt棋子_我_生_吃_敌_无保护,
-  filt棋子_敌,
-  filt棋子_敌_生,
-  filt棋子_敌_死,
-  filt棋子_敌_生_吃,
-  filt棋子_敌_生_吃_敌,
-  filt棋子_敌_生_吃_我,
-  filt棋子_敌_生_吃_我_有保护,
-  filt棋子_敌_生_吃_我_无保护,
-  正在被吃,
-  走棋信息,
-  暗子牌库,
-} from './data'
+import { 上次点击位置, is先手, 我的id, 对手id, 回合数, is我的回合, base棋子, one, buff, 走棋信息 } from './data'
 
 function diff_jie(arr: t棋子[]) {
   const l = arr.filter((item) => item.jie === '〇')
@@ -110,7 +78,7 @@ body {
   /* transform: scale(0.83); */
 }
 
-*:not(dom位置) {
+#app *:not(dom位置) {
   /* 事件穿透 */
   pointer-events: none;
 }

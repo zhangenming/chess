@@ -1,6 +1,7 @@
-import { computed, reactive, ref, watch } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import { getMyId, raw, 位置2棋子, qzA, qzB } from './utils'
 import { get棋子_可走_位置, get棋子_可吃_位置 } from './move'
+import type { t棋子, 位置 } from './type'
 
 export const 回合数 = ref(0)
 export const is先手 = ref(true)
@@ -25,27 +26,15 @@ export const 上次点击位置 = ref<位置>()
 export const 可移动位置 = computed(() => {
   const 棋子 = 位置2棋子(上次点击位置.value)
   if (!棋子) return []
-  return get棋子_可走_位置(棋子).filter((位置) => 位置2棋子(位置)?.tb !== 棋子.tb)
+  return get棋子_可走_位置(棋子, 所有位置一维).filter((位置) => 位置2棋子(位置)?.tb !== 棋子.tb)
 })
 
 export const 可移动位置2 = computed(() => {
   return []
 
   const 棋子 = 位置2棋子(上次点击位置.value)!
-  return get棋子_可走_位置(棋子).filter((位置) => 位置2棋子(位置)?.tb === 棋子.tb)
+  return get棋子_可走_位置(棋子, 所有位置一维).filter((位置) => 位置2棋子(位置)?.tb === 棋子.tb)
 })
-
-export type 位置 = { i: number; j: number }
-
-export type t棋子 = {
-  tb: 'top' | 'bot'
-  role: string
-  jie: string
-  deadIdx: number
-
-  i: number
-  j: number
-} & 位置
 
 const _base棋子 = [] as t棋子[]
 export const 所有位置 = reactive(
@@ -98,7 +87,7 @@ export const filt棋子_我_死 = computed(() => filt棋子_我.value.filter(is�
 export const filt棋子_我_生 = computed(() => filt棋子_我.value.filter(is生棋子))
 export const filt棋子_我_生_吃 = computed(() =>
   filt棋子_我_生.value
-    .map(get棋子_可走_位置)
+    .map((棋子) => get棋子_可走_位置(棋子, 所有位置一维))
     .flat()
     .map(位置2棋子)
     .filter((e) => e !== undefined)
@@ -114,7 +103,7 @@ export const filt棋子_敌_死 = computed(() => filt棋子_敌.value.filter(is�
 export const filt棋子_敌_生 = computed(() => filt棋子_敌.value.filter(is生棋子))
 export const filt棋子_敌_生_吃 = computed(() =>
   filt棋子_敌_生.value
-    .map(get棋子_可走_位置)
+    .map((棋子) => get棋子_可走_位置(棋子, 所有位置一维))
     .flat()
     .map(位置2棋子)
     .filter((e) => e !== undefined)
@@ -135,11 +124,11 @@ export const bot被将 = computed(() => 正在被吃.value.find((e) => e.role ==
 
 export const 走棋信息 = ref('...')
 
-export const 危险位置 = computed(() => filt棋子_敌_生.value.map(get棋子_可吃_位置).flat())
+export const 危险位置 = computed(() => filt棋子_敌_生.value.map((棋子) => get棋子_可吃_位置(棋子, 所有位置一维)).flat())
 export const 安全位置 = computed(() =>
   filt棋子_我_生.value
     .filter(({ i, j }) => 上次点击位置.value?.i !== i || 上次点击位置.value?.j !== j)
-    .map(get棋子_可吃_位置)
+    .map((棋子) => get棋子_可吃_位置(棋子, 所有位置一维))
     .flat()
 )
 

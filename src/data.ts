@@ -1,5 +1,5 @@
 import { computed, reactive, ref, watch } from 'vue'
-import { raw, 位置2棋子, qzA, qzB, clearLL, LL } from './utils'
+import { raw, 位置2棋子, qzA, qzB, clearLL, LL, hasFlag } from './utils'
 import { get棋子_可走_位置, get棋子_可吃_位置 } from './move'
 import type { 棋子, 位置 } from './type'
 import { 走子提示 } from './gameTick'
@@ -138,25 +138,13 @@ export const 活棋子_我敌 = computed(() => base棋子.filter(is生棋子))
 export const 我的活棋子 = computed(() => 活棋子_我敌.value.filter(is我棋子))
 export const 敌的活棋子 = computed(() => 活棋子_我敌.value.filter(is敌棋子))
 
-const 我棋子吃2 = computed(() =>
-  我的活棋子.value.map((棋子) => ({
-    k: `${棋子.i}${棋子.j}`,
-    v: get棋子_可走_位置(棋子, 所有位置一维)
-      .map(位置2棋子)
-      .filter(is敌棋子)
-      .map((e) => `${e!.i}${e!.j}`),
-  }))
-)
-
-const 我棋子吃 = computed(() => {
-  const vfilt棋子_敌_生_吃_敌 = filt棋子_敌_生_吃_敌.value
+const 我可以吃的棋子 = computed(() => {
+  const v_flags = filt棋子_敌_生_吃_敌.value
   return 我的活棋子.value.map((棋子) => {
     const 所有可吃棋子 = get棋子_可吃_位置(棋子, 所有位置一维).map(位置2棋子)
     const 吃空地 = 所有可吃棋子.filter((棋子) => !棋子)
     const 吃我 = 所有可吃棋子.filter(is我棋子) as 棋子[]
     const 吃敌 = 所有可吃棋子.filter(is敌棋子) as 棋子[]
-    const 吃敌_有保护 = 吃敌.filter((p) => vfilt棋子_敌_生_吃_敌.includes(p))
-    const 吃敌_无保护 = 吃敌.filter((p) => !vfilt棋子_敌_生_吃_敌.includes(p))
 
     return {
       k: `${棋子.i}${棋子.j}`,
@@ -169,8 +157,22 @@ const 我棋子吃 = computed(() => {
 
       吃敌,
 
-      吃敌_有保护,
-      吃敌_无保护,
+      吃敌_有保护: 吃敌.filter((p) => v_flags.includes(p)),
+      吃敌_无保护: 吃敌.filter((p) => !v_flags.includes(p)),
+    }
+  })
+})
+
+const 敌可以吃的棋子 = computed(() => {
+  const v_flags = filt棋子_我_生_吃_我.value
+  return 敌的活棋子.value.map((棋子) => {
+    const 所有可吃棋子 = get棋子_可吃_位置(棋子, 所有位置一维).map(位置2棋子)
+    const 吃我 = 所有可吃棋子.filter(is我棋子) as 棋子[]
+
+    return {
+      k: `${棋子.i}${棋子.j}`,
+      吃我_有保护: 吃我.filter((p) => v_flags.includes(p)),
+      吃我_无保护: 吃我.filter((p) => !v_flags.includes(p)),
     }
   })
 })
@@ -181,10 +183,19 @@ setTimeout(() => {
     () => {
       clearLL()
 
-      我棋子吃.value.forEach(({ k: l, 吃敌_有保护, 吃敌_无保护 }) => {
-        吃敌_有保护.forEach((r) => LL(l, `${r.i}${r.j}`))
-        吃敌_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { size: 4 }))
-      })
+      // todo 主力
+
+      hasFlag('d') &&
+        敌可以吃的棋子.value.forEach(({ k: l, 吃我_有保护, 吃我_无保护 }) => {
+          hasFlag('1') && 吃我_有保护.forEach((r) => LL(l, `${r.i}${r.j}`))
+          hasFlag('2') && 吃我_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { size: 4 }))
+        })
+
+      hasFlag('w') &&
+        我可以吃的棋子.value.forEach(({ k: l, 吃敌_有保护, 吃敌_无保护 }) => {
+          hasFlag('1') && 吃敌_有保护.forEach((r) => LL(l, `${r.i}${r.j}`, { color: 'green' }))
+          hasFlag('2') && 吃敌_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { color: 'green', size: 4 }))
+        })
 
       if (走子提示.value) {
         const [l, r] = 走子提示.value

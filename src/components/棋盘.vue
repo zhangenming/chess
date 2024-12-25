@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { 可移动位置, isTop回合, isBot回合, top被将, bot被将, 危险位置, 安全位置, 活棋子_我敌, 我的活棋子, 敌的活棋子 } from '../data'
-import { findItem, 位置2棋子, get棋子role } from '../utils'
+import { findItem, 位置2棋子, get棋子role, hasFlag } from '../utils'
 import { action, 走子提示 } from '../gameTick'
 import { isBuff } from '@/lib/constant'
 </script>
@@ -90,6 +90,7 @@ import { isBuff } from '@/lib/constant'
               }),
             },
             isBuff &&
+              hasFlag('x') &&
               (() => {
                 const 危险位置cls = findItem(危险位置, { i, j })
                 const 安全位置cls = findItem(安全位置, { i, j })
@@ -234,7 +235,7 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   aspect-ratio: 1;
   border-radius: 1%;
   position: absolute;
-  background: #1500fb;
+  background: black;
 }
 
 .走子提示1 {

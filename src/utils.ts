@@ -113,6 +113,10 @@ export function get棋子role(棋子: 棋子 | undefined) {
   return jie === '〇' ? role : jie
 }
 
+export function hasFlag(flag: string) {
+  return location.search.includes(flag)
+}
+
 export function clearLL() {
   document.querySelectorAll('svg').forEach((e) => e.remove())
 }

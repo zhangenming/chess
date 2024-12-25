@@ -1,7 +1,6 @@
 import GoEasy from 'goeasy'
-import { isMaster, isMe, is先手, 回合数, 我的id, 对手id, isBoss, one } from './data'
+import { isMaster, is先手, 我的id, 对手id, isBoss, isOne } from './data'
 import { RECEIVE } from './gameTick'
-import { ref } from 'vue'
 
 let channel = '大厅'
 
@@ -41,7 +40,7 @@ if (isMaster) {
       }
     },
   })
-} else if (one) {
+} else if (isOne) {
   channel = 'one_channel'
   pubsub.subscribe({
     channel,

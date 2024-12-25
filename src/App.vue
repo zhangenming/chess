@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import 棋盘 from './components/棋盘.vue'
-import { 上次点击位置, is先手, 我的id, 对手id, 回合数, is我的回合, base棋子, one, buff, 走棋信息 } from './data'
+import { 上次点击位置, is先手, 我的id, 对手id, 回合数, is我的回合, base棋子, isOne, buff, 走棋信息 } from './data'
 import { isMaster } from './data'
 </script>
 
@@ -13,7 +13,7 @@ import { isMaster } from './data'
   </div>
 
   <component
-    v-if="(对手id || one) && !isMaster"
+    v-if="(对手id || isOne) && !isMaster"
     :is="棋盘"
     :style="{
       '--该你走了': is我的回合 ? 'black' : '#999',
@@ -32,7 +32,7 @@ import { isMaster } from './data'
               zIndex: deadIdx,
               // transition: 'none',
               top: tb === 'top' ? '510px' : '-40px',
-              left: `${(deadIdx - 1) * 24}px`,
+              left: `${(deadIdx - 1) * 20}px`,
             }
           : { top: `${i * 50}px`, left: `${j * 50}px` }
       "

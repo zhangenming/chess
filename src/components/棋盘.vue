@@ -233,12 +233,28 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   display: none;
 }
 
+.canMove位置 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.canMove位置::before {
+  content: '';
+  width: 15px;
+  aspect-ratio: 1;
+  border-radius: 1%;
+  position: absolute;
+  background: #1500fb;
+}
+
 .走子提示1 {
   border: 2px solid #1500fb;
 }
 .走子提示2 {
   border: 4px solid #1500fb;
 }
+
 .被将军 {
   outline: 25px solid var(--将军颜色);
 }
@@ -258,19 +274,4 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
 .安全位置cls.存在敌方棋子 {
   background: color-mix(in oklab, black, transparent 70%);
 } */
-
-.canMove位置 {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.canMove位置::before {
-  content: '';
-  width: 15px;
-  aspect-ratio: 1;
-  border-radius: 1%;
-  position: absolute;
-  background: #1500fb;
-}
 </style>

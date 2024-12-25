@@ -12,13 +12,13 @@ import {
   距离j,
   距离,
   位置2棋子,
+  get棋子role,
 } from './utils'
 
 function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走', 所有位置一维: 位置[]): 位置[] {
-  const { jie, role } = 棋子
-  const item = jie === '〇' ? role : jie
+  const role = get棋子role(棋子)
 
-  if (item === '马') {
+  if (role === '马') {
     return 所有位置一维
       .filter((p) => (距离i(棋子, p) === 1 && 距离j(棋子, p) === 2) || (距离i(棋子, p) === 2 && 距离j(棋子, p) === 1))
       .filter(({ i, j }) => {
@@ -37,7 +37,7 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走', 所有位
       })
   }
 
-  if (item === '象') {
+  if (role === '象') {
     return 所有位置一维
       .filter((p) => 距离i(棋子, p) === 2 && 距离j(棋子, p) === 2)
       .filter(({ i, j }) => {
@@ -56,16 +56,16 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走', 所有位
       })
   }
 
-  if (item === '士') {
+  if (role === '士') {
     return 所有位置一维
       .filter((p) => 距离i(棋子, p) === 1 && 距离j(棋子, p) === 1)
       .filter(({ j }) => {
-        if (jie !== '〇') return true
+        if (棋子.jie !== '〇') return true
         return j === 3 || j === 4 || j === 5
       })
   }
 
-  if (item === '车') {
+  if (role === '车') {
     return [
       ...filter军可移动位置(get下侧全部位置(棋子)),
       ...filter军可移动位置(get上侧全部位置(棋子)),
@@ -74,7 +74,7 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走', 所有位
     ]
   }
 
-  if (item === '炮') {
+  if (role === '炮') {
     return [
       ...filter炮可移动位置(get下侧全部位置(棋子), 行动),
       ...filter炮可移动位置(get上侧全部位置(棋子), 行动),
@@ -83,7 +83,7 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走', 所有位
     ]
   }
 
-  if (item === '卒') {
+  if (role === '卒') {
     return 所有位置一维
       .filter((p) => 距离(棋子, p) === 1)
       .filter(({ i, j }) => (棋子.tb === 'top' ? 棋子.i <= i : 棋子.i >= i))
@@ -97,7 +97,7 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走', 所有位
       })
   }
 
-  if (item === '帅') {
+  if (role === '帅') {
     const 九宫 = 所有位置一维
       .filter((p) => (距离i(棋子, p) === 1 && 距离j(棋子, p) === 0) || (距离i(棋子, p) === 0 && 距离j(棋子, p) === 1))
       .filter(({ i, j }) => (j === 3 || j === 4 || j === 5) && (i === 0 || i === 1 || i === 2 || i === 7 || i === 8 || i === 9))

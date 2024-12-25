@@ -12,7 +12,7 @@ import {
   filt棋子_生_我,
   filt棋子_生_敌,
 } from '../data'
-import { findItem } from '../utils'
+import { findItem, 位置2棋子, get棋子role } from '../utils'
 import { action, 走子提示 } from '../gameTick'
 </script>
 
@@ -97,6 +97,7 @@ import { action, 走子提示 } from '../gameTick'
                 // canMove位置2: findItem(可移动位置2, { i, j }),
                 存在我方棋子: findItem(filt棋子_生_我, { i, j }),
                 存在敌方棋子: findItem(filt棋子_生_敌, { i, j }),
+                主力棋子: ['车', '马', '炮'].includes(get棋子role(位置2棋子({ i, j })) || ''),
               }),
             },
             buff &&
@@ -268,10 +269,13 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
 .安全位置cls {
   background: color-mix(in oklab, black, transparent 90%);
 }
-/* .危险位置cls.存在我方棋子 {
+
+/* .混乱位置cls.主力棋子 {
   background: color-mix(in oklab, red, transparent 70%);
-}
-.安全位置cls.存在敌方棋子 {
-  background: color-mix(in oklab, black, transparent 70%);
 } */
+
+.危险位置cls.存在我方棋子,
+.安全位置cls.存在敌方棋子 {
+  background: color-mix(in oklab, red, transparent 30%);
+}
 </style>

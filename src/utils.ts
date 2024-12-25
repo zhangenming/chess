@@ -107,3 +107,8 @@ export function deleteItem<T>(arr: T[], item: T) {
 export function findItem(arr: 位置[], item: 位置) {
   return arr.find((e) => e.i === item.i && e.j === item.j)
 }
+
+export function get棋子role(棋子: t棋子 | undefined) {
+  const { jie, role } = 棋子 || {}
+  return jie === '〇' ? role : jie
+}

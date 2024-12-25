@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 import type { 位置 } from './type'
-
 import { 回合数, is我的回合, isOne, 上次点击位置, filt棋子_死, 走棋信息, 暗子牌库, 可移动位置 } from './data'
 import { SEND, 全局loading } from './online'
 import { deleteItem, findItem, get暗棋Random, 位置2棋子 } from './utils'
@@ -8,8 +7,8 @@ import { deleteItem, findItem, get暗棋Random, 位置2棋子 } from './utils'
 type ol = {
   ol_起点位置: 位置
   ol_终点位置: 位置
-  ol_揭开终点被吃暗子?: string | undefined
-  ol_揭开起点暗子?: string | undefined
+  ol_揭开终点被吃暗子?: string
+  ol_揭开起点暗子?: string
 }
 
 // 这里的逻辑 只有我方阵营会执行

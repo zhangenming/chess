@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import 棋盘 from './components/棋盘.vue'
-import { 上次点击位置, is先手, 我的id, 对手id, 回合数, is我的回合, base棋子, isOne, buff, 走棋信息 } from './data'
-import { isMaster } from './data'
+import { isMaster, 上次点击位置, is先手, 我的id, 对手id, 回合数, is我的回合, base棋子, isOne, buff, 走棋信息 } from './data'
 </script>
 
 <template>

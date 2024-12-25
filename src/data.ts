@@ -1,7 +1,8 @@
-import { computed, reactive, ref } from 'vue'
-import { raw, 位置2棋子, qzA, qzB } from './utils'
+import { computed, reactive, ref, watch } from 'vue'
+import { raw, 位置2棋子, qzA, qzB, clearLL, LL } from './utils'
 import { get棋子_可走_位置, get棋子_可吃_位置 } from './move'
-import type { t棋子, 位置 } from './type'
+import type { 棋子, 位置 } from './type'
+import { 走子提示 } from './gameTick'
 
 export const 回合数 = ref(0)
 export const is先手 = ref(true)
@@ -29,7 +30,7 @@ export const 可移动位置2 = computed(() => {
   return get棋子_可走_位置(棋子, 所有位置一维).filter((位置) => 位置2棋子(位置)?.tb === 棋子.tb)
 })
 
-const _base棋子 = [] as t棋子[]
+const _base棋子 = [] as 棋子[]
 export const 所有位置 = reactive(
   raw.map((line, i) =>
     line.map((role, j) => {
@@ -60,20 +61,22 @@ export const 暗子牌库 = reactive({
   bot: qzB,
 })
 
-function is我棋子(棋子: t棋子 | undefined) {
-  if (!棋子) return false
-
-  return 棋子.tb === myTB.value
+function is我棋子(棋子: undefined | 位置 | 棋子) {
+  if (棋子 === undefined) return false
+  if (!('tb' in 棋子)) 棋子 = 位置2棋子(棋子)
+  if (棋子 === undefined) return false
+  return (棋子 as 棋子).tb === myTB.value
 }
-function is敌棋子(棋子: t棋子 | undefined) {
-  if (!棋子) return false
-
-  return !is我棋子(棋子)
+function is敌棋子(棋子: undefined | 位置 | 棋子) {
+  if (棋子 === undefined) return false
+  if (!('tb' in 棋子)) 棋子 = 位置2棋子(棋子)
+  if (棋子 === undefined) return false
+  return (棋子 as 棋子).tb === drTB.value
 }
-function is生棋子(棋子: t棋子) {
+function is生棋子(棋子: 棋子) {
   return 棋子.deadIdx === 0
 }
-function is死棋子(棋子: t棋子) {
+function is死棋子(棋子: 棋子) {
   return !is生棋子(棋子)
 }
 
@@ -131,6 +134,75 @@ export const 安全位置 = computed(() =>
     .flat()
 )
 
-export const filt棋子_生_我敌 = computed(() => base棋子.filter(is生棋子))
-export const filt棋子_生_我 = computed(() => filt棋子_生_我敌.value.filter(is我棋子))
-export const filt棋子_生_敌 = computed(() => filt棋子_生_我敌.value.filter(is敌棋子))
+export const 活棋子_我敌 = computed(() => base棋子.filter(is生棋子))
+export const 我的活棋子 = computed(() => 活棋子_我敌.value.filter(is我棋子))
+export const 敌的活棋子 = computed(() => 活棋子_我敌.value.filter(is敌棋子))
+
+const 我棋子吃2 = computed(() =>
+  我的活棋子.value.map((棋子) => ({
+    k: `${棋子.i}${棋子.j}`,
+    v: get棋子_可走_位置(棋子, 所有位置一维)
+      .map(位置2棋子)
+      .filter(is敌棋子)
+      .map((e) => `${e!.i}${e!.j}`),
+  }))
+)
+
+const 我棋子吃 = computed(() => {
+  const vfilt棋子_敌_生_吃_敌 = filt棋子_敌_生_吃_敌.value
+  return 我的活棋子.value.map((棋子) => {
+    const 所有可吃棋子 = get棋子_可吃_位置(棋子, 所有位置一维).map(位置2棋子)
+    const 吃空地 = 所有可吃棋子.filter((棋子) => !棋子)
+    const 吃我 = 所有可吃棋子.filter(is我棋子) as 棋子[]
+    const 吃敌 = 所有可吃棋子.filter(is敌棋子) as 棋子[]
+    const 吃敌_有保护 = 吃敌.filter((p) => vfilt棋子_敌_生_吃_敌.includes(p))
+    const 吃敌_无保护 = 吃敌.filter((p) => !vfilt棋子_敌_生_吃_敌.includes(p))
+
+    return {
+      k: `${棋子.i}${棋子.j}`,
+
+      // 所有可吃棋子,
+
+      // 吃空地,
+
+      // 吃我,
+
+      吃敌,
+
+      吃敌_有保护,
+      吃敌_无保护,
+    }
+  })
+})
+
+setTimeout(() => {
+  watch(
+    回合数,
+    () => {
+      clearLL()
+
+      我棋子吃.value.forEach(({ k: l, 吃敌_有保护, 吃敌_无保护 }) => {
+        吃敌_有保护.forEach((r) => LL(l, `${r.i}${r.j}`))
+        吃敌_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { size: 4 }))
+      })
+
+      if (走子提示.value) {
+        const [l, r] = 走子提示.value
+        LL(
+          //
+          `${l.i}${l.j}`,
+          `${r.i}${r.j}`,
+          {
+            color: '#1500fb',
+            size: 7,
+            path: 'straight',
+            dash: { animation: true, len: 10, gap: 5 },
+          }
+        )
+      }
+    },
+    {
+      immediate: true,
+    }
+  )
+})

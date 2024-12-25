@@ -1,4 +1,4 @@
-import type { t棋子, 位置 } from './type'
+import type { 棋子, 位置 } from './type'
 import { 所有位置, filt棋子_生, 暗子牌库 } from './data'
 
 export const raw = [
@@ -89,7 +89,7 @@ export function test(bool: any, text: any) {
     console.error(text)
   }
 }
-export function 位置2棋子(位置or棋子: 位置 | undefined): t棋子 | undefined {
+export function 位置2棋子(位置or棋子: 位置 | undefined): 棋子 | undefined {
   return 位置or棋子 && filt棋子_生.value.find((e) => e.i === 位置or棋子.i && e.j === 位置or棋子.j)
 }
 
@@ -108,7 +108,35 @@ export function findItem(arr: 位置[], item: 位置) {
   return arr.find((e) => e.i === item.i && e.j === item.j)
 }
 
-export function get棋子role(棋子: t棋子 | undefined) {
+export function get棋子role(棋子: 棋子 | undefined) {
   const { jie, role } = 棋子 || {}
   return jie === '〇' ? role : jie
+}
+
+export function clearLL() {
+  document.querySelectorAll('svg').forEach((e) => e.remove())
+}
+function str2dom(str: string) {
+  return document.querySelector(`[style="--i: ${str[0]}; --j: ${str[1]};"]`)!
+}
+
+const { LeaderLine } = window as any
+export function LL(l: string, r: string, args?: any) {
+  new LeaderLine(
+    LeaderLine.pointAnchor(str2dom(l), {
+      x: 25,
+      y: 25,
+    }),
+    LeaderLine.pointAnchor(str2dom(r), {
+      x: 25,
+      y: 25,
+    }),
+    {
+      path: 'arc',
+      size: 2,
+      // endPlug: 'crosshair',
+      // endPlugSize: 0.4,
+      ...args,
+    }
+  )
 }

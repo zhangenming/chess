@@ -1,4 +1,4 @@
-import type { t棋子, 位置 } from './type'
+import type { 棋子, 位置 } from './type'
 import {
   get上侧位置,
   get下侧位置,
@@ -15,7 +15,7 @@ import {
   get棋子role,
 } from './utils'
 
-function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走', 所有位置一维: 位置[]): 位置[] {
+function 行动_位置(棋子: 棋子, 行动: '走' | '吃' = '走', 所有位置一维: 位置[]): 位置[] {
   const role = get棋子role(棋子)
 
   if (role === '马') {
@@ -165,12 +165,12 @@ function 行动_位置(棋子: t棋子, 行动: '走' | '吃' = '走', 所有位
   }
 }
 
-// 得到所有符合规则的移动位置 包括 [空位(走) / 敌(吃) / 我(保)]
+// 得到所有符合规则的移动位置 包括 [空位(走) / 敌(吃)(有保护;无保护) / 我(保)]
 // 对炮来说 可走位置和可吃位置 不一致
-export function get棋子_可走_位置(棋子: t棋子, 所有位置一维: 位置[]) {
+export function get棋子_可走_位置(棋子: 棋子, 所有位置一维: 位置[]) {
   return 行动_位置(棋子, '走', 所有位置一维)
 }
-export function get棋子_可吃_位置(棋子: t棋子, 所有位置一维: 位置[]) {
+export function get棋子_可吃_位置(棋子: 棋子, 所有位置一维: 位置[]) {
   const x = 行动_位置(棋子, '吃', 所有位置一维)
   x.forEach((位置) => {
     // @ts-expect-error

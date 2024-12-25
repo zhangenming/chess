@@ -1,6 +1,7 @@
 import GoEasy from 'goeasy'
 import { isMaster, isMe, is先手, 回合数, 我的id, 对手id, isBoss, one } from './data'
 import { RECEIVE } from './gameTick'
+import { ref } from 'vue'
 
 let channel = '大厅'
 
@@ -13,6 +14,8 @@ const { connect, pubsub } = GoEasy.getInstance({
 })
 
 connect({ id: who, data: { username: 我的id } })
+
+//todo 重构 现在发一次 两个人会接受到消息. 重构成一个人接受
 
 // GoEasy
 if (isMaster) {
@@ -98,10 +101,18 @@ if (isMaster) {
 //
 //
 //
+// 避免一个人走多个回合
+export let 全局loading = false
+
 export async function SEND(type: string, data = {}) {
   console.log('1 SEND', type, data)
 
-  await new Promise((resolve) => setTimeout(resolve, 回合数.value / 2))
+  // await new Promise((resolve) => setTimeout(resolve, 回合数.value / 2))
+
+  全局loading = true
+  setTimeout(() => {
+    全局loading = false
+  }, 500)
 
   pubsub.publish({
     channel,

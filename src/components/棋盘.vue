@@ -12,8 +12,8 @@ import {
   filt棋子_生_我,
   filt棋子_生_敌,
 } from '../data'
-import { findItem } from '@/utils'
-import { 走子提示 } from '../gameTick'
+import { findItem } from '../utils'
+import { action, 走子提示 } from '../gameTick'
 </script>
 
 <template>
@@ -86,6 +86,7 @@ import { 走子提示 } from '../gameTick'
       <template v-for="i of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]">
         <dom位置
           v-for="j of [0, 1, 2, 3, 4, 5, 6, 7, 8]"
+          @click="action"
           :style="{ '--i': i, '--j': j }"
           :class="[
             {

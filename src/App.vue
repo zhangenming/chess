@@ -43,10 +43,12 @@ function diff_jie(arr: t棋子[]) {
 }
 
 // console.log(LeaderLine)
+
+import { isMaster } from './data'
 </script>
 
 <template>
-  <div>
+  <div v-if="!isMaster">
     <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
     <div>is先手: {{ is先手 }}</div>
     <div>回合数: {{ 回合数 }}</div>
@@ -54,7 +56,7 @@ function diff_jie(arr: t棋子[]) {
   </div>
 
   <component
-    v-if="对手id || one"
+    v-if="(对手id || one) && !isMaster"
     :is="棋盘"
     @click="action"
     :style="{

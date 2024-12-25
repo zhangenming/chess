@@ -1,12 +1,11 @@
 import { computed, reactive, ref } from 'vue'
-import { getMyId, raw, 位置2棋子, qzA, qzB } from './utils'
+import { raw, 位置2棋子, qzA, qzB } from './utils'
 import { get棋子_可走_位置, get棋子_可吃_位置 } from './move'
 import type { t棋子, 位置 } from './type'
 
 export const 回合数 = ref(0)
 export const is先手 = ref(true)
 export const 对手id = ref()
-export const 我的id = getMyId() // 非响应式
 
 export const is我的回合 = computed(() => 回合数.value % 2 === (is先手.value ? 0 : 1))
 export const isTop回合 = computed(() => 回合数.value % 2 === 1)
@@ -14,11 +13,6 @@ export const isBot回合 = computed(() => 回合数.value % 2 === 0)
 export const myTB = computed(() => (is先手.value ? 'bot' : 'top'))
 export const drTB = computed(() => (is先手.value ? 'top' : 'bot'))
 export const myIsTop = computed(() => myTB.value === 'top')
-
-export const isMaster = location.search.includes('master')
-export const isBoss = location.search.includes('boss')
-export const isOne = location.search.includes('one')
-export const buff = location.search.includes('buff')
 
 export const 上次点击位置 = ref<位置>()
 
@@ -44,6 +38,7 @@ export const 所有位置 = reactive(
           tb: i < 5 ? 'top' : 'bot',
           role,
           jie: role === '帅' ? '帅' : '〇',
+
           deadIdx: 0, // 死亡顺序 0表示存活
 
           i,
@@ -53,6 +48,7 @@ export const 所有位置 = reactive(
       return {
         i,
         j,
+        idx: `${i}${j}`,
       }
     })
   )
@@ -64,10 +60,14 @@ export const 暗子牌库 = reactive({
   bot: qzB,
 })
 
-function is我棋子(棋子: t棋子) {
+function is我棋子(棋子: t棋子 | undefined) {
+  if (!棋子) return false
+
   return 棋子.tb === myTB.value
 }
-function is敌棋子(棋子: t棋子) {
+function is敌棋子(棋子: t棋子 | undefined) {
+  if (!棋子) return false
+
   return !is我棋子(棋子)
 }
 function is生棋子(棋子: t棋子) {

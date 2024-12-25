@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import 棋盘 from './components/棋盘.vue'
-import { isMaster, 上次点击位置, is先手, 我的id, 对手id, 回合数, is我的回合, base棋子, isOne, buff, 走棋信息 } from './data'
+import { 上次点击位置, is先手, 对手id, 回合数, is我的回合, base棋子, 走棋信息 } from './data'
+import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
 </script>
 
 <template>
@@ -41,7 +42,7 @@ import { isMaster, 上次点击位置, is先手, 我的id, 对手id, 回合数, 
           ? 'dead'
           : {
               selected: 上次点击位置?.i === i && 上次点击位置?.j === j,
-              ...(buff &&
+              ...(isBuff &&
                 {
                   // // 我吃敌有保护cls: 我吃_敌_有保护.find((item) => item.i === i && item.j === j),
                   // 我吃敌无保护cls: findItem(filt棋子_我_生_吃_敌_无保护, { i, j }),

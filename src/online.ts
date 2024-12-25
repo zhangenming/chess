@@ -1,6 +1,7 @@
 import GoEasy from 'goeasy'
-import { isMaster, is先手, 我的id, 对手id, isBoss, isOne } from './data'
+import { is先手, 对手id } from './data'
 import { RECEIVE } from './gameTick'
+import { isBoss, isMaster, isOne, 我的id } from './lib/constant'
 
 let channel = '大厅'
 

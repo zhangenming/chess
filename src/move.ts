@@ -167,6 +167,7 @@ export function get棋子_可走_位置(棋子: t棋子) {
 export function get棋子_可吃_位置(棋子: t棋子) {
   const x = 行动_位置(棋子, '吃')
   x.forEach((位置) => {
+    // @ts-expect-error
     位置.被吃 = `${棋子.i}-${棋子.j}`
   })
   return x

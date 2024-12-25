@@ -114,7 +114,7 @@ import { 走子提示 } from '../gameTick'
                 return '中立位置cls'
               })(),
           ]"
-          :安全位置cls="findItem(安全位置, { i, j })?.被吃"
+          :安全位置cls="(findItem(安全位置, { i, j }) as any)?.被吃"
         />
       </template>
     </div>
@@ -243,20 +243,20 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
 }
 
 .混乱位置cls {
-  background: color-mix(in oklab, yellow, transparent 60%);
+  background: color-mix(in oklab, yellow, transparent 80%);
 }
 .危险位置cls {
-  background: color-mix(in oklab, red, transparent 80%);
+  background: color-mix(in oklab, red, transparent 90%);
 }
 .安全位置cls {
-  background: color-mix(in oklab, black, transparent 80%);
+  background: color-mix(in oklab, black, transparent 90%);
 }
-.危险位置cls.存在我方棋子 {
-  background: color-mix(in oklab, red, transparent 40%);
+/* .危险位置cls.存在我方棋子 {
+  background: color-mix(in oklab, red, transparent 70%);
 }
 .安全位置cls.存在敌方棋子 {
-  background: color-mix(in oklab, black, transparent 40%);
-}
+  background: color-mix(in oklab, black, transparent 70%);
+} */
 
 .canMove位置 {
   cursor: pointer;

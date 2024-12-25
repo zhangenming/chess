@@ -172,8 +172,9 @@ dom棋子 {
 }
 .dead {
   top: -50px;
-  border-width: 1px;
+  outline-width: 1px;
   font-size: 20px;
+  width: 30px;
 }
 /* dom位置.canMove位置,
 dom位置.canMove位置2 {

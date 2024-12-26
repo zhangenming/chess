@@ -18,8 +18,6 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
     :style="{
       '--该你走了': is我的回合 ? 'black' : '#999',
       '--后手需要反转': is先手 ? '0deg' : '180deg',
-      '--top_weight': is先手 ? 100 : 900,
-      '--bot_weight': is先手 ? 900 : 100,
       '--top_color': is先手 ? 'red' : 'black',
       '--bot_color': is先手 ? 'black' : 'red',
     }"
@@ -94,12 +92,10 @@ dom棋子 {
   transform: rotate(var(--后手需要反转));
   outline-color: var(--top_color);
   color: var(--top_color);
-  font-weight: var(--top_weight);
 }
 .bot {
   outline-color: var(--bot_color);
   color: var(--bot_color);
-  font-weight: var(--bot_weight);
 }
 [jie='〇'] {
   color: #aaa;

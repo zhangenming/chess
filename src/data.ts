@@ -205,9 +205,9 @@ setTimeout(() => {
           `${r.i}${r.j}`,
           {
             color: '#1500fb',
-            size: 7,
             path: 'straight',
-            dash: { animation: true, len: 10, gap: 5 },
+            size: 5,
+            dash: { animation: true, len: 10, gap: 3 },
           }
         )
       }

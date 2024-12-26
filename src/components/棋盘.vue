@@ -117,8 +117,6 @@ dom棋盘 {
   display: block;
   width: 450px;
   height: 500px;
-  /* outline: 26px solid beige;
-  box-shadow: 0px 0px 0px 35px var(--该你走了); */
   transform: rotate(var(--后手需要反转));
   user-select: none;
   position: relative;

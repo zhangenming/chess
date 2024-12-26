@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import 棋盘 from './components/棋盘.vue'
+import comp棋盘 from './components/棋盘.vue'
 import { 上次点击位置, is先手, 对手id, 回合数, is我的回合, base棋子, 走棋信息 } from './data'
 import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
 </script>
@@ -12,11 +12,9 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
     <div style="font-size: 30px">{{ 对手id ? 走棋信息 : '等待对手加入...' }}</div>
   </div>
 
-  <component
+  <comp棋盘
     v-if="(对手id || isOne) && !isMaster"
-    :is="棋盘"
     :style="{
-      '--该你走了': is我的回合 ? 'black' : '#999',
       '--后手需要反转': is先手 ? '0deg' : '180deg',
       '--top_color': is先手 ? 'red' : 'black',
       '--bot_color': is先手 ? 'black' : 'red',
@@ -54,7 +52,7 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
     >
       {{ jie }}
     </dom棋子>
-  </component>
+  </comp棋盘>
 
   <div popover id="popover" style="position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 50px">对方退出</div>
 </template>

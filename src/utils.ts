@@ -53,14 +53,16 @@ export function get上侧全部位置({ i, j }: 位置) {
     .reverse()
 }
 export function get下侧全部位置({ i, j }: 位置) {
-  return 所有位置.slice(i + 1).map((line) => line[j])
+  return 所有位置 //
+    .slice(i + 1)
+    .map((line) => line[j])
 }
 
 // 保证每次取数据都是随机的(添加到时候不必在意 直接添加就好)保证悔完棋的时候随机
 export function get暗棋Random(tb: 'top' | 'bot') {
   // return 棋子.role
 
-  return shuffle(暗子牌库[tb])[0] // 这个是单人逻辑 为了保持数据一致性 在双人逻辑处做数据删除处理
+  return shuffle(暗子牌库[tb])[0] // 这里是单人逻辑 为了保持数据一致性 在双人逻辑处做数据删除处理
 
   // 洗牌算法
   function shuffle<T>(arr: T[]) {

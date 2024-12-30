@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import type { 位置 } from './type'
-import { 回合数, is我的回合, 上次点击位置, filt棋子_死, 走棋信息, 暗子牌库, 可移动位置 } from './data'
+import { 回合数, is我的回合, 上次点击位置, filt棋子_死, 走棋信息, 暗子牌库, 可移动位置, myTB } from './data'
 import { SEND, 全局loading } from './online'
 import { deleteItem, findItem, get暗棋Random, 位置2棋子 } from './utils'
 import { isOne } from './lib/constant'
@@ -19,10 +19,10 @@ export function action({ target }: { target: HTMLElement }) {
 
   const 本次点击位置 = { i: Number(target.style.getPropertyValue('--i')), j: Number(target.style.getPropertyValue('--j')) }
 
-  if ((is我的回合.value || isOne) && findItem(可移动位置.value, 本次点击位置)) {
-    const 起点棋子 = 位置2棋子(上次点击位置.value)!
-    const 终点棋子 = 位置2棋子(本次点击位置)
-
+  const 起点棋子 = 位置2棋子(上次点击位置.value)!
+  const 终点棋子 = 位置2棋子(本次点击位置)
+  // 不可走敌方棋子
+  if ((is我的回合.value || isOne) && findItem(可移动位置.value, 本次点击位置) && 起点棋子.tb === myTB.value) {
     SEND('走棋', {
       ol_起点位置: 上次点击位置.value,
       ol_终点位置: 本次点击位置,

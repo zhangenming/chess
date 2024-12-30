@@ -144,7 +144,7 @@ const 我可以吃的棋子 = computed(() => {
     const 所有可吃棋子 = get棋子_可吃_位置(棋子, 所有位置一维).map(位置2棋子)
     const 吃空地 = 所有可吃棋子.filter((棋子) => !棋子)
     const 吃我 = 所有可吃棋子.filter(is我棋子) as 棋子[]
-    const 吃敌 = 所有可吃棋子.filter(is敌棋子) as 棋子[]
+    const 吃敌 = (所有可吃棋子.filter(is敌棋子) as 棋子[]).filter(is主力)
 
     return {
       k: `${棋子.i}${棋子.j}`,
@@ -167,7 +167,7 @@ const 敌可以吃的棋子 = computed(() => {
   const v_flags = filt棋子_我_生_吃_我.value
   return 敌的活棋子.value.map((棋子) => {
     const 所有可吃棋子 = get棋子_可吃_位置(棋子, 所有位置一维).map(位置2棋子)
-    const 吃我 = 所有可吃棋子.filter(is我棋子) as 棋子[]
+    const 吃我 = (所有可吃棋子.filter(is我棋子) as 棋子[]).filter(is主力)
 
     return {
       k: `${棋子.i}${棋子.j}`,
@@ -176,6 +176,10 @@ const 敌可以吃的棋子 = computed(() => {
     }
   })
 })
+
+function is主力(棋子: 棋子) {
+  return ['车', '马', '炮', '帅'].includes(棋子.role)
+}
 
 setTimeout(() => {
   watch(

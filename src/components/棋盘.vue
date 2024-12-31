@@ -263,6 +263,6 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
 
 .危险位置cls.存在我方棋子,
 .安全位置cls.存在敌方棋子 {
-  background: color-mix(in oklab, red, transparent 30%);
+  background: color-mix(in oklab, red, transparent 60%);
 }
 </style>

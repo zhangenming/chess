@@ -178,7 +178,7 @@ const 敌可以吃的棋子 = computed(() => {
 })
 
 function is主力(棋子: 棋子) {
-  return ['车', '马', '炮', '帅'].includes(棋子.role)
+  return ['车', '马', '炮', '帅'].includes(棋子.jie)
 }
 
 setTimeout(() => {
@@ -192,13 +192,13 @@ setTimeout(() => {
       hasFlag('d') &&
         敌可以吃的棋子.value.forEach(({ k: l, 吃我_有保护, 吃我_无保护 }) => {
           hasFlag('1') && 吃我_有保护.forEach((r) => LL(l, `${r.i}${r.j}`))
-          hasFlag('2') && 吃我_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { size: 4 }))
+          hasFlag('2') && 吃我_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { size: 6 }))
         })
 
       hasFlag('w') &&
         我可以吃的棋子.value.forEach(({ k: l, 吃敌_有保护, 吃敌_无保护 }) => {
           hasFlag('1') && 吃敌_有保护.forEach((r) => LL(l, `${r.i}${r.j}`, { color: 'green' }))
-          hasFlag('2') && 吃敌_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { color: 'green', size: 4 }))
+          hasFlag('2') && 吃敌_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { color: 'green', size: 6 }))
         })
 
       if (走子提示.value) {

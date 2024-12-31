@@ -22,7 +22,7 @@ export function action({ target }: { target: HTMLElement }) {
   const 起点棋子 = 位置2棋子(上次点击位置.value)!
   const 终点棋子 = 位置2棋子(本次点击位置)
   // 不可走敌方棋子
-  if ((is我的回合.value || isOne) && findItem(可移动位置.value, 本次点击位置) && 起点棋子.tb === myTB.value) {
+  if (((is我的回合.value && 起点棋子?.tb === myTB.value) || isOne) && findItem(可移动位置.value, 本次点击位置)) {
     SEND('走棋', {
       ol_起点位置: 上次点击位置.value,
       ol_终点位置: 本次点击位置,

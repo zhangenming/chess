@@ -3,6 +3,13 @@ import { 可移动位置, isTop回合, isBot回合, top被将, bot被将, 我被
 import { findItem, 位置2棋子, get棋子role, hasFlag } from '../utils'
 import { action, 走子提示 } from '../gameTick'
 import { isBuff } from '@/lib/constant'
+import { effect } from 'vue'
+
+effect(() => {
+  if (我被将军) {
+    navigator.vibrate([200, 50, 200])
+  }
+})
 </script>
 
 <template>

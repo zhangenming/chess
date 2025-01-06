@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { 可移动位置, isTop回合, isBot回合, top被将, bot被将, 危险位置, 安全位置, 活棋子_我敌, 我的活棋子, 敌的活棋子 } from '../data'
+import { 可移动位置, isTop回合, isBot回合, top被将, bot被将, 我被将军, 危险位置, 安全位置, 活棋子_我敌, 我的活棋子, 敌的活棋子 } from '../data'
 import { findItem, 位置2棋子, get棋子role, hasFlag } from '../utils'
 import { action, 走子提示 } from '../gameTick'
 import { isBuff } from '@/lib/constant'
 </script>
 
 <template>
-  <dom棋盘>
+  <dom棋盘 :style="{ '--棋盘颜色': 我被将军 ? 'red' : 'black' }">
     <div class="横">
       <div class="h" v-for="i in 10" :style="{ left: '25px', top: `${(i - 1) * 50 + 25}px` }"></div>
     </div>
@@ -20,9 +20,7 @@ import { isBuff } from '@/lib/constant'
     <div class="士">
       <div
         class="士-1"
-        :class="{ 被将军: top被将 }"
         :style="{
-          '--将军颜色': 'var(--top_color)',
           ...(isTop回合 && { background: 'color-mix(in oklab, var(--top_color), white 50%)' }),
         }"
       >
@@ -31,9 +29,7 @@ import { isBuff } from '@/lib/constant'
       </div>
       <div
         class="士-2"
-        :class="{ 被将军: bot被将 }"
         :style="{
-          '--将军颜色': 'var(--bot_color)',
           ...(isBot回合 && { background: 'color-mix(in oklab, var(--bot_color), white 50%)' }),
         }"
       >
@@ -114,12 +110,14 @@ import { isBuff } from '@/lib/constant'
 
 <style>
 dom棋盘 {
+  margin-top: 30px;
   display: block;
   width: 450px;
   height: 500px;
   transform: rotate(var(--后手需要反转));
   user-select: none;
   position: relative;
+  outline: var(--棋盘颜色) solid 30px;
 }
 
 .h,
@@ -241,10 +239,6 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
 }
 .走子提示2 {
   border: 4px solid #1500fb;
-}
-
-.被将军 {
-  outline: 25px solid var(--将军颜色);
 }
 
 .混乱位置cls {

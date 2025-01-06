@@ -19,10 +19,14 @@ connect({ id: who, data: { username: 我的id } })
 
 // GoEasy
 if (isMaster) {
+  console.log('isMaster')
+
   let memberA
   pubsub.subscribePresence({
     channel,
-    onSuccess() {},
+    onSuccess() {
+      console.log(111)
+    },
     onPresence({ action, member: memberB, members }) {
       console.log(action, memberB, memberB.id)
       if (action === 'join') {
@@ -48,10 +52,15 @@ if (isMaster) {
     onMessage: RECEIVE,
   })
 } else {
+  console.log('1', channel)
+
   pubsub.subscribe({
     channel,
     presence: {
       enable: true,
+    },
+    onSuccess() {
+      console.log(111)
     },
     onMessage({ content }) {
       const { type, data } = JSON.parse(content)

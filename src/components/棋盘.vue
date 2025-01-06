@@ -93,6 +93,7 @@ effect(() => {
               }),
             },
             isBuff &&
+              hasFlag('x') &&
               (() => {
                 const 危险位置cls = findItem(危险位置, { i, j })
                 const 安全位置cls = findItem(安全位置, { i, j })

@@ -132,51 +132,40 @@ export const 安全位置 = computed(() =>
     .flat()
 )
 
-export const 活棋子_我敌 = computed(() => base棋子.filter(is生棋子))
-export const 我的活棋子 = computed(() => 活棋子_我敌.value.filter(is我棋子))
-export const 敌的活棋子 = computed(() => 活棋子_我敌.value.filter(is敌棋子))
+export const 活棋子_我敌 = computed(() => base棋子.filter(is生棋子) as 棋子[])
+export const 我的活棋子s = computed(() => 活棋子_我敌.value.filter(is我棋子))
+export const 敌的活棋子s = computed(() => 活棋子_我敌.value.filter(is敌棋子))
 
-const 我可以吃的棋子 = computed(() => {
-  const v_flags = filt棋子_敌_生_吃_敌.value
-  return 我的活棋子.value.map((棋子) => {
-    const 所有可吃棋子 = get棋子_可吃_位置(棋子, 所有位置一维).map(位置2棋子)
-    const 吃空地 = 所有可吃棋子.filter((棋子) => !棋子)
-    const 吃我 = 所有可吃棋子.filter(is我棋子) as 棋子[]
-    const 吃敌 = (所有可吃棋子.filter(is敌棋子) as 棋子[]).filter(is主力)
-
-    return {
-      k: `${棋子.i}${棋子.j}`,
-
-      // 所有可吃棋子,
-
-      // 吃空地,
-
-      // 吃我,
-
-      吃敌,
-
-      吃敌_有保护: 吃敌.filter((p) => v_flags.includes(p)),
-      吃敌_无保护: 吃敌.filter((p) => !v_flags.includes(p)),
-    }
-  })
+export const 敌可以吃的棋子s = computed(() => {
+  return 敌的活棋子s.value
+    .map((敌的活棋子) => {
+      const 所有可吃棋子 = get棋子_可吃_位置(敌的活棋子, 所有位置一维).map(位置2棋子) as 棋子[]
+      const 吃 = 所有可吃棋子.filter(is我棋子).filter(is主力)
+      return 吃.map((r) => ({
+        l: 敌的活棋子,
+        r: r,
+      }))
+    })
+    .filter((e) => e.length)
+    .flat()
 })
 
-const 敌可以吃的棋子 = computed(() => {
-  const v_flags = filt棋子_我_生_吃_我.value
-  return 敌的活棋子.value.map((棋子) => {
-    const 所有可吃棋子 = get棋子_可吃_位置(棋子, 所有位置一维).map(位置2棋子)
-    const 吃我 = (所有可吃棋子.filter(is我棋子) as 棋子[]).filter(is主力)
-
-    return {
-      k: `${棋子.i}${棋子.j}`,
-      吃我_有保护: 吃我.filter((p) => v_flags.includes(p)),
-      吃我_无保护: 吃我.filter((p) => !v_flags.includes(p)),
-    }
-  })
+export const 我可以吃的棋子s = computed(() => {
+  return 我的活棋子s.value
+    .map((我的活棋子) => {
+      const 所有可吃棋子 = get棋子_可吃_位置(我的活棋子, 所有位置一维).map(位置2棋子) as 棋子[]
+      const 吃 = 所有可吃棋子.filter(is敌棋子).filter(is主力)
+      return 吃.map((r) => ({
+        l: 我的活棋子,
+        r: r,
+      }))
+    })
+    .filter((e) => e.length)
+    .flat()
 })
 
 function is主力(棋子: 棋子) {
-  return ['车', '马', '炮', '帅'].includes(棋子.jie)
+  return ['车', '马', '炮', '帅'].includes(棋子.jie) || ['车', '马', '炮', '帅'].includes(棋子.role)
 }
 
 setTimeout(() => {
@@ -185,26 +174,29 @@ setTimeout(() => {
     () => {
       clearLL()
 
-      // todo 主力
-
       hasFlag('d') &&
-        敌可以吃的棋子.value.forEach(({ k: l, 吃我_有保护, 吃我_无保护 }) => {
-          hasFlag('1') && 吃我_有保护.forEach((r) => LL(l, `${r.i}${r.j}`))
-          hasFlag('2') && 吃我_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { size: 6 }))
+        敌可以吃的棋子s.value.forEach((敌可以吃的棋子) => {
+          if (filt棋子_我_生_吃_我.value.includes(敌可以吃的棋子.r)) {
+            LL(敌可以吃的棋子.l, 敌可以吃的棋子.r)
+          } else {
+            LL(敌可以吃的棋子.l, 敌可以吃的棋子.r, { size: 6 })
+          }
         })
-
       hasFlag('w') &&
-        我可以吃的棋子.value.forEach(({ k: l, 吃敌_有保护, 吃敌_无保护 }) => {
-          hasFlag('1') && 吃敌_有保护.forEach((r) => LL(l, `${r.i}${r.j}`, { color: 'green' }))
-          hasFlag('2') && 吃敌_无保护.forEach((r) => LL(l, `${r.i}${r.j}`, { color: 'green', size: 6 }))
+        我可以吃的棋子s.value.forEach((我可以吃的棋子) => {
+          if (filt棋子_敌_生_吃_敌.value.includes(我可以吃的棋子.r)) {
+            LL(我可以吃的棋子.l, 我可以吃的棋子.r)
+          } else {
+            LL(我可以吃的棋子.l, 我可以吃的棋子.r, { size: 6 })
+          }
         })
 
       if (走子提示.value) {
         const [l, r] = 走子提示.value
         LL(
           //
-          `${l.i}${l.j}`,
-          `${r.i}${r.j}`,
+          l,
+          r,
           {
             color: '#1500fb',
             path: 'straight',

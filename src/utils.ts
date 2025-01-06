@@ -127,13 +127,13 @@ function str2dom(str: string) {
 }
 
 const { LeaderLine } = window as any
-export function LL(l: string, r: string, args?: any) {
+export function LL(l: 位置, r: 位置, args?: any) {
   new LeaderLine(
-    LeaderLine.pointAnchor(str2dom(l), {
+    LeaderLine.pointAnchor(str2dom(`${l.i}${l.j}`), {
       x: 25,
       y: 25,
     }),
-    LeaderLine.pointAnchor(str2dom(r), {
+    LeaderLine.pointAnchor(str2dom(`${r.i}${r.j}`), {
       x: 25,
       y: 25,
     }),

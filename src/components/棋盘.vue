@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { 可移动位置, isTop回合, isBot回合, top被将, bot被将, 我被将军, 危险位置, 安全位置, 活棋子_我敌, 我的活棋子, 敌的活棋子 } from '../data'
+import { 可移动位置, isTop回合, isBot回合, top被将, bot被将, 我被将军, 危险位置, 安全位置, 活棋子_我敌, 我的活棋子s, 敌的活棋子s } from '../data'
 import { findItem, 位置2棋子, get棋子role, hasFlag } from '../utils'
 import { action, 走子提示 } from '../gameTick'
 import { isBuff } from '@/lib/constant'
@@ -87,13 +87,12 @@ effect(() => {
               canMove位置: findItem(可移动位置, { i, j }),
               ...(isBuff && {
                 // canMove位置2: findItem(可移动位置2, { i, j }),
-                存在我方棋子: findItem(我的活棋子, { i, j }),
-                存在敌方棋子: findItem(敌的活棋子, { i, j }),
+                存在我方棋子: findItem(我的活棋子s, { i, j }),
+                存在敌方棋子: findItem(敌的活棋子s, { i, j }),
                 主力棋子: ['车', '马', '炮'].includes(get棋子role(位置2棋子({ i, j })) || ''),
               }),
             },
             isBuff &&
-              hasFlag('x') &&
               (() => {
                 const 危险位置cls = findItem(危险位置, { i, j })
                 const 安全位置cls = findItem(安全位置, { i, j })

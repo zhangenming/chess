@@ -1,8 +1,8 @@
 import { ref } from 'vue'
 import type { 位置 } from './type'
-import { 回合数, is我的回合, 上次点击位置, filt棋子_死, 暗子牌库, 可移动位置, myTB } from './data'
+import { 回合数, is我的回合, 上次点击位置, filt棋子_死, 暗子牌库, 可移动位置, myTB, 敌可以吃的棋子s } from './data'
 import { SEND, 全局loading } from './online'
-import { deleteItem, findItem, get暗棋Random, 位置2棋子 } from './utils'
+import { deleteItem, findItem, get暗棋Random, hasFlag, LL, 位置2棋子 } from './utils'
 import { isOne } from './lib/constant'
 
 type ol = {
@@ -13,6 +13,7 @@ type ol = {
 }
 
 // 这里的逻辑 只有我方阵营会执行
+let 上次行走路线: string
 export function action({ target }: { target: HTMLElement }) {
   if (target.tagName !== 'DOM位置') return
   if (全局loading && !isOne) return
@@ -23,12 +24,39 @@ export function action({ target }: { target: HTMLElement }) {
   const 终点棋子 = 位置2棋子(本次点击位置)
   // 不可走敌方棋子
   if (((is我的回合.value && 起点棋子?.tb === myTB.value) || isOne) && findItem(可移动位置.value, 本次点击位置)) {
-    SEND('走棋', {
-      ol_起点位置: 上次点击位置.value,
-      ol_终点位置: 本次点击位置,
-      ...(起点棋子.jie === '〇' && { ol_揭开起点暗子: get暗棋Random(起点棋子.tb) }),
-      ...(终点棋子?.jie === '〇' && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子.tb) }),
-    } as ol)
+    const before敌可以吃的棋子s = 敌可以吃的棋子s.value.map((e) => e.r)
+
+    const ol_起点位置 = 上次点击位置.value!
+    const ol_终点位置 = 本次点击位置
+
+    if (终点棋子) {
+      终点棋子.deadIdx = filt棋子_死.value.filter((e) => e.tb === 终点棋子.tb).length + 1
+    }
+    ;({ i: 起点棋子.i, j: 起点棋子.j } = ol_终点位置)
+
+    const 存在失误 = 敌可以吃的棋子s.value.filter((x) => !before敌可以吃的棋子s.includes(x.r))
+
+    const 本次行走路线 = JSON.stringify({ ol_起点位置, ol_终点位置 })
+
+    if (存在失误.length && 本次行走路线 !== 上次行走路线 && hasFlag('d')) {
+      存在失误.forEach((x) => LL(x.l, x.r, { size: 10 }))
+    } else {
+      SEND('走棋', {
+        ol_起点位置,
+        ol_终点位置,
+        ...(起点棋子.jie === '〇' && { ol_揭开起点暗子: get暗棋Random(起点棋子.tb) }),
+        ...(终点棋子?.jie === '〇' && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子.tb) }),
+      } as ol)
+    }
+
+    // flag
+    上次行走路线 = JSON.stringify({ ol_起点位置, ol_终点位置 })
+
+    // 恢复
+    if (终点棋子) {
+      终点棋子.deadIdx = 0
+    }
+    ;({ i: 起点棋子.i, j: 起点棋子.j } = 上次点击位置.value!)
   } else {
     上次点击位置.value = 本次点击位置
   }

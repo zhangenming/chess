@@ -1,6 +1,6 @@
 import { ref } from 'vue'
 import type { 位置 } from './type'
-import { 回合数, is我的回合, 上次点击位置, filt棋子_死, 走棋信息, 暗子牌库, 可移动位置, myTB } from './data'
+import { 回合数, is我的回合, 上次点击位置, filt棋子_死, 暗子牌库, 可移动位置, myTB } from './data'
 import { SEND, 全局loading } from './online'
 import { deleteItem, findItem, get暗棋Random, 位置2棋子 } from './utils'
 import { isOne } from './lib/constant'
@@ -38,6 +38,7 @@ export function action({ target }: { target: HTMLElement }) {
 const 悔棋数据 = []
 
 export const 走子提示 = ref<[位置, 位置]>()
+export const 走棋信息 = ref('...')
 
 // 两种思路
 // 1. 可变数据 记录走棋数据，然后悔棋的时候，根据走棋数据，反向走棋

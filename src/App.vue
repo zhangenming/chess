@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import comp棋盘 from './components/棋盘.vue'
-import { 上次点击位置, is先手, 对手id, 回合数, is我的回合, base棋子, 走棋信息 } from './data'
+import { 上次点击位置, is先手, 对手id, 回合数, is我的回合, base棋子 } from './data'
+import { 走棋信息 } from './gameTick'
 import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
 </script>
 
 <template>
-  <div v-if="!isMaster">
+  <!-- <div v-if="!isMaster">
     <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
     <div>is先手: {{ is先手 }}</div>
     <div>回合数: {{ 回合数 }}</div>
-    <div style="font-size: 30px">{{ 对手id ? 走棋信息 : '等待对手加入...' }}</div>
-  </div>
+  </div> -->
+  <div style="font-size: 30px">{{ 对手id ? 走棋信息 : '等待对手加入...' }}</div>
 
   <comp棋盘
     v-if="(对手id || isOne) && !isMaster"
@@ -61,7 +62,11 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
 body {
   /* transform: scale(0.83); */
 }
-
+#app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 dom位置 {
   position: absolute;
   width: 50px;

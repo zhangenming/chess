@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import comp棋盘 from './components/棋盘.vue'
 import { 上次点击位置, is先手, 对手id, 回合数, is我的回合, base棋子 } from './data'
-import { 走子信息 } from './gameTick'
+import { 走子信息, 走子延迟 } from './gameTick'
 import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
 </script>
 
@@ -14,6 +14,7 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
   </div> -->
 
   <div style="font-size: 30px">{{ 走子信息 }}</div>
+  <div>走子延迟: {{ 走子延迟 }}</div>
 
   <comp棋盘
     v-if="走子信息 !== '等待对手加入...' || isOne"

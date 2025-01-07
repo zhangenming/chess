@@ -78,6 +78,7 @@ const 悔棋数据 = []
 
 export const 走子提示 = ref<{ l: 位置; r: 位置 }>()
 export const 走子信息 = ref('等待对手加入...')
+export const 走子延迟 = ref()
 
 // 两种思路
 // 1. 可变数据 记录走棋数据，然后悔棋的时候，根据走棋数据，反向走棋
@@ -86,7 +87,8 @@ export const 走子信息 = ref('等待对手加入...')
 // 这里的逻辑 双方阵营会执行
 export function RECEIVE({ content }: any) {
   const { type, data, time } = JSON.parse(content)
-  console.log('2 RECEIVE', +new Date() - time, type, data)
+  走子延迟.value = +new Date() - time + 'ms'
+  console.log('2 RECEIVE', type, data)
   console.log('\n')
 
   if (type === '走棋') {

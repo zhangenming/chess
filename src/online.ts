@@ -111,7 +111,7 @@ if (isMaster) {
 //
 //
 // 避免一个人走多个回合
-export let 全局loading = false
+export let 全局loading = false // todo remove
 
 export async function SEND(type: string, data = {}) {
   console.log('1 SEND', type, data)

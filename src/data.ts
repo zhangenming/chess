@@ -177,26 +177,24 @@ setTimeout(() => {
       hasFlag('d') &&
         敌可以吃的棋子s.value.forEach((敌可以吃的棋子) => {
           if (filt棋子_我_生_吃_我.value.includes(敌可以吃的棋子.r)) {
-            // LL(敌可以吃的棋子.l, 敌可以吃的棋子.r)
+            // LL(敌可以吃的棋子)
           } else {
-            LL(敌可以吃的棋子.l, 敌可以吃的棋子.r, { size: 6 })
+            LL(敌可以吃的棋子, { size: 6 })
           }
         })
       hasFlag('w') &&
         我可以吃的棋子s.value.forEach((我可以吃的棋子) => {
           if (filt棋子_敌_生_吃_敌.value.includes(我可以吃的棋子.r)) {
-            // LL(我可以吃的棋子.l, 我可以吃的棋子.r)
+            // LL(我可以吃的棋子)
           } else {
-            LL(我可以吃的棋子.l, 我可以吃的棋子.r, { size: 6 })
+            LL(我可以吃的棋子, { size: 6 })
           }
         })
 
       if (走子提示.value) {
         const [l, r] = 走子提示.value
         LL(
-          //
-          l,
-          r,
+          { l, r },
           {
             size: 5,
             color: '#1500fb',

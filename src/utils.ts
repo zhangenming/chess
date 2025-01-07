@@ -124,7 +124,7 @@ export function clearLL() {
 }
 
 const { LeaderLine } = window as any
-export function LL(l: 位置, r: 位置, args?: {}) {
+export function LL({ l, r }: { l: 位置; r: 位置 }, args?: {}) {
   new LeaderLine(
     LeaderLine.pointAnchor(document.querySelector(`[style="--i: ${l.i}; --j: ${l.j};"]`)!, {
       x: 25,

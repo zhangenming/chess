@@ -40,7 +40,7 @@ export function action({ target }: { target: HTMLElement }) {
 
     if (存在失误.length && 本次行走路线 !== 上次行走路线 && hasFlag('d')) {
       存在失误.forEach((x) =>
-        LL(x.l, x.r, {
+        LL(x, {
           size: 10,
           color: '#1500fb',
           path: 'straight',

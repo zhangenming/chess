@@ -124,7 +124,8 @@ dom棋盘 {
   transform: rotate(var(--后手需要反转));
   user-select: none;
   position: relative;
-  outline: var(--棋盘颜色) solid 30px;
+  outline: var(--棋盘颜色) solid 5px;
+  margin: 10px;
 }
 
 .h,

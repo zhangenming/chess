@@ -6,8 +6,8 @@ export type 位置 = {
 
 export type 棋子 = {
   tb: 'top' | 'bot'
-  role: string
-  jie: string
+  明: string
+  暗: string
   deadIdx: number
 
   // idx: string // 动态的 静态无效

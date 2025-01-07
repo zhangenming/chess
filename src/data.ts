@@ -37,8 +37,8 @@ export const 所有位置 = reactive(
       if (role != '空') {
         _base棋子.push({
           tb: i < 5 ? 'top' : 'bot',
-          role,
-          jie: role === '帅' ? '帅' : '〇',
+          明: role,
+          暗: role === '帅' ? '帅' : '〇',
 
           deadIdx: 0, // 死亡顺序 0表示存活
 
@@ -116,13 +116,13 @@ export const filt棋子_敌_生_吃_我_有保护 = computed(() => filt棋子_�
 export const filt棋子_敌_生_吃_我_无保护 = computed(() => filt棋子_敌_生_吃_我.value.filter((p) => !filt棋子_我_生_吃_我.value.includes(p)))
 // 不完全 不会提示送子
 
-export const 我被将军 = computed(() => filt棋子_敌_生_吃_我.value.some((p) => p.role === '帅'))
-export const 敌被将军 = computed(() => filt棋子_我_生_吃_敌.value.some((p) => p.role === '帅'))
+export const 我被将军 = computed(() => filt棋子_敌_生_吃_我.value.some((p) => p.明 === '帅'))
+export const 敌被将军 = computed(() => filt棋子_我_生_吃_敌.value.some((p) => p.明 === '帅'))
 
 export const 正在被吃 = computed(() => [...filt棋子_我_生_吃_敌.value, ...filt棋子_敌_生_吃_我.value])
 
-export const top被将 = computed(() => 正在被吃.value.find((e) => e.role === '帅' && e.tb === 'top'))
-export const bot被将 = computed(() => 正在被吃.value.find((e) => e.role === '帅' && e.tb === 'bot'))
+export const top被将 = computed(() => 正在被吃.value.find((e) => e.明 === '帅' && e.tb === 'top'))
+export const bot被将 = computed(() => 正在被吃.value.find((e) => e.明 === '帅' && e.tb === 'bot'))
 
 export const 危险位置 = computed(() => filt棋子_敌_生.value.map((棋子) => get棋子_可吃_位置(棋子, 所有位置一维)).flat())
 export const 安全位置 = computed(() =>
@@ -165,7 +165,7 @@ export const 我可以吃的棋子s = computed(() => {
 })
 
 function is主力(棋子: 棋子) {
-  return ['车', '马', '炮', '帅'].includes(棋子.jie) || ['车', '马', '炮', '帅'].includes(棋子.role)
+  return ['车', '马', '炮', '帅'].includes(棋子.暗) || ['车', '马', '炮', '帅'].includes(棋子.明)
 }
 
 setTimeout(() => {

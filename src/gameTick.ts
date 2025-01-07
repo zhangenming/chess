@@ -51,8 +51,8 @@ export function action({ target }: { target: HTMLElement }) {
       SEND('走棋', {
         ol_起点位置,
         ol_终点位置,
-        ...(起点棋子.jie === '〇' && { ol_揭开起点暗子: get暗棋Random(起点棋子.tb) }),
-        ...(终点棋子?.jie === '〇' && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子.tb) }),
+        ...(起点棋子.暗 === '〇' && { ol_揭开起点暗子: get暗棋Random(起点棋子.tb) }),
+        ...(终点棋子?.暗 === '〇' && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子.tb) }),
       } as ol)
     }
 
@@ -95,7 +95,7 @@ export function RECEIVE({ content }: any) {
     const 终点棋子 = 位置2棋子(ol_终点位置)
 
     if (ol_揭开起点暗子) {
-      起点棋子.jie = ol_揭开起点暗子
+      起点棋子.暗 = ol_揭开起点暗子
 
       deleteItem(暗子牌库[起点棋子.tb], ol_揭开起点暗子)
     }
@@ -104,7 +104,7 @@ export function RECEIVE({ content }: any) {
       终点棋子.deadIdx = filt棋子_死.value.filter((e) => e.tb === 终点棋子.tb).length + 1
 
       if (ol_揭开终点被吃暗子) {
-        终点棋子.jie = ol_揭开终点被吃暗子
+        终点棋子.暗 = ol_揭开终点被吃暗子
         // if (终点棋子.tb !== myTB.value) {
         // }
         deleteItem(暗子牌库[终点棋子.tb], ol_揭开终点被吃暗子)
@@ -127,7 +127,7 @@ export function RECEIVE({ content }: any) {
       if (ol_揭开起点暗子) {
         return '走暗子: ' + ol_揭开起点暗子
       }
-      return 终点棋子 ? '吃: ' + 终点棋子.role : '走'
+      return 终点棋子 ? '吃: ' + 终点棋子.明 : '走'
     })()
   }
 

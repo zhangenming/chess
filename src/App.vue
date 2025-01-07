@@ -22,7 +22,7 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
     }"
   >
     <dom棋子
-      v-for="{ i, j, tb, jie, deadIdx } of base棋子"
+      v-for="{ i, j, tb, 暗, deadIdx } of base棋子"
       :style="
         deadIdx
           ? {
@@ -49,9 +49,9 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
                 }),
             },
       ]"
-      :jie
+      :暗
     >
-      {{ jie }}
+      {{ 暗 }}
     </dom棋子>
   </comp棋盘>
 
@@ -97,18 +97,18 @@ dom棋子 {
   outline-color: var(--bot_color);
   color: var(--bot_color);
 }
-[jie='〇'] {
+[暗='〇'] {
   color: #aaa;
 }
-[jie='车'] {
+[暗='车'] {
   outline-width: 7px;
   font-weight: 900;
 }
-[jie='马'] {
+[暗='马'] {
   outline-width: 5px;
   font-weight: 900;
 }
-[jie='炮'] {
+[暗='炮'] {
   outline-width: 5px;
   font-weight: 900;
 }

@@ -111,8 +111,8 @@ export function findItem(arr: 位置[], item: 位置) {
 }
 
 export function get棋子role(棋子: 棋子 | undefined) {
-  const { jie, role } = 棋子 || {}
-  return jie === '〇' ? role : jie
+  const { 暗, 明 } = 棋子 || {}
+  return 暗 === '〇' ? 明 : 暗
 }
 
 export function hasFlag(flag: string) {

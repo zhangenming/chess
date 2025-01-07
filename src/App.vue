@@ -6,16 +6,6 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
 </script>
 
 <template>
-  <div v-if="isMaster">master</div>
-  <!-- <div v-if="!isMaster">
-    <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
-    <div>is先手: {{ is先手 }}</div>
-    <div>回合数: {{ 回合数 }}</div>
-  </div> -->
-
-  <div style="font-size: 30px">{{ 走子信息 }}</div>
-  <div>走子延迟: {{ 走子延迟 }}</div>
-
   <comp棋盘
     v-if="走子信息 !== '等待对手加入...' || isOne"
     :style="{
@@ -57,6 +47,13 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
       {{ 暗 }}
     </dom棋子>
   </comp棋盘>
+
+  <div style="position: absolute; bottom: 0; width: 100%">
+    <div style="font-size: 30px">{{ 走子信息 }}</div>
+    <div>走子延迟: {{ 走子延迟 }}</div>
+    <div>我的id: {{ 我的id }} vs 对手id: {{ 对手id }}</div>
+    <div>回合数: {{ 回合数 }}</div>
+  </div>
 
   <div popover id="popover" style="position: absolute; left: 50%; top: 50%; translate: -50% -50%; padding: 50px">对方退出</div>
 </template>

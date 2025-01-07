@@ -117,13 +117,12 @@ effect(() => {
 
 <style>
 dom棋盘 {
-  margin-top: 30px;
+  margin-top: 40px;
   display: block;
   width: 450px;
   height: 500px;
   transform: rotate(var(--后手需要反转));
   user-select: none;
-  position: relative;
   outline: var(--棋盘颜色) solid 5px;
 }
 

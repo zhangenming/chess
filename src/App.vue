@@ -3,6 +3,11 @@ import comp棋盘 from './components/棋盘.vue'
 import { 上次点击位置, is先手, 对手id, 回合数, is我的回合, base棋子 } from './data'
 import { 走棋信息 } from './gameTick'
 import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
+
+// alert(window.innerWidth)
+// alert(window.outerWidth)
+
+document.body.style.transform = `scale(${window.innerWidth / 450})`
 </script>
 
 <template>
@@ -59,9 +64,6 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
 </template>
 
 <style>
-body {
-  /* transform: scale(0.83); */
-}
 #app {
   display: flex;
   flex-direction: column;

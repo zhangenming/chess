@@ -42,9 +42,10 @@ export function action({ target }: { target: HTMLElement }) {
       存在失误.forEach((x) =>
         LL(x, {
           size: 10,
-          color: '#1500fb',
+          color: 'red',
           path: 'straight',
-          dash: { animation: true, len: 10, gap: 3 },
+          dash: { animation: true, len: 5, gap: 1 },
+          endPlug: 'behind',
         })
       )
     } else {

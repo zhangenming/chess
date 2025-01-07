@@ -165,7 +165,7 @@ export const 我可以吃的棋子s = computed(() => {
 })
 
 function is主力(棋子: 棋子) {
-  return ['车', '马', '炮', '帅'].includes(棋子.暗) || ['车', '马', '炮', '帅'].includes(棋子.明)
+  return ['车', '马', '炮', '帅'].includes(棋子.暗) //|| ['车', '马', '炮', '帅'].includes(棋子.明)
 }
 
 setTimeout(() => {

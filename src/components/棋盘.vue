@@ -6,7 +6,7 @@ import { isBuff } from '@/lib/constant'
 import { effect } from 'vue'
 
 effect(() => {
-  if (我被将军) {
+  if (我被将军.value) {
     navigator.vibrate([200, 50, 200])
   }
 })

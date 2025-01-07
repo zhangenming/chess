@@ -116,24 +116,21 @@ export function get棋子role(棋子: 棋子 | undefined) {
 }
 
 export function hasFlag(flag: string) {
-  return location.search.includes(flag)
+  return new URLSearchParams(location.search).has(flag)
 }
 
 export function clearLL() {
   document.querySelectorAll('svg').forEach((e) => e.remove())
 }
-function str2dom(str: string) {
-  return document.querySelector(`[style="--i: ${str[0]}; --j: ${str[1]};"]`)!
-}
 
 const { LeaderLine } = window as any
-export function LL(l: 位置, r: 位置, args?: any) {
+export function LL(l: 位置, r: 位置, args?: {}) {
   new LeaderLine(
-    LeaderLine.pointAnchor(str2dom(`${l.i}${l.j}`), {
+    LeaderLine.pointAnchor(document.querySelector(`[style="--i: ${l.i}; --j: ${l.j};"]`)!, {
       x: 25,
       y: 25,
     }),
-    LeaderLine.pointAnchor(str2dom(`${r.i}${r.j}`), {
+    LeaderLine.pointAnchor(document.querySelector(`[style="--i: ${r.i}; --j: ${r.j};"]`)!, {
       x: 25,
       y: 25,
     }),

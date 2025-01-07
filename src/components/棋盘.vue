@@ -125,7 +125,6 @@ dom棋盘 {
   user-select: none;
   position: relative;
   outline: var(--棋盘颜色) solid 5px;
-  margin: 10px;
 }
 
 .h,

@@ -191,17 +191,13 @@ setTimeout(() => {
           }
         })
 
-      if (走子提示.value) {
-        LL(走子提示.value, {
-          size: 5,
-          color: '#1500fb',
-          path: 'straight',
-          dash: { animation: true, len: 10, gap: 3 },
-        })
-      }
+      LL(走子提示.value!, {
+        size: 5,
+        color: '#1500fb',
+        path: 'straight',
+        dash: { animation: true, len: 10, gap: 3 },
+      })
     },
-    {
-      immediate: true,
-    }
+    {}
   )
 })

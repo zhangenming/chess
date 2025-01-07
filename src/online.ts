@@ -116,7 +116,7 @@ export let 全局loading = false
 export async function SEND(type: string, data = {}) {
   console.log('1 SEND', type, data)
 
-  // await new Promise((resolve) => setTimeout(resolve, 回合数.value / 2))
+  // await new Promise((resolve) => setTimeout(resolve, 2444))
 
   全局loading = true
   setTimeout(() => {

@@ -49,12 +49,15 @@ export function action({ target }: { target: HTMLElement }) {
         })
       )
     } else {
-      SEND('走棋', {
-        ol_起点位置,
-        ol_终点位置,
-        ...(起点棋子.暗 === '〇' && { ol_揭开起点暗子: get暗棋Random(起点棋子.tb) }),
-        ...(终点棋子?.暗 === '〇' && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子.tb) }),
-      } as ol)
+      if (走子信息.value !== '正在走子...') {
+        走子信息.value = '正在走子...'
+        SEND('走棋', {
+          ol_起点位置,
+          ol_终点位置,
+          ...(起点棋子.暗 === '〇' && { ol_揭开起点暗子: get暗棋Random(起点棋子.tb) }),
+          ...(终点棋子?.暗 === '〇' && { ol_揭开终点被吃暗子: get暗棋Random(终点棋子.tb) }),
+        } as ol)
+      }
     }
 
     // flag
@@ -74,7 +77,7 @@ export function action({ target }: { target: HTMLElement }) {
 const 悔棋数据 = []
 
 export const 走子提示 = ref<{ l: 位置; r: 位置 }>()
-export const 走棋信息 = ref('...')
+export const 走子信息 = ref('等待对手加入...')
 
 // 两种思路
 // 1. 可变数据 记录走棋数据，然后悔棋的时候，根据走棋数据，反向走棋
@@ -118,7 +121,7 @@ export function RECEIVE({ content }: any) {
 
     // 悔棋数据.push(data)
 
-    走棋信息.value = (() => {
+    走子信息.value = (() => {
       if (ol_揭开起点暗子 && ol_揭开终点被吃暗子) {
         return '走暗子: ' + ol_揭开起点暗子 + '; 吃暗子: ' + ol_揭开终点被吃暗子
       }

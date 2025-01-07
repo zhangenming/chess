@@ -72,7 +72,7 @@ export function action({ target }: { target: HTMLElement }) {
 //todo 多步悔棋
 const 悔棋数据 = []
 
-export const 走子提示 = ref<[位置, 位置]>()
+export const 走子提示 = ref<{ l: 位置; r: 位置 }>()
 export const 走棋信息 = ref('...')
 
 // 两种思路
@@ -113,7 +113,7 @@ export function RECEIVE({ content }: any) {
 
     ;({ i: 起点棋子.i, j: 起点棋子.j } = ol_终点位置)
 
-    走子提示.value = [ol_起点位置, ol_终点位置]
+    走子提示.value = { l: ol_起点位置, r: ol_终点位置 }
 
     // 悔棋数据.push(data)
 

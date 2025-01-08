@@ -82,14 +82,11 @@ effect(() => {
           :style="{ '--i': i, '--j': j }"
           :class="[
             {
-              // 走子提示1: 走子提示?.[0].i === i && 走子提示?.[0].j === j,
-              // 走子提示2: 走子提示?.[1].i === i && 走子提示?.[1].j === j,
               canMove位置: findItem(可移动位置, { i, j }),
               ...(isBuff && {
                 // canMove位置2: findItem(可移动位置2, { i, j }),
                 存在我方棋子: findItem(我的活棋子s, { i, j }),
                 存在敌方棋子: findItem(敌的活棋子s, { i, j }),
-                主力棋子: ['车', '马', '炮'].includes(get棋子role(位置2棋子({ i, j })) || ''),
               }),
             },
             isBuff &&
@@ -238,13 +235,6 @@ div.炮 > div:nth-child(2) > div:nth-child(3) > div:nth-child(2) {
   border-radius: 1%;
   position: absolute;
   background: black;
-}
-
-.走子提示1 {
-  border: 2px solid #1500fb;
-}
-.走子提示2 {
-  border: 4px solid #1500fb;
 }
 
 .混乱位置cls {

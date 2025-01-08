@@ -7,7 +7,7 @@ import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
 
 <template>
   <comp棋盘
-    v-if="走子信息 !== '等待对手加入...' || isOne"
+    v-if="对手id || isOne"
     :style="{
       '--后手需要反转': is先手 ? '0deg' : '180deg',
       '--top_color': is先手 ? 'red' : 'black',

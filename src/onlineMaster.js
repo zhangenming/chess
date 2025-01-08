@@ -12706,8 +12706,6 @@
   )
 })
 
-let channel = '大厅'
-
 const x = globalThis.GoEasy.getInstance({
   host: 'hangzhou.goeasy.io',
   appkey: 'BC-719aadae85b7430c9e1d79edd47d2c10', // online2 : home
@@ -12718,19 +12716,22 @@ x.connect({ id: '主机', data: { username: '主机' } })
 
 let memberA
 x.pubsub.subscribePresence({
-  channel,
-  onSuccess() {},
+  channel: '大厅',
+  onSuccess() {
+    console.log('onSuccess')
+  },
   onPresence({ action, member: memberB, members }) {
-    console.log(action, memberB, memberB.id)
+    console.log(1)
+
     if (action === 'join') {
       if (
         memberA &&
         members.find((e) => e.id === memberA.id) && // 此时a可能已经离开
         memberA.data.username != memberB.data.username
       ) {
-        SEND('匹配成功', {
-          ol_房间号: `${memberA.id}--VS--${memberB.id}`,
-        })
+        // SEND('匹配成功', {
+        //   ol_房间号: `${memberA.id}--VS--${memberB.id}`,
+        // })
         memberA = null
       } else {
         memberA = memberB
@@ -12738,21 +12739,9 @@ x.pubsub.subscribePresence({
     }
   },
 })
-
-let 全局loading = false
-
 async function SEND(type, data = {}) {
-  console.log('1 SEND', type, data)
-
-  // await new Promise((resolve) => setTimeout(resolve, 回合数.value / 2))
-
-  全局loading = true
-  setTimeout(() => {
-    全局loading = false
-  }, 500)
-
   x.pubsub.publish({
-    channel,
+    channel: '大厅',
     message: JSON.stringify({
       type,
       data,

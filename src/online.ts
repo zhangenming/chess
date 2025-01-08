@@ -24,9 +24,7 @@ if (isMaster) {
   let memberA
   pubsub.subscribePresence({
     channel,
-    onSuccess() {
-      console.log(111)
-    },
+    onSuccess() {},
     onPresence({ action, member: memberB, members }) {
       console.log(action, memberB, memberB.id)
       if (action === 'join') {
@@ -52,16 +50,12 @@ if (isMaster) {
     onMessage: RECEIVE,
   })
 } else {
-  console.log('1', channel)
-
   pubsub.subscribe({
     channel,
     presence: {
       enable: true,
     },
-    onSuccess() {
-      console.log(111)
-    },
+    onSuccess() {},
     onMessage({ content }) {
       const { type, data } = JSON.parse(content)
       console.log('接收', type, data)

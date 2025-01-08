@@ -77,9 +77,10 @@ export function get暗棋Random(tb: 'top' | 'bot') {
 
 export function getMyId() {
   return (
-    new URLSearchParams(location.search).get('id') ||
+    getFlag('id') ||
+    localStorage.getItem('username') ||
     (() => {
-      const username = localStorage.getItem('username') || Math.random().toFixed(4).slice(2)
+      const username = Math.random().toFixed(4).slice(2)
       localStorage.setItem('username', username)
       return username
     })()
@@ -117,6 +118,9 @@ export function get棋子role(棋子: 棋子) {
 
 export function hasFlag(flag: string) {
   return new URLSearchParams(location.search).has(flag)
+}
+export function getFlag(flag: string) {
+  return new URLSearchParams(location.search).get(flag)!
 }
 
 export function clearLL() {

@@ -1,8 +1,15 @@
 <script setup lang="ts">
+import { watch } from 'vue'
 import comp棋盘 from './components/棋盘.vue'
-import { 上次点击位置, is先手, 对手id, 回合数, is我的回合, base棋子 } from './data'
+import { 上次点击位置, is先手, 对手id, 回合数, base棋子, 我被将军 } from './data'
 import { 走子信息, 走子延迟 } from './gameTick'
-import { 我的id, isMaster, isOne, isBuff } from './lib/constant'
+import { 我的id, isOne, isBuff } from './lib/constant'
+
+watch(回合数, () => {
+  if (我被将军.value) {
+    navigator.vibrate([200, 50, 200])
+  }
+})
 </script>
 
 <template>

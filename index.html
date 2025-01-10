@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=480" />
+    <meta name="viewport" content="width=480, initial-scale=1.0" />
     <title>xq</title>
     <script>
       Object.defineProperties(Object.prototype, {
@@ -18,19 +18,6 @@
           },
         },
       })
-
-      if (location.search.includes('boss')) {
-        const style = document.createElement('style')
-        style.textContent = `
-body {  
-  opacity: 0.05;
-}
-body:hover {  
-  opacity: 0.2;
-}
-`
-        document.head.appendChild(style)
-      }
     </script>
     <script src="./leadline.js"></script>
     <script type="module" src="/src/main.ts"></script>
